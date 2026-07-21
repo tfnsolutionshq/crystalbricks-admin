@@ -1,9 +1,23 @@
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+
+import SignInPage from "./features/auth/pages/SignInPage";
+import SetPasscodePage from "./features/auth/pages/SetPasscodePage";
+import ResetPasscodePage from "./features/auth/pages/ResetPasscodePage";
+
 export default function App() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-100">
-      <h1 className="text-5xl font-bold text-blue-600">
-        Tailwind is working! 🎉
-      </h1>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Navigate to="/signin" replace />} />
+        <Route path="/signin" element={<SignInPage />} />
+        <Route path="/set-passcode" element={<SetPasscodePage />} />
+        <Route path="/reset-passcode" element={<ResetPasscodePage />} />
+      </Routes>
+    </Router>
   );
 }
