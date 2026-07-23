@@ -14,6 +14,7 @@ import {
   X,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useAuth } from "@/shared/context/AuthContext";
 
 const NAV_ITEMS = [
   { label: "Dashboard", icon: LayoutGrid, href: "/dashboard" },
@@ -34,6 +35,7 @@ const NAV_ITEMS = [
  * `activeItem` lets each page highlight the nav entry that matches it.
  */
 export default function Sidebar({ activeItem = "Dashboard", isOpen, onClose }) {
+  const { logout } = useAuth();
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
@@ -99,6 +101,7 @@ export default function Sidebar({ activeItem = "Dashboard", isOpen, onClose }) {
           <button
             type="button"
             className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors cursor-pointer"
+            onClick={() => logout()}
           >
             <LogOut size={18} strokeWidth={2} />
             Log out
