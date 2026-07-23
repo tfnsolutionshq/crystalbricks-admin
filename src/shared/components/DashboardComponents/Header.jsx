@@ -1,4 +1,6 @@
+import crystalBricksLogo from "@/assets/images/crystal_bricks_logo.png";
 import { Search, Moon, Bell, ChevronDown, Gem, Menu } from "lucide-react";
+import { useAuth } from "@/shared/context/AuthContext";
 
 /**
  * Header
@@ -6,6 +8,8 @@ import { Search, Moon, Bell, ChevronDown, Gem, Menu } from "lucide-react";
  * Contains the app brand mark and account/utility actions on the right.
  */
 export default function Header({ onToggleSidebar }) {
+  const { user } = useAuth();
+
   return (
     <header className="h-18.25 w-full flex items-center justify-between px-6 border-b border-gray-200 bg-white shrink-0">
       {/* Brand */}
@@ -18,12 +22,10 @@ export default function Header({ onToggleSidebar }) {
         >
           <Menu size={22} />
         </button>
-        <div className="w-9 h-9 rounded-lg bg-pink-50 flex items-center justify-center text-pink-600">
-          <Gem size={20} strokeWidth={2.25} />
+        <div className="flex items-center gap-2">
+          <img src={crystalBricksLogo} alt="" />
+          <span className="text-lg font-semibold">Crystal Bricks</span>
         </div>
-        <span className="text-lg font-bold text-gray-900 tracking-tight">
-          Crystal App
-        </span>
       </div>
 
       {/* Actions */}
@@ -54,15 +56,15 @@ export default function Header({ onToggleSidebar }) {
 
         <button
           type="button"
-          className="flex items-center gap-2 pl-1 pr-2 py-1 rounded-full hover:bg-gray-100 transition-colors"
+          className="flex items-center gap-2 pl-1 pr-2 py-1 rounded-full hover:bg-gray-100 transition-colors cursor-pointer"
         >
           <img
-            src="https://i.pravatar.cc/64?img=13"
+            src={user.avatar}
             alt="Kelechi's avatar"
             className="w-8 h-8 rounded-full object-cover"
           />
           <span className="text-sm font-medium text-gray-700">
-            kelechi@iil.com
+            {user.email}
           </span>
           <ChevronDown size={16} className="text-gray-400" />
         </button>
