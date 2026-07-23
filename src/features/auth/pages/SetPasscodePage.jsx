@@ -38,7 +38,14 @@ const SetPasscodePage = () => {
 
       {/* RIGHT PANEL */}
       <div className="flex w-full flex-1 flex-col bg-slate-50 md:w-[43%]">
-        <div className="flex flex-1 items-center justify-center px-6 pb-16">
+        {/* Mobile branding - visible only when left panel is hidden */}
+        <div className="flex md:hidden items-center gap-2 px-4 sm:px-6 pt-6 pb-4">
+          <img src={crystalBricksLogo} alt="" className="h-7 w-7" />
+          <span className="text-base font-semibold text-slate-900">
+            Crystal Bricks
+          </span>
+        </div>
+        <div className="flex flex-1 items-center justify-center px-4 sm:px-6 pb-12 sm:pb-16">
           <form className="w-full max-w-sm">
             <h2 className="mb-1 text-2xl font-bold text-slate-900">
               Set Passcode
