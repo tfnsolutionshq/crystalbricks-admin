@@ -17,6 +17,7 @@ import CustomersPage from "./features/customers/pages/CustomersPage";
 import CustomerDetailsPage from "./features/customers/pages/CustomerDetailsPage";
 import TransactionsPage from "./features/transactions/pages/TransactionsPage";
 import TransactionDetailsPage from "./features/transactions/pages/TransactionDetailsPage";
+import AnalyticsPage from "./features/analytics/pages/AnalyticsPage";
 import PublicRouteGuard from "./routes/PublicRouteGuard";
 import PrivateRouteGuard from "./routes/PrivateRouteGuard";
 
@@ -54,6 +55,7 @@ export default function App() {
               path="/transactions/:transactionId"
               element={<TransactionDetailsPage />}
             />
+            <Route path="/analytics" element={<AnalyticsPage />} />
           </Route>
         </Routes>
       </Router>
