@@ -148,7 +148,7 @@ export default function AnalyticsPage() {
   };
 
   return (
-    <Layout activeNavItem="analytics">
+    <Layout activeNavItem="Analytics">
       <div className="p-6 space-y-6 max-w-[1600px]">
         <div className="p-4 sm:p-6 lg:p-8 bg-slate-50 min-h-screen">
           {/* ------------------------------------------------------------- */}
