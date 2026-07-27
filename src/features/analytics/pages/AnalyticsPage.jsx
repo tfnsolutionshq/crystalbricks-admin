@@ -27,13 +27,12 @@ import {
   TrendingDown,
 } from "lucide-react";
 
-import FilterPill from "@/features/analytics/components/FilterPill";
-import Pagination from "@/features/analytics/components/Pagination";
-import {
-  getTrendColorClass,
-  formatCurrency,
-  formatNumber,
-} from "@/features/analytics/helpers/analyticsHelpers";
+import FilterPill from "@/shared/components/FilterPill";
+import Pagination from "@/shared/components/Pagination";
+import formatCurrency from "@/shared/utils/formatCurrency";
+import formatNumber from "@/shared/utils/formatNumber";
+
+import { getTrendColorClass } from "@/features/analytics/helpers/analyticsHelpers";
 
 import {
   summaryStats,

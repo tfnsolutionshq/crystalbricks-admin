@@ -1,5 +1,5 @@
 import { AlertTriangle, CheckCircle2, Trash2 } from "lucide-react";
-import ModalShell from "./ModalShell";
+import ModalShell from "@/shared/components/ModalShell";
 
 const ACTION_CONFIG = {
   deactivate: {

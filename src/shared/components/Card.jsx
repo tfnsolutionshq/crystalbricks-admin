@@ -1,5 +1,5 @@
 // Card wrapper used across Details/KYC/Loans tabs.
-export function Card({ title, action, children, className = "" }) {
+export default function Card({ title, action, children, className = "" }) {
   return (
     <div
       className={`bg-white rounded-2xl border border-gray-100 p-6 ${className}`}

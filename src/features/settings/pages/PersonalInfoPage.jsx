@@ -8,7 +8,8 @@ import { Camera, BadgeCheck } from "lucide-react";
 import Layout from "@/shared/components/Layout";
 import Badge from "@/shared/components/Badge";
 
-import Field, { TextInput } from "@/features/team-management/components/Field";
+import Field from "@/shared/components/Field";
+import TextInput from "@/shared/components/TextInput";
 
 import SettingsTabs from "@/features/settings/components/SettingsTabs";
 import { currentUser } from "@/features/settings/mocks/settingsMockData";

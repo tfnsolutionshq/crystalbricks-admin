@@ -1,4 +1,4 @@
-export function TextInput(props) {
+export default function TextInput(props) {
   return (
     <input
       {...props}

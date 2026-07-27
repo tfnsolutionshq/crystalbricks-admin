@@ -16,7 +16,7 @@ const BADGE_STYLES = {
   Corporate: "bg-blue-50 text-blue-500",
 };
 
-export function Badge({ children }) {
+export default function Badge({ children }) {
   const style = BADGE_STYLES[children] || "bg-gray-100 text-gray-500";
   return (
     <span

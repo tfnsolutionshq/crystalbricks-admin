@@ -1,4 +1,4 @@
-export function SearchInput({ placeholder, value, onChange }) {
+export default function SearchInput({ placeholder, value, onChange }) {
   return (
     <div className="flex items-center gap-2 px-3.5 py-2 rounded-lg border border-gray-200 bg-white flex-1 min-w-55">
       <svg

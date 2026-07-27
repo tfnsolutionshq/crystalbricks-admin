@@ -1,5 +1,5 @@
 // Bottom-of-table pagination footer: "Showing X of Y" ... "Page A of B" <> .
-export function Pagination({ showing, total, page, pageCount }) {
+export default function Pagination({ showing, total, page, pageCount }) {
   return (
     <div className="flex items-center justify-between px-1 pt-4 text-sm text-gray-400">
       <span>

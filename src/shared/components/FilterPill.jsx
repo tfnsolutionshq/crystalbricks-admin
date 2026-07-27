@@ -1,6 +1,6 @@
 // A dropdown-style filter chip, e.g. "Type +", "Status +". Purely visual —
 // wire up `onClick` to open your real dropdown/menu implementation.
-export function FilterPill({ label, onClick }) {
+export default function FilterPill({ label, onClick }) {
   return (
     <button
       onClick={onClick}

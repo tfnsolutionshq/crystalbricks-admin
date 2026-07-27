@@ -1,5 +1,5 @@
 // The "•••" icon button seen top-right of cards/pages (kebab menu trigger).
-export function KebabButton({ onClick }) {
+export default function KebabButton({ onClick }) {
   return (
     <button
       onClick={onClick}
