@@ -36,18 +36,6 @@ export function formatMonthLabel(month) {
   return month;
 }
 
-export function formatCurrency(amount, { decimals = 2 } = {}) {
-  const value = Number(amount) || 0;
-  return `₦${value.toLocaleString("en-NG", {
-    minimumFractionDigits: decimals,
-    maximumFractionDigits: decimals,
-  })}`;
-}
-
-export function formatNumber(value) {
-  return Number(value || 0).toLocaleString("en-NG");
-}
-
 export function formatPercent(value, { withSign = false } = {}) {
   const num = Number(value) || 0;
   const sign = withSign && num > 0 ? "+" : "";

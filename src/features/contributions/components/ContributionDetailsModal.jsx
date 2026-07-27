@@ -3,9 +3,9 @@
 // investment/contribution plan plus its recent transaction history.
 // Triggered from both ContributionsPage and CustomerContributionDetailsPage.
 
-import Modal from "@/features/team-management/components/ModalShell";
-import { Badge } from "@/features/customers/components/GeneralCustomerComponents";
-import { formatCurrency } from "@/features/analytics/helpers/analyticsHelpers";
+import Modal from "@/shared/components/ModalShell";
+import Badge from "@/shared/components/Badge";
+import formatCurrency from "@/shared/utils/formatCurrency";
 import {
   getCategoryLabel,
   getFrequencyLabel,

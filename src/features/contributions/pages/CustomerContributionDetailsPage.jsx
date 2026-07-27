@@ -7,14 +7,15 @@ import { useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ArrowLeft, Eye, Mail, Phone, CalendarDays } from "lucide-react";
 
-import Layout from "@/shared/components/DashboardComponents/Layout";
+import Layout from "@/shared/components/Layout";
+import Badge from "@/shared/components/Badge";
 
-import { Badge } from "@/features/customers/components/GeneralCustomerComponents";
-import { formatCurrency } from "@/features/analytics/helpers/analyticsHelpers";
+import formatCurrency from "@/shared/utils/formatCurrency";
 
 import ContributionDetailsModal from "@/features/contributions/components/ContributionDetailsModal";
 
 import { contributions as allContributions } from "@/features/contributions/mocks/contributionsMockData";
+
 import {
   getCustomerById,
   getInvestmentsForCustomer,

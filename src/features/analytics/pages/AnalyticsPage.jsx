@@ -47,7 +47,7 @@ import {
   analyticsFilters,
   analyticsPagination,
 } from "@/features/analytics/mocks/analyticsMockData";
-import Layout from "@/shared/components/DashboardComponents/Layout.jsx";
+import Layout from "@/shared/components/Layout.jsx";
 
 // ---------------------------------------------------------------------------
 // Custom tooltip: Loans vs Investment bar chart

@@ -8,20 +8,17 @@ import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Download, Eye, UserRound } from "lucide-react";
 
-import Layout from "@/shared/components/DashboardComponents/Layout";
-import {
-  Badge,
-  SearchInput,
-  FilterPill,
-  KebabButton,
-  Pagination,
-} from "@/features/customers/components/GeneralCustomerComponents";
-import {
-  formatCurrency,
-  formatNumber,
-} from "@/features/analytics/helpers/analyticsHelpers";
+import Layout from "@/shared/components/Layout";
+import Badge from "@/shared/components/Badge";
+import SearchInput from "@/shared/components/SearchInput";
+import FilterPill from "@/shared/components/FilterPill";
+import KebabButton from "@/shared/components/KebabButton";
+import Pagination from "@/shared/components/Pagination";
 
-import ContributionDetailsModal from "../components/ContributionDetailsModal";
+import formatCurrency from "@/shared/utils/formatCurrency";
+import formatNumber from "@/shared/utils/formtNumber";
+
+import ContributionDetailsModal from "@/features/contributions/components/ContributionDetailsModal";
 
 import {
   contributions,
@@ -30,6 +27,7 @@ import {
   contributionsStats,
   contributionsPagination,
 } from "@/features/contributions/mocks/contributionsMockData";
+
 import {
   getCustomerById,
   getCategoryLabel,
