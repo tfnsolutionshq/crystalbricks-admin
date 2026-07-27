@@ -16,7 +16,7 @@ import KebabButton from "@/shared/components/KebabButton";
 import Pagination from "@/shared/components/Pagination";
 
 import formatCurrency from "@/shared/utils/formatCurrency";
-import formatNumber from "@/shared/utils/formtNumber";
+import formatNumber from "@/shared/utils/formatNumber";
 
 import ContributionDetailsModal from "@/features/contributions/components/ContributionDetailsModal";
 

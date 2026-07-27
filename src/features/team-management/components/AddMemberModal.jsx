@@ -1,7 +1,10 @@
 import { useState } from "react";
 import { UserPlus } from "lucide-react";
-import ModalShell from "./ModalShell";
-import Field, { TextInput } from "./Field";
+
+import ModalShell from "@/shared/components/ModalShell";
+import Field from "@/shared/components/Field";
+import TextInput from "@/shared/components/TextInput";
+
 import RoleSelect from "./RoleSelect";
 
 const emptyForm = { name: "", email: "", phone: "", role: "" };

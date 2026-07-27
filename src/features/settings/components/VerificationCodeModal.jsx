@@ -2,7 +2,9 @@
 
 import { useEffect, useRef, useState } from "react";
 import { ShieldCheck } from "lucide-react";
-import Modal from "@/features/team-management/components/ModalShell";
+
+import ModalShell from "@/shared/components/ModalShell";
+
 import { maskEmail } from "@/features/settings/helpers/settingsHelpers";
 
 const CODE_LENGTH = 6;
@@ -71,7 +73,7 @@ export default function VerificationCodeModal({
   const isValid = code.length === CODE_LENGTH;
 
   return (
-    <Modal
+    <ModalShell
       open={open}
       onClose={onClose}
       title="Enter Verification Code"
@@ -141,6 +143,6 @@ export default function VerificationCodeModal({
           </button>
         </div>
       </form>
-    </Modal>
+    </ModalShell>
   );
 }

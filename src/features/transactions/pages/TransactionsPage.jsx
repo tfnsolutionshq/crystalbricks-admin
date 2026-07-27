@@ -1,14 +1,17 @@
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import AppLayout from "@/shared/components/DashboardComponents/Layout.jsx";
-import {
-  Badge,
-  FilterPill,
-  Pagination,
-  SearchInput,
-  formatNaira,
-} from "@/features/transactions/components/GeneralTransactionsUIComponents.jsx";
+
+import Layout from "@/shared/components/Layout.jsx";
+
+import Badge from "@/shared/components/Badge";
+import FilterPill from "@/shared/components/FilterPill";
+import Pagination from "@/shared/components/Pagination";
+import SearchInput from "@/shared/components/SearchInput";
+
+import formatCurrency from "@/shared/utils/formatCurrency";
+
 import { transactionsList } from "@/features/transactions/mocks/transactionMockData.js";
+
 import { filterTransactions } from "@/features/transactions/helpers/transactionHelpers.js";
 
 // ============================================================================
@@ -27,7 +30,7 @@ export default function TransactionsPage() {
   );
 
   return (
-    <AppLayout activeNavItem="Transactions">
+    <Layout activeNavItem="Transactions">
       <div className="p-4 sm:p-6 space-y-6 max-w-[1600px]">
         {/* ------------------------------------------------------------------
           PAGE HEADER: title + Export button
@@ -101,7 +104,7 @@ export default function TransactionsPage() {
                     {txn.description}
                   </td>
                   <td className="px-6 py-4 text-gray-900">
-                    {formatNaira(txn.amount)}
+                    {formatCurrency(txn.amount)}
                   </td>
                   <td className="px-6 py-4 text-gray-500">{txn.date}</td>
                   <td className="px-6 py-4">
@@ -122,6 +125,6 @@ export default function TransactionsPage() {
           </div>
         </div>
       </div>
-    </AppLayout>
+    </Layout>
   );
 }

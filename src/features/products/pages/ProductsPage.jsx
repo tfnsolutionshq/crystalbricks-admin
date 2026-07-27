@@ -2,12 +2,12 @@ import { useState } from "react";
 import { Plus } from "lucide-react";
 
 import Layout from "@/shared/components/Layout";
+import StatCard from "@/shared/components/StatCard";
+import Pagination from "@/shared/components/Pagination";
 
 import ProductTabs from "@/features/products/components/ProductTabs";
-import StatCard from "@/features/products/components/StatCard";
 import FilterBar from "@/features/products/components/FilterBar";
 import ProductsTable from "@/features/products/components/ProductsTable";
-import TableFooter from "@/features/products/components/TableFooter";
 
 import { DATA_BY_TAB } from "@/features/products/mocks/productsMockData";
 
@@ -47,7 +47,7 @@ export default function Products() {
 
         <div className="bg-white rounded-2xl border border-gray-200 p-6 space-y-4">
           <ProductsTable rows={rows} />
-          <TableFooter
+          <Pagination
             showing={showing}
             total={total}
             page={page}

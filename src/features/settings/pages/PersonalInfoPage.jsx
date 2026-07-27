@@ -5,10 +5,10 @@
 import { useState } from "react";
 import { Camera, BadgeCheck } from "lucide-react";
 
-import Layout from "@/shared/components/DashboardComponents/Layout.jsx";
+import Layout from "@/shared/components/Layout";
+import Badge from "@/shared/components/Badge";
 
 import Field, { TextInput } from "@/features/team-management/components/Field";
-import { Badge } from "@/features/customers/components/GeneralCustomerComponents";
 
 import SettingsTabs from "@/features/settings/components/SettingsTabs";
 import { currentUser } from "@/features/settings/mocks/settingsMockData";

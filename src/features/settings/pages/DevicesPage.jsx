@@ -6,11 +6,11 @@
 import { useState } from "react";
 import { Laptop, Smartphone, LogOut } from "lucide-react";
 
-import Layout from "@/shared/components/DashboardComponents/Layout.jsx";
+import Layout from "@/shared/components/Layout.jsx";
 
-import { Badge } from "@/features/customers/components/GeneralCustomerComponents";
-import { KebabButton } from "@/features/customers/components/GeneralCustomerComponents";
-import Modal from "@/features/team-management/components/ModalShell";
+import Badge from "@/shared/components/Badge";
+import KebabButton from "@/shared/components/KebabButton";
+import ModalShell from "@/shared/components/ModalShell";
 
 import SettingsTabs from "@/features/settings/components/SettingsTabs";
 import { devices as initialDevices } from "@/features/settings/mocks/settingsMockData";
@@ -144,7 +144,7 @@ export default function DevicesPage() {
           {/* ------------------------------------------------------------- */}
           {/* Log out confirm modal                                        */}
           {/* ------------------------------------------------------------- */}
-          <Modal
+          <ModalShell
             open={!!confirmTarget}
             onClose={() => setConfirmTarget(null)}
             maxWidth="max-w-sm"
@@ -184,7 +184,7 @@ export default function DevicesPage() {
                 </button>
               </div>
             </div>
-          </Modal>
+          </ModalShell>
         </div>
       </div>
     </Layout>

@@ -1,4 +1,5 @@
-import StatusBadge from "@/features/dashboard/components/StatusBadge";
+import Badge from "@/shared/components/Badge";
+
 import { TRANSACTIONS } from "@/features/dashboard/mocks/dashboardMockData";
 
 export default function RecentTransactionsTable() {
@@ -37,7 +38,7 @@ export default function RecentTransactionsTable() {
                 <td className="py-3 pr-4 text-gray-900">{t.amount}</td>
                 <td className="py-3 pr-4 text-gray-500">{t.date}</td>
                 <td className="py-3">
-                  <StatusBadge status={t.status} />
+                  <Badge status={t.status} />
                 </td>
               </tr>
             ))}

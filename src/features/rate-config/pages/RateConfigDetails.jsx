@@ -3,9 +3,14 @@ import { useParams, useNavigate } from "react-router-dom";
 import { ArrowLeft, MoreHorizontal, Calendar, Clock } from "lucide-react";
 
 import Layout from "@/shared/components/Layout.jsx";
+
 import RatesTable from "@/features/rate-config/components/RatesTable";
 import DateTimeField from "@/features/rate-config/components/DateTimeField";
-import { RATE_PRODUCTS, AMOUNT_TIERS } from "@/features/rate-config/mocks/rateConfigMockData";
+
+import {
+  RATE_PRODUCTS,
+  AMOUNT_TIERS,
+} from "@/features/rate-config/mocks/rateConfigMockData";
 
 export default function RateConfigDetail() {
   const { productId } = useParams();

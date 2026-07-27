@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import AppLayout from "@/shared/components/DashboardComponents/Layout.jsx";
+
+import Layout from "@/shared/components/Layout";
 import {
   Badge,
   Card,
@@ -8,7 +9,9 @@ import {
   KebabButton,
   formatNaira,
 } from "@/features/transactions/components/GeneralTransactionsUIComponents.jsx";
+
 import { getTransactionById } from "@/features/transactions/mocks/transactionMockData.js";
+
 import { calculateNewAvailable } from "@/features/transactions/helpers/transactionHelpers.js";
 import ConfirmApprovalModal from "@/features/transactions/components/ConfirmApprovalModal.jsx";
 import ConfirmRejectionModal from "@/features/transactions/components/ConfirmRejectionModal.jsx";

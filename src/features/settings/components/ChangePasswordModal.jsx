@@ -2,9 +2,12 @@
 
 import { useState } from "react";
 import { Eye, EyeOff, KeyRound } from "lucide-react";
-import Modal from "@/features/team-management/components/ModalShell";
-import Field, { TextInput } from "@/features/team-management/components/Field";
-import { Badge } from "@/features/customers/components/GeneralCustomerComponents";
+
+import ModalShell from "@/shared/components/ModalShell";
+import Badge from "@/shared/components/Badge";
+import Field from "@/shared/components/Field";
+import TextInput from "@/shared/components/TextInput";
+
 import { getPasswordStrength } from "@/features/settings/helpers/settingsHelpers";
 
 const emptyForm = { current: "", next: "", confirm: "" };
@@ -45,7 +48,7 @@ export default function ChangePasswordModal({ open, onClose, onSubmit }) {
     form.confirm === form.next;
 
   return (
-    <Modal open={open} onClose={handleClose} title="Change Password">
+    <ModalShell open={open} onClose={handleClose} title="Change Password">
       <form onSubmit={handleSubmit}>
         <Field label="Current Password" required>
           <div className="relative">
@@ -151,6 +154,6 @@ export default function ChangePasswordModal({ open, onClose, onSubmit }) {
           </button>
         </div>
       </form>
-    </Modal>
+    </ModalShell>
   );
 }

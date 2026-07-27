@@ -7,10 +7,9 @@ import { useState } from "react";
 import { KeyRound, ShieldCheck, Monitor } from "lucide-react";
 import { Link } from "react-router-dom";
 
-import Layout from "@/shared/components/DashboardComponents/Layout.jsx";
-
-import Toggle from "@/shared/components/DashboardComponents/Toggle";
-import { Badge } from "@/features/customers/components/GeneralCustomerComponents";
+import Layout from "@/shared/components/Layout";
+import Toggle from "@/shared/components/Toggle";
+import Badge from "@/shared/components/Badge";
 
 import SettingsTabs from "@/features/settings/components/SettingsTabs";
 import ChangePasswordModal from "@/features/settings/components/ChangePasswordModal";

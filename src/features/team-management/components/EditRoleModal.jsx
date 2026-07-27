@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
-import ModalShell from "./ModalShell";
-import Field from "./Field";
+
+import ModalShell from "@/shared/components/ModalShell";
+import Field from "@/shared/components/Field";
+
 import RoleSelect from "./RoleSelect";
+
 import {
   getInitials,
   getAvatarColor,

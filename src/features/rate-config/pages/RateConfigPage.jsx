@@ -1,9 +1,12 @@
 import { useState } from "react";
-import Layout from "@/shared/components/DashboardComponents/Layout.jsx";
+
+import Layout from "@/shared/components/Layout";
+import Pagination from "@/shared/components/Pagination";
+
 import RateConfigTabs from "@/features/rate-config/components/RateConfigTabs";
 import FilterBar from "@/features/rate-config/components/FilterBar";
 import RateConfigTable from "@/features/rate-config/components/RateConfigTable";
-import TableFooter from "@/features/rate-config/components/TableFooter";
+
 import { RATE_PRODUCTS } from "@/features/rate-config/mocks/rateConfigMockData";
 
 export default function RateConfiguration() {
@@ -21,7 +24,7 @@ export default function RateConfiguration() {
 
         <RateConfigTable rows={RATE_PRODUCTS} />
 
-        <TableFooter showing={10} total={4523} page={1} pageCount={46} />
+        <Pagination showing={10} total={4523} page={1} pageCount={46} />
       </div>
     </Layout>
   );

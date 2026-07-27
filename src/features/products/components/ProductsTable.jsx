@@ -1,4 +1,4 @@
-import StatusBadge from "@/features/products/components/StatusBadge";
+import Badge from "@/shared/components/Badge";
 
 export default function ProductsTable({ rows }) {
   return (
@@ -22,7 +22,7 @@ export default function ProductsTable({ rows }) {
               <td className="py-4 pr-4 text-gray-500">{row.type}</td>
               <td className="py-4 pr-4 text-gray-900">{row.rate}</td>
               <td className="py-4 pr-4">
-                <StatusBadge status={row.status} />
+                <Badge status={row.status} />
               </td>
               <td className="py-4 text-gray-500">{row.dateCreated}</td>
             </tr>

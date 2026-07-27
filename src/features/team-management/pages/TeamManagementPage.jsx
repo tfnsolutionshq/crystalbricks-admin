@@ -1,20 +1,19 @@
 import { useMemo, useState } from "react";
 import { UserPlus, Pencil, UserX, UserCheck, Trash2 } from "lucide-react";
 
-import Layout from "@/shared/components/DashboardComponents/Layout.jsx";
+import Layout from "@/shared/components/Layout";
+import Badge from "@/shared/components/Badge";
+import FilterPill from "@/shared/components/FilterPill";
+import SearchInput from "@/shared/components/SearchInput";
+import Pagination from "@/shared/components/Pagination";
+import KebabButton from "@/shared/components/KebabButton";
 
-import {
-  Badge,
-  FilterPill,
-  SearchInput,
-  Pagination,
-  KebabButton,
-} from "@/features/customers/components/GeneralCustomerComponents.jsx";
 import {
   teamMembers,
   TEAM_ROLES,
   teamPagination,
 } from "@/features/team-management/mocks/teamManagementMockData";
+
 import {
   getInitials,
   getAvatarColor,

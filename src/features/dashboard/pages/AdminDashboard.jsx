@@ -1,9 +1,9 @@
 import { useState } from "react";
 
-import Layout from "@/shared/components/Layout.jsx";
+import Layout from "@/shared/components/Layout";
+import StatCard from "@/shared/components/StatCard";
 
 import FilterDropdown from "@/features/dashboard/components/FilterDropdown";
-import StatCard from "@/features/dashboard/components/StatCard";
 import ActiveUsersChart from "@/features/dashboard/components/ActiveUsersChart";
 import UpcomingRepayments from "@/features/dashboard/components/UpcomingRepayments";
 import RevenueDonutChart from "@/features/dashboard/components/RevenueDonutChart";
