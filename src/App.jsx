@@ -21,6 +21,9 @@ import AnalyticsPage from "./features/analytics/pages/AnalyticsPage";
 import PublicRouteGuard from "./routes/PublicRouteGuard";
 import PrivateRouteGuard from "./routes/PrivateRouteGuard";
 import TeamManagementPage from "./features/team-management/pages/TeamManagementPage";
+import PersonalInfoPage from "./features/settings/pages/PersonalInfoPage";
+import SecurityPage from "./features/settings/pages/SecurityPage";
+import DevicesPage from "./features/settings/pages/DevicesPage";
 
 export default function App() {
   return (
@@ -58,6 +61,17 @@ export default function App() {
             />
             <Route path="/analytics" element={<AnalyticsPage />} />
             <Route path="/team-management" element={<TeamManagementPage />} />
+
+            <Route
+              path="/settings"
+              element={<Navigate to="/settings/personal-info" replace />}
+            />
+            <Route
+              path="/settings/personal-info"
+              element={<PersonalInfoPage />}
+            />
+            <Route path="/settings/security" element={<SecurityPage />} />
+            <Route path="/settings/devices" element={<DevicesPage />} />
           </Route>
         </Routes>
       </Router>
