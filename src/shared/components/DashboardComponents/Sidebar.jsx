@@ -14,6 +14,7 @@ import {
   X,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useAuth } from "@/shared/context/AuthContext";
 
 const NAV_ITEMS = [
   { label: "Dashboard", icon: LayoutGrid, href: "/dashboard" },
@@ -34,6 +35,7 @@ const NAV_ITEMS = [
  * `activeItem` lets each page highlight the nav entry that matches it.
  */
 export default function Sidebar({ activeItem = "Dashboard", isOpen, onClose }) {
+  const { logout } = useAuth();
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
@@ -57,7 +59,7 @@ export default function Sidebar({ activeItem = "Dashboard", isOpen, onClose }) {
 
       {/* Mobile off-canvas sidebar */}
       <aside
-        className={`fixed top-0 left-0 z-50 h-full w-64 shrink-0 bg-white border-r border-gray-200 flex flex-col justify-between transition-transform duration-300 lg:static lg:z-auto lg:flex lg:translate-x-0 ${
+        className={`fixed top-0 left-0 z-50 h-full w-64 shrink-0 bg-white border-r border-gray-200 flex flex-col justify-between transition-transform duration-300 lg:static lg:z-auto lg:flex lg:translate-x-0 pb-4 ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
@@ -95,10 +97,11 @@ export default function Sidebar({ activeItem = "Dashboard", isOpen, onClose }) {
           </ul>
         </nav>
 
-        <div className="px-3 pb-6">
+        <div className="px-3">
           <button
             type="button"
-            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors"
+            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors cursor-pointer"
+            onClick={() => logout()}
           >
             <LogOut size={18} strokeWidth={2} />
             Log out

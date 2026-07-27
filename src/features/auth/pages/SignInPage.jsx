@@ -1,12 +1,44 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import { Mail, Lock, Eye, EyeOff } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { Mail, Lock, Eye, EyeOff, Loader2 } from "lucide-react";
 import skyscraperImage from "@/assets/images/skyscrapers.jpg";
 import crystalBricksLogo from "@/assets/images/crystal_bricks_logo.png";
+import { useAuth } from "@/shared/context/AuthContext";
 
 const SignInPage = () => {
+  const navigate = useNavigate();
+  const { login } = useAuth();
+
+  const [email, setEmail] = useState("");
+  const [passcode, setPasscode] = useState("");
   const [showPasscode, setShowPasscode] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError(null);
+    setLoading(true);
+
+    try {
+      await login({
+        email,
+        password: passcode,
+      });
+
+      navigate("/dashboard");
+    } catch (error) {
+      setError(
+        error.response?.data?.message ??
+          error.message ??
+          error ??
+          "An error occurred during login. Please try again",
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row">
@@ -44,14 +76,29 @@ const SignInPage = () => {
 
       {/* RIGHT PANEL */}
       <div className="flex w-full flex-1 flex-col bg-slate-50 md:w-[43%]">
-        <div className="flex flex-1 items-center justify-center px-6 pb-16">
-          <form className="w-full max-w-sm">
+        {/* Mobile branding - visible only when left panel is hidden */}
+        <div className="flex md:hidden items-center gap-2 px-4 sm:px-6 pt-6 pb-4">
+          <img src={crystalBricksLogo} alt="" className="h-7 w-7" />
+          <span className="text-base font-semibold text-slate-900">
+            Crystal Bricks
+          </span>
+        </div>
+        <div className="flex flex-1 items-center justify-center px-4 sm:px-6 pb-12 sm:pb-16">
+          <form className="w-full max-w-sm" onSubmit={handleSubmit}>
             <h2 className="mb-1 text-2xl font-bold text-slate-900">
               Admin Portal
             </h2>
             <p className="mb-8 text-sm text-slate-500">
               Welcome! Please enter your details to log in
             </p>
+
+            <div>
+              {error && (
+                <div className="mb-4 rounded-lg bg-red-100 px-4 py-2 text-sm text-red-700">
+                  {error}
+                </div>
+              )}
+            </div>
 
             {/* EMAIL */}
             <div className="mb-5">
@@ -70,6 +117,8 @@ const SignInPage = () => {
                   type="email"
                   name="email"
                   id="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   placeholder="Enter email address"
                   className="w-full rounded-xl border border-slate-200 bg-white py-3 pl-11 pr-4 text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#c21c86] focus:outline-none focus:ring-1 focus:ring-[#c21c86]"
                 />
@@ -93,6 +142,8 @@ const SignInPage = () => {
                   type={showPasscode ? "text" : "password"}
                   name="passcode"
                   id="passcode"
+                  value={passcode}
+                  onChange={(e) => setPasscode(e.target.value)}
                   placeholder="Enter passcode"
                   className="w-full rounded-xl border border-slate-200 bg-white py-3 pl-11 pr-11 text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#c21c86] focus:outline-none focus:ring-1 focus:ring-[#c21c86]"
                 />
@@ -108,7 +159,7 @@ const SignInPage = () => {
             </div>
 
             {/* REMEMBER ME / FORGOT PASSCODE */}
-            <div className="mb-6 flex items-center justify-between">
+            <div className="mb-6 flex items-center justify-between gap-2 flex-wrap">
               <label className="flex items-center gap-2 text-sm text-slate-600">
                 <input
                   type="checkbox"
@@ -130,9 +181,17 @@ const SignInPage = () => {
             {/* SUBMIT */}
             <button
               type="submit"
-              className="w-full rounded-xl bg-[#c21c86] py-3.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#a8176f] focus:outline-none focus:ring-2 focus:ring-[#c21c86] focus:ring-offset-2"
+              className="w-full rounded-xl bg-[#c21c86] py-3.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#a8176f] focus:outline-none focus:ring-2 focus:ring-[#c21c86] focus:ring-offset-2 cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
+              disabled={loading}
             >
-              Log in
+              {loading ? (
+                <span className="flex items-center justify-center gap-1">
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  <>Logging in...</>
+                </span>
+              ) : (
+                "Log in"
+              )}
             </button>
           </form>
         </div>
