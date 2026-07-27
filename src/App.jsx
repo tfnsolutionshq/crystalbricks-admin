@@ -20,6 +20,7 @@ import TransactionDetailsPage from "./features/transactions/pages/TransactionDet
 import AnalyticsPage from "./features/analytics/pages/AnalyticsPage";
 import PublicRouteGuard from "./routes/PublicRouteGuard";
 import PrivateRouteGuard from "./routes/PrivateRouteGuard";
+import TeamManagementPage from "./features/team-management/pages/TeamManagementPage";
 
 export default function App() {
   return (
@@ -56,6 +57,7 @@ export default function App() {
               element={<TransactionDetailsPage />}
             />
             <Route path="/analytics" element={<AnalyticsPage />} />
+            <Route path="/team-management" element={<TeamManagementPage />} />
           </Route>
         </Routes>
       </Router>
