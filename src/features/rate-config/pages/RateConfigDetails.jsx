@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { ArrowLeft, MoreHorizontal, Calendar, Clock } from "lucide-react";
-import Layout from "@/shared/components/DashboardComponents/Layout.jsx";
+
+import Layout from "@/shared/components/Layout.jsx";
+
 import { RATE_PRODUCTS } from "./RateConfigPage.jsx";
 
 /* -------------------------------------------------------------------------- */

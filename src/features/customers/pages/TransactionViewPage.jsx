@@ -1,12 +1,14 @@
 import { useNavigate, useParams } from "react-router-dom";
-import AppLayout from "@/shared/components/DashboardComponents/Layout.jsx";
-import {
-  Badge,
-  Card,
-  Field,
-  KebabButton,
-  formatNaira,
-} from "@/features/customers/components/GeneralCustomerComponents.jsx";
+
+import Layout from "@/shared/components/DashboardComponents/Layout.jsx";
+
+import Badge from "@/shared/components/Badge.jsx";
+import Card from "@/shared/components/Card.jsx";
+import Field from "@/shared/components/Field.jsx";
+import KebabButton from "@/shared/components/KebabButton.jsx";
+
+import formatCurrency from "@/shared/utils/formatCurrency";
+
 import { getTransaction } from "@/features/customers/mocks/customerMockData.js";
 
 // ============================================================================
@@ -22,16 +24,16 @@ export default function TransactionViewPage() {
 
   if (!txn) {
     return (
-      <AppLayout activeNavItem="Customers">
+      <Layout activeNavItem="Customers">
         <div className="p-4 sm:p-6 space-y-6 max-w-[1600px]">
           <p className="text-sm text-gray-500">Transaction not found.</p>
         </div>
-      </AppLayout>
+      </Layout>
     );
   }
 
   return (
-    <AppLayout activeNavItem="Customers">
+    <Layout activeNavItem="Customers">
       <div className="p-4 sm:p-6 space-y-6 max-w-[1600px]">
         {/* ------------------------------------------------------------------
           HEADER: back button, transaction id + timestamp, status, kebab menu
@@ -90,9 +92,11 @@ export default function TransactionViewPage() {
                   </svg>
                 </span>
               </Field>
-              <Field label="Amount">{formatNaira(txn.amount)}</Field>
+              <Field label="Amount">{formatCurrency(txn.amount)}</Field>
               <Field label="Fee">
-                <span className="underline">{formatNaira(txn.fee || 0)}</span>
+                <span className="underline">
+                  {formatCurrency(txn.fee || 0)}
+                </span>
               </Field>
               <Field label="Type">{txn.type}</Field>
               <Field label="Category">{txn.category}</Field>
@@ -103,26 +107,28 @@ export default function TransactionViewPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-5">
               <Field label="Previous Available">
                 <span className="line-through text-gray-400">
-                  {formatNaira(txn.previousAvailable)}
+                  {formatCurrency(txn.previousAvailable)}
                 </span>
               </Field>
               <Field label="Pending">
                 <span className="text-gray-400">
-                  {formatNaira(txn.pending)}
+                  {formatCurrency(txn.pending)}
                 </span>
               </Field>
               <Field label="Transaction Amount">
-                +{formatNaira(txn.amount)}
+                +{formatCurrency(txn.amount)}
               </Field>
               <div />
               <Field label="New Available">
-                {formatNaira(txn.newAvailable)}
+                {formatCurrency(txn.newAvailable)}
               </Field>
-              <Field label="New Pending">{formatNaira(txn.newPending)}</Field>
+              <Field label="New Pending">
+                {formatCurrency(txn.newPending)}
+              </Field>
             </div>
           </Card>
         </div>
       </div>
-    </AppLayout>
+    </Layout>
   );
 }

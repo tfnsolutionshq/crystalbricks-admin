@@ -1,13 +1,13 @@
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import AppLayout from "@/shared/components/DashboardComponents/Layout.jsx";
-import {
-  Badge,
-  StatCard,
-  FilterPill,
-  SearchInput,
-  Pagination,
-} from "@/features/customers/components/GeneralCustomerComponents.jsx";
+
+import Layout from "@/shared/components/Layout.jsx";
+import Badge from "@/shared/components/Badge.jsx";
+import StatCard from "@/shared/components/StatCard.jsx";
+import Pagination from "@/shared/components/Pagination.jsx";
+import SearchInput from "@/shared/components/SearchInput.jsx";
+import FilterPill from "@/shared/components/FilterPill.jsx";
+
 import {
   customers,
   customerStats,
@@ -34,7 +34,7 @@ export default function CustomersPage() {
   }, [search]);
 
   return (
-    <AppLayout activeNavItem="Customers">
+    <Layout activeNavItem="Customers">
       <div className="p-4 sm:p-6 space-y-6 max-w-[1600px]">
         {/* ------------------------------------------------------------------
           PAGE HEADER: title + Export button
@@ -177,6 +177,6 @@ export default function CustomersPage() {
           </div>
         </div>
       </div>
-    </AppLayout>
+    </Layout>
   );
 }

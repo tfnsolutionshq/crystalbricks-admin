@@ -1,16 +1,17 @@
 import { Fragment, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import AppLayout from "@/shared/components/DashboardComponents/Layout.jsx";
-import {
-  Badge,
-  Card,
-  Field,
-  KebabButton,
-  Pagination,
-  SearchInput,
-  FilterPill,
-  formatNaira,
-} from "@/features/customers/components/GeneralCustomerComponents.jsx";
+
+import Layout from "@/shared/components/Layout.jsx";
+import Badge from "@/shared/components/Badge.jsx";
+import Card from "@/shared/components/Card.jsx";
+import Field from "@/shared/components/Field.jsx";
+import KebabButton from "@/shared/components/KebabButton.jsx";
+import Pagination from "@/shared/components/Pagination.jsx";
+import SearchInput from "@/shared/components/SearchInput.jsx";
+import FilterPill from "@/shared/components/FilterPill.jsx";
+
+import formatCurrency from "@/shared/utils/formatCurrency";
+
 import { getCustomerById } from "@/features/customers/mocks/customerMockData.js";
 
 const TABS = [
@@ -38,7 +39,7 @@ export default function CustomerDetailsPage() {
   const [activeTab, setActiveTab] = useState("Details");
 
   return (
-    <AppLayout activeNavItem="Customers">
+    <Layout activeNavItem="Customers">
       <div className="p-4 sm:p-6 space-y-6 max-w-[1600px]">
         {/* ------------------------------------------------------------------
           HEADER: back button, name, verification/status, kebab menu
@@ -122,7 +123,7 @@ export default function CustomerDetailsPage() {
         {activeTab === "Loans" && <LoansTab customer={customer} />}
         {activeTab === "Audit Log" && <AuditLogTab customer={customer} />}
       </div>
-    </AppLayout>
+    </Layout>
   );
 }
 
@@ -304,10 +305,10 @@ function BalancesTab({ customer }) {
                   {row.type}
                 </td>
                 <td className="px-4 sm:px-6 py-4 text-gray-400 line-through whitespace-nowrap">
-                  {formatNaira(row.available)}
+                  {formatCurrency(row.available)}
                 </td>
                 <td className="px-4 sm:px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                  {formatNaira(row.total)}
+                  {formatCurrency(row.total)}
                 </td>
                 <td className="px-4 sm:px-6 py-4 text-right">
                   <KebabButton />
@@ -395,7 +396,7 @@ function TransactionsTab({ customer }) {
                     {txn.description}
                   </td>
                   <td className="px-4 sm:px-6 py-4 text-gray-900 whitespace-nowrap">
-                    {formatNaira(txn.amount)}
+                    {formatCurrency(txn.amount)}
                   </td>
                   <td className="px-4 sm:px-6 py-4 text-gray-500 whitespace-nowrap">
                     {txn.date}
@@ -453,12 +454,12 @@ function LoansTab({ customer }) {
           <span className="underline">{loan.referenceId}</span>
         </Field>
         <Field label="Interest">
-          {loan.interestRate} ({formatNaira(loan.interestAmount)})
+          {loan.interestRate} ({formatCurrency(loan.interestAmount)})
         </Field>
-        <Field label="Amount">{formatNaira(loan.amount)}</Field>
+        <Field label="Amount">{formatCurrency(loan.amount)}</Field>
         <Field label="Accepted">{loan.accepted}</Field>
         <Field label="Instalment Amount">
-          {formatNaira(loan.instalmentAmount)}
+          {formatCurrency(loan.instalmentAmount)}
         </Field>
         <Field label="End Date">{loan.endDate}</Field>
         <Field label="Start Date">{loan.startDate}</Field>
