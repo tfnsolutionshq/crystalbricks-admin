@@ -24,6 +24,8 @@ import TeamManagementPage from "./features/team-management/pages/TeamManagementP
 import PersonalInfoPage from "./features/settings/pages/PersonalInfoPage";
 import SecurityPage from "./features/settings/pages/SecurityPage";
 import DevicesPage from "./features/settings/pages/DevicesPage";
+import ContributionsPage from "./features/contributions/pages/ContributionsPage";
+import CustomerContributionDetailsPage from "./features/contributions/pages/CustomerContributionDetailsPage";
 
 export default function App() {
   return (
@@ -72,6 +74,11 @@ export default function App() {
             />
             <Route path="/settings/security" element={<SecurityPage />} />
             <Route path="/settings/devices" element={<DevicesPage />} />
+            <Route path="/contributions" element={<ContributionsPage />} />
+            <Route
+              path="/contributions/:customerId"
+              element={<CustomerContributionDetailsPage />}
+            />
           </Route>
         </Routes>
       </Router>
