@@ -1,0 +1,222 @@
+import { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Download } from "lucide-react";
+
+import Card from "@/shared/components/Card";
+import Badge from "@/shared/components/Badge";
+import FilterPill from "@/shared/components/FilterPill";
+import SearchInput from "@/shared/components/SearchInput";
+import Pagination from "@/shared/components/Pagination";
+
+import { ALL_LOANS, TOTAL_LOANS } from "@/features/loans/mocks/loansMockData";
+
+import {
+  formatNaira,
+  formatDateTime,
+  getStatusVariant,
+  getTypeVariant,
+} from "@/features/loans/helpers/loanHelpers";
+
+const PAGE_SIZE = 10;
+
+const TYPE_OPTIONS = ["All", "Individual", "Corporate"];
+const CATEGORY_OPTIONS = ["All", "Government Salary Workers Loan"];
+const STATUS_OPTIONS = [
+  "All",
+  "New",
+  "Processing",
+  "On hold",
+  "Awaiting",
+  "Pending",
+  "Active",
+  "Declined",
+  "Rejected",
+  "Repaid",
+];
+const DATE_OPTIONS = [
+  "This week",
+  "Today",
+  "This month",
+  "This year",
+  "All time",
+];
+
+export default function LoanList() {
+  const navigate = useNavigate();
+
+  // ---- Filter state (header section) ----
+  const [search, setSearch] = useState("");
+  const [type, setType] = useState("All");
+  const [category, setCategory] = useState("All");
+  const [status, setStatus] = useState("All");
+  const [dateRange, setDateRange] = useState("This week");
+  const [page, setPage] = useState(1);
+
+  // ---- Filtering (table section) ----
+  const filteredLoans = useMemo(() => {
+    return ALL_LOANS.filter((loan) => {
+      const matchesSearch =
+        !search ||
+        loan.reference.toLowerCase().includes(search.toLowerCase()) ||
+        loan.customer.toLowerCase().includes(search.toLowerCase());
+      const matchesType = type === "All" || loan.type === type;
+      const matchesCategory = category === "All" || loan.category === category;
+      const matchesStatus = status === "All" || loan.status === status;
+      return matchesSearch && matchesType && matchesCategory && matchesStatus;
+    });
+  }, [search, type, category, status]);
+
+  const totalCount =
+    filteredLoans.length === ALL_LOANS.length
+      ? TOTAL_LOANS
+      : filteredLoans.length;
+  const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
+  const pageStart = (page - 1) * PAGE_SIZE;
+  const pageLoans = filteredLoans.slice(pageStart, pageStart + PAGE_SIZE);
+
+  const goToDetail = (reference) => navigate(`/loans/${reference}/application`);
+
+  return (
+    <div className="p-4 sm:p-6">
+      {/* ---- Page header ---- */}
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-xl font-bold text-gray-900">Loans</h1>
+        <button
+          type="button"
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-pink-700 hover:bg-pink-800 text-white text-sm font-medium transition-colors"
+        >
+          Export
+          <Download size={16} />
+        </button>
+      </div>
+
+      {/* ---- Search + filter bar ---- */}
+      <div className="flex flex-wrap items-center gap-3 mb-5">
+        <div className="w-full sm:w-72">
+          <SearchInput
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search reference, customer"
+          />
+        </div>
+        <FilterPill
+          label="Type"
+          value={type}
+          options={TYPE_OPTIONS}
+          onChange={setType}
+        />
+        <FilterPill
+          label="Category"
+          value={category}
+          options={CATEGORY_OPTIONS}
+          onChange={setCategory}
+        />
+        <FilterPill
+          label="Status"
+          value={status}
+          options={STATUS_OPTIONS}
+          onChange={setStatus}
+        />
+        <FilterPill
+          label="Date"
+          value={dateRange}
+          options={DATE_OPTIONS}
+          onChange={setDateRange}
+        />
+      </div>
+
+      {/* ---- Loans table ---- */}
+      <Card padded={false}>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-gray-100 text-left text-gray-500">
+                <th className="px-6 py-3 font-medium whitespace-nowrap">
+                  Reference
+                </th>
+                <th className="px-6 py-3 font-medium whitespace-nowrap">
+                  Customer
+                </th>
+                <th className="px-6 py-3 font-medium whitespace-nowrap">
+                  Type
+                </th>
+                <th className="px-6 py-3 font-medium whitespace-nowrap">
+                  Category
+                </th>
+                <th className="px-6 py-3 font-medium whitespace-nowrap">
+                  Amount
+                </th>
+                <th className="px-6 py-3 font-medium whitespace-nowrap">
+                  Date
+                </th>
+                <th className="px-6 py-3 font-medium whitespace-nowrap text-right">
+                  Status
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-100">
+              {pageLoans.map((loan) => (
+                <tr
+                  key={loan.reference}
+                  onClick={() => goToDetail(loan.reference)}
+                  className="cursor-pointer hover:bg-gray-50"
+                >
+                  <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900">
+                    {loan.reference}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <a
+                      href={`/customers/${loan.customerId}`}
+                      onClick={(e) => e.stopPropagation()}
+                      className="text-gray-900 underline underline-offset-2"
+                    >
+                      {loan.customer}
+                    </a>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <Badge variant={getTypeVariant(loan.type)}>
+                      {loan.type}
+                    </Badge>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-gray-700 max-w-45 truncate">
+                    {loan.category}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900">
+                    {formatNaira(loan.amount)}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-gray-700">
+                    {formatDateTime(loan.date)}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-right">
+                    <Badge variant={getStatusVariant(loan.status)}>
+                      {loan.status}
+                    </Badge>
+                  </td>
+                </tr>
+              ))}
+              {pageLoans.length === 0 && (
+                <tr>
+                  <td
+                    colSpan={7}
+                    className="px-6 py-10 text-center text-sm text-gray-500"
+                  >
+                    No loans match your filters.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+
+        <Pagination
+          page={page}
+          totalPages={totalPages}
+          totalCount={totalCount}
+          pageSize={PAGE_SIZE}
+          shownCount={pageLoans.length}
+          onPageChange={setPage}
+        />
+      </Card>
+    </div>
+  );
+}
