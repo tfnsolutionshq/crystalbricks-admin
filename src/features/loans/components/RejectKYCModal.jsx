@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import Modal, { ModalFooter } from "./Modal";
 
 export default function RejectKYCModal({ open, onClose, onConfirm }) {

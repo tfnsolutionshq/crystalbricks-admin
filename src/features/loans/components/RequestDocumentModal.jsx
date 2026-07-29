@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Modal, { ModalFooter } from "./Modal";
 
 export default function RequestDocumentModal({ open, onClose, onConfirm }) {

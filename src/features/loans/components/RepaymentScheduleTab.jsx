@@ -6,7 +6,7 @@ import Badge from "@/shared/components/Badge";
 import {
   formatNaira,
   formatDateTime,
-} from "@/features/helpers/loans/loanHelpers";
+} from "@/features/loans/helpers/loanHelpers";
 
 import UpdateAmountModal from "@/features/loans/components/UpdateAmountModal";
 import AddRepaymentEntryModal from "@/features/loans/components/AddRepaymentEntryModal";

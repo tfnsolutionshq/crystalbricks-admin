@@ -26,6 +26,8 @@ import SecurityPage from "./features/settings/pages/SecurityPage";
 import DevicesPage from "./features/settings/pages/DevicesPage";
 import ContributionsPage from "./features/contributions/pages/ContributionsPage";
 import CustomerContributionDetailsPage from "./features/contributions/pages/CustomerContributionDetailsPage";
+import LoanDetailsPage from "./features/loans/pages/LoanDetailsPage";
+import LoanListPage from "./features/loans/pages/LoanListPage";
 
 export default function App() {
   return (
@@ -78,6 +80,12 @@ export default function App() {
             <Route
               path="/contributions/:customerId"
               element={<CustomerContributionDetailsPage />}
+            />
+            <Route path="/loans" element={<LoanListPage />} />
+            <Route path="/loans/:reference" element={<LoanDetailsPage />} />
+            <Route
+              path="/loans/:reference/:tab"
+              element={<LoanDetailsPage />}
             />
           </Route>
         </Routes>
