@@ -12,7 +12,7 @@ export default function Pagination({ showing, total, page, pageCount }) {
         <div className="flex items-center gap-1.5">
           <button
             disabled={page <= 1}
-            className="w-7 h-7 rounded-md border border-gray-200 flex items-center justify-center disabled:opacity-40"
+            className="w-7 h-7 rounded-md border border-gray-200 flex items-center justify-center disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed"
             aria-label="Previous page"
           >
             <svg
@@ -27,7 +27,7 @@ export default function Pagination({ showing, total, page, pageCount }) {
           </button>
           <button
             disabled={page >= pageCount}
-            className="w-7 h-7 rounded-md border border-gray-200 flex items-center justify-center disabled:opacity-40"
+            className="w-7 h-7 rounded-md border border-gray-200 flex items-center justify-center disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed"
             aria-label="Next page"
           >
             <svg

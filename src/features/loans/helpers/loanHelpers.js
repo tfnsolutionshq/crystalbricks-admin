@@ -67,11 +67,11 @@ export function getRiskVariant(risk) {
 // ---- Tab visibility ---------------------------------------------------------
 // Approval Details only shows once a loan has reached a decision stage.
 const STATUSES_WITH_APPROVAL = [
-  "Awaiting",
-  "Pending",
-  "Declined",
-  "Active",
-  "Repaid",
+  "awaiting",
+  "pending",
+  "declined",
+  "active",
+  "repaid",
 ];
 // Repayment Schedule only exists once a loan has been disbursed.
 const STATUSES_WITH_SCHEDULE = ["Active", "Repaid"];
@@ -79,7 +79,7 @@ const STATUSES_WITH_SCHEDULE = ["Active", "Repaid"];
 export function getAvailableTabs(loan) {
   const tabs = [
     { key: "application", label: "Application Details" },
-    { key: "kyc", label: "KYC Documents" },
+    { key: "kyc", label: "KYC" },
     { key: "credit", label: "Credit Check" },
   ];
   if (STATUSES_WITH_APPROVAL.includes(loan.status)) {
@@ -96,13 +96,13 @@ export function getAvailableTabs(loan) {
 // Returns which action buttons show next to the status badge in the page header.
 export function getHeaderActions(loan) {
   switch (loan.status) {
-    case "On hold":
+    case "on hold":
       return ["approve", "reject"]; // Approve/Reject the overall application
-    case "Processing":
+    case "processing":
       return loan.reviewReady ? ["approve", "reject"] : [];
-    case "Awaiting":
+    case "awaiting":
       return ["reject"];
-    case "Pending":
+    case "pending":
       return ["disburse", "reject"];
     default:
       return [];
@@ -110,27 +110,6 @@ export function getHeaderActions(loan) {
 }
 
 // ---- Formatting --------------------------------------------------------------
-export function formatNaira(amount) {
-  if (amount === null || amount === undefined) return "-";
-  return `₦${Number(amount).toLocaleString("en-NG", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  })}`;
-}
-
-export function formatDateTime(value) {
-  if (!value) return "-";
-  const date = new Date(value);
-  return date.toLocaleString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-    hour: "numeric",
-    minute: "2-digit",
-    hour12: true,
-  });
-}
-
 export function formatDateShort(value) {
   if (!value) return "-";
   const date = new Date(value);
@@ -149,11 +128,11 @@ export function formatDateShort(value) {
 // ones) never renders an empty page.
 export function buildFallbackDetail(loan) {
   const approvedStatuses = [
-    "Awaiting",
-    "Pending",
-    "Declined",
-    "Active",
-    "Repaid",
+    "awaiting",
+    "pending",
+    "declined",
+    "active",
+    "repaid",
   ];
   const kycCreditApproved =
     approvedStatuses.includes(loan.status) || loan.status === "Processing";
@@ -173,7 +152,7 @@ export function buildFallbackDetail(loan) {
     },
     kyc: {
       status:
-        loan.status === "Rejected"
+        loan.status === "rejected"
           ? "rejected"
           : kycCreditApproved
             ? "approved"
@@ -194,7 +173,7 @@ export function buildFallbackDetail(loan) {
     },
     credit: {
       status:
-        loan.status === "Rejected"
+        loan.status === "rejected"
           ? "rejected"
           : kycCreditApproved
             ? "approved"
@@ -209,7 +188,7 @@ export function buildFallbackDetail(loan) {
           interestPercent: 13,
           interestAmount: Math.round(loan.amount * 0.13),
           instalmentAmount: Math.round((loan.amount * 1.13) / 6),
-          accepted: loan.status === "Awaiting" ? null : loan.date,
+          accepted: loan.status === "awaiting" ? null : loan.date,
           startDate: loan.date,
           endDate: loan.date,
           period: "6 months",
@@ -217,15 +196,15 @@ export function buildFallbackDetail(loan) {
         }
       : null,
     schedule:
-      loan.status === "Active" || loan.status === "Repaid"
+      loan.status === "active" || loan.status === "repaid"
         ? [
             {
-              transactionId: loan.status === "Repaid" ? "rpy_sample01" : null,
+              transactionId: loan.status === "repaid" ? "rpy_sample01" : null,
               amountDue: Math.round((loan.amount * 1.13) / 6),
-              paymentMethod: loan.status === "Repaid" ? "Wallet" : null,
+              paymentMethod: loan.status === "repaid" ? "Wallet" : null,
               dueDate: loan.date,
-              paidDate: loan.status === "Repaid" ? loan.date : null,
-              status: loan.status === "Repaid" ? "Paid" : "Pending",
+              paidDate: loan.status === "repaid" ? loan.date : null,
+              status: loan.status === "repaid" ? "paid" : "pending",
             },
           ]
         : null,

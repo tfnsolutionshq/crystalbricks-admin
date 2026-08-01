@@ -1,9 +1,6 @@
 import { useState } from "react";
 
 import Card from "@/shared/components/Card";
-import Badge from "@/shared/components/Badge";
-
-import { formatDateTime } from "@/features/loans/helpers/loanHelpers";
 
 const TAG_VARIANT = {
   Approved: "green",
@@ -11,7 +8,7 @@ const TAG_VARIANT = {
   Comment: "neutral",
 };
 
-export default function NotesTab({ notes = [], onPostComment }) {
+export default function NotesTab({ note, onPostComment }) {
   const [comment, setComment] = useState("");
 
   const handlePost = () => {
@@ -26,33 +23,7 @@ export default function NotesTab({ notes = [], onPostComment }) {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Comment thread */}
-        <div>
-          {notes.length === 0 ? (
-            <p className="text-sm text-gray-500">No notes available yet.</p>
-          ) : (
-            <div className="space-y-6">
-              {notes.map((note, idx) => (
-                <div key={idx}>
-                  <div className="flex items-center justify-between mb-2">
-                    <p className="text-sm text-gray-500">
-                      {note.author}{" "}
-                      <span className="text-gray-400">({note.role})</span>
-                    </p>
-                    <Badge variant={TAG_VARIANT[note.tag] || "neutral"}>
-                      {note.tag}
-                    </Badge>
-                  </div>
-                  <div className="bg-gray-50 rounded-lg px-4 py-3 text-sm text-gray-800">
-                    {note.message}
-                  </div>
-                  <p className="text-xs text-gray-400 mt-2">
-                    {formatDateTime(note.date)}
-                  </p>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
+        <div>{note}</div>
 
         {/* Leave a comment */}
         <div>
@@ -70,7 +41,7 @@ export default function NotesTab({ notes = [], onPostComment }) {
             <button
               type="button"
               onClick={handlePost}
-              className="px-6 py-2.5 rounded-xl bg-pink-700 hover:bg-pink-800 text-white text-sm font-medium transition-colors"
+              className="px-6 py-2.5 rounded-xl bg-pink-700 hover:bg-pink-800 text-white text-sm font-medium transition-colors cursor-pointer"
             >
               Post
             </button>

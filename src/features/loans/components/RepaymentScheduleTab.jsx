@@ -3,10 +3,8 @@ import { Pencil } from "lucide-react";
 import Card from "@/shared/components/Card";
 import Badge from "@/shared/components/Badge";
 
-import {
-  formatNaira,
-  formatDateTime,
-} from "@/features/loans/helpers/loanHelpers";
+import formatDateTime from "@/shared/utils/formatDateTime";
+import formatCurrency from "@/shared/utils/formatCurrency";
 
 import UpdateAmountModal from "@/features/loans/components/UpdateAmountModal";
 import AddRepaymentEntryModal from "@/features/loans/components/AddRepaymentEntryModal";
@@ -91,7 +89,7 @@ export default function RepaymentScheduleTab({
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900">
                   <span className="inline-flex items-center gap-2">
-                    {formatNaira(row.amountDue)}
+                    {formatCurrency(row.amountDue)}
                     {allowEdits && row.status !== "Paid" && (
                       <button
                         type="button"
@@ -104,7 +102,7 @@ export default function RepaymentScheduleTab({
                     )}
                     {row.fineAmount && (
                       <span className="text-red-500 line-through">
-                        {formatNaira(row.fineAmount)}
+                        {formatCurrency(row.fineAmount)}
                       </span>
                     )}
                   </span>

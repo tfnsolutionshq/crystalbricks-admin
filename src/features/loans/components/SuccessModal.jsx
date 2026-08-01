@@ -25,7 +25,7 @@ export default function SuccessModal({
         <button
           type="button"
           onClick={onClose}
-          className="mt-6 w-full rounded-xl bg-pink-700 hover:bg-pink-800 text-white font-medium py-3 transition-colors"
+          className="mt-6 w-full rounded-xl bg-pink-700 hover:bg-pink-800 text-white font-medium py-3 transition-colors cursor-pointer"
         >
           {doneLabel}
         </button>

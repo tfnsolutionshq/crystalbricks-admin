@@ -1,9 +1,7 @@
 import Card from "@/shared/components/Card";
 
-import {
-  formatNaira,
-  formatDateTime,
-} from "@/features/loans/helpers/loanHelpers";
+import formatDateTime from "@/shared/utils/formatDateTime";
+import formatCurrency from "@/shared/utils/formatCurrency";
 
 function Field({ label, children, strikeThrough }) {
   return (
@@ -72,13 +70,15 @@ export default function ApprovalDetailsTab({
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-5">
         <Field label="Amount" strikeThrough={declinedState}>
-          {formatNaira(amount)}
+          {formatCurrency(amount)}
         </Field>
         <Field label="Interest">
-          {interestPercent}% ({formatNaira(interestAmount)})
+          {interestPercent}% ({formatCurrency(interestAmount)})
         </Field>
 
-        <Field label="Instalment Amount">{formatNaira(instalmentAmount)}</Field>
+        <Field label="Instalment Amount">
+          {formatCurrency(instalmentAmount)}
+        </Field>
         {declined ? (
           <Field label="Declined">{formatDateTime(declined)}</Field>
         ) : (

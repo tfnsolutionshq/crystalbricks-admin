@@ -1,6 +1,6 @@
 import Modal, { ModalFooter } from "./Modal";
 
-import { formatNaira } from "@/features/loans/helpers/loanHelpers";
+import formatCurrency from "@/shared/utils/formatCurrency";
 
 export default function UpdateAmountModal({
   open,
@@ -24,7 +24,7 @@ export default function UpdateAmountModal({
         <div>
           <label className="block text-sm text-gray-400 mb-2">Amount Due</label>
           <div className="w-full rounded-xl border border-gray-200 px-4 py-3 text-sm text-gray-400 bg-gray-50">
-            {formatNaira(currentAmountDue)}
+            {formatCurrency(currentAmountDue)}
           </div>
         </div>
 
