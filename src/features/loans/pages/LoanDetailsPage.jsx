@@ -51,7 +51,6 @@ export default function LoanDetail() {
     setError(null);
     try {
       const { data } = await fetchLoanDetail(reference);
-      console.log("over here: ", data);
       setLoan(data);
       setDetail(data);
     } catch (err) {

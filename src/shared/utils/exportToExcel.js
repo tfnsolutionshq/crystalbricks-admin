@@ -11,8 +11,6 @@ export default function exportToExcel(
     return;
   }
 
-  console.log("the data is here: ", data);
-
   let rows = data;
 
   if (columns?.length) {
@@ -39,8 +37,6 @@ export default function exportToExcel(
       return mapped;
     });
   }
-
-  console.log("the rows are here: ", rows);
 
   const worksheet = XLSX.utils.json_to_sheet(rows);
 
