@@ -17,8 +17,11 @@ export default function exportToExcel(
     rows = data.map((row) => {
       const mapped = {};
       columns.forEach(({ key, header, accessor }) => {
-        let value = row[key];
-        if (key === undefined || key === null) {
+        let value = accessor
+          ? accessor(row)
+          : key.split(".").reduce((acc, part) => acc?.[part], row);
+
+        if (value === undefined || value === null) {
           value = "N/A";
         }
         if (key === "status" && typeof value === "string") {
@@ -30,9 +33,7 @@ export default function exportToExcel(
         if (key === "amount" && typeof value === "string") {
           value = formatNumber(value);
         }
-        // mapped[header] = accessor
-        //   ? accessor(row)
-        //   : key.split(".").reduce((acc, part) => acc?.[part], row);
+        mapped[header] = value;
       });
       return mapped;
     });

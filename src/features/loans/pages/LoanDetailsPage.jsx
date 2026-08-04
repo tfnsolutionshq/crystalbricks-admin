@@ -34,7 +34,7 @@ import DisburseLoanModal from "@/features/loans/components/DisburseLoanModal";
 import SuccessModal from "@/features/loans/components/SuccessModal";
 
 export default function LoanDetail() {
-  const { reference, tab } = useParams();
+  const { loanId, tab } = useParams();
   const navigate = useNavigate();
 
   const [loan, setLoan] = useState(null);
@@ -50,7 +50,7 @@ export default function LoanDetail() {
     setLoading(true);
     setError(null);
     try {
-      const { data } = await fetchLoanDetail(reference);
+      const { data } = await fetchLoanDetail(loanId);
       setLoan(data);
       setDetail(data);
     } catch (err) {
@@ -60,7 +60,7 @@ export default function LoanDetail() {
     } finally {
       setLoading(false);
     }
-  }, [reference]);
+  }, [loanId]);
 
   useEffect(() => {
     loadLoan();
@@ -118,7 +118,7 @@ export default function LoanDetail() {
     : availableTabs[0].key;
   const headerActions = loan ? getHeaderActions(loan) : [];
 
-  const goToTab = (key) => navigate(`/loans/${reference}/${key}`);
+  const goToTab = (key) => navigate(`/loans/${loanId}/${key}`);
 
   const updateDetail = (patch) => setDetail((prev) => ({ ...prev, ...patch }));
 
@@ -252,7 +252,7 @@ export default function LoanDetail() {
                 <div>
                   <div className="flex items-center gap-2 flex-wrap">
                     <h1 className="text-lg font-bold text-gray-900">
-                      {loan.user.first_name ?? "N/A"}
+                      {loan.user ?? "N/A"}
                     </h1>
                     <Badge variant={getStatusVariant(loan.status)}>
                       {formatStatus(loan.status)}

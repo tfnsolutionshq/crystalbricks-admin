@@ -216,15 +216,17 @@ export function buildFallbackDetail(loan) {
 
 // ---- Exporting Spreadsheet --------------------------------------------------------------
 const columns = [
-  { key: "customer", header: "Customer", width: 25 },
+  { key: "user.first_name", header: "First Name", width: 25 },
+  { key: "user.last_name", header: "Last Name", width: 25 },
   { key: "loan_name", header: "Loan Name", width: 25 },
-  { key: "plan", header: "Plan", width: 15 },
+  { key: "plan.name", header: "Plan", width: 25 },
   { key: "amount", header: "Amount (₦)", width: 15 },
   { key: "created_at", header: "Date", width: 25 },
   { key: "status", header: "Status", width: 15 },
 ];
 
 export function handleExport(loanList) {
+  console.log("the list of loans: ", loanList);
   exportToExcel(loanList, {
     fileName: "Crystal_Bricks_Loan_Request_List",
     sheetName: "Loan Request List",

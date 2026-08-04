@@ -65,7 +65,6 @@ export default function LoanList() {
     setError(null);
     try {
       const { data } = await fetchLoans();
-      console.log("the data: ", data[0].user);
       setLoans(data);
     } catch (err) {
       setError(
@@ -99,7 +98,9 @@ export default function LoanList() {
   const pageStart = (page - 1) * PAGE_SIZE;
   const pageLoans = filteredLoans.slice(pageStart, pageStart + PAGE_SIZE);
 
-  const goToDetail = (reference) => navigate(`/loans/${reference}`);
+  const goToDetail = (loanId) => {
+    navigate(`/loans/${loanId}`);
+  };
 
   return (
     <Layout activeNavItem="Loans">
@@ -239,8 +240,8 @@ export default function LoanList() {
                   ) : (
                     pageLoans.map((loan, index) => (
                       <tr
-                        key={loan.reference ?? loan.id ?? index}
-                        onClick={() => goToDetail(loan.reference ?? loan.id)}
+                        key={loan.id}
+                        onClick={() => goToDetail(loan.id)}
                         className="cursor-pointer hover:bg-gray-50"
                       >
                         <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900">
@@ -249,8 +250,9 @@ export default function LoanList() {
                             onClick={(e) => e.stopPropagation()}
                             className="text-gray-900 underline underline-offset-2"
                           >
-                            {`${loan?.user?.first_name} ${loan?.user?.last_name}` ??
-                              "N/A"}
+                            {!loan?.user?.first_name || !loan?.user?.last_name
+                              ? "N/A"
+                              : `${loan?.user?.first_name} ${loan?.user?.last_name}`}
                           </Link>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">

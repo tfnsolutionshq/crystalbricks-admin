@@ -82,11 +82,8 @@ export default function App() {
               element={<CustomerContributionDetailsPage />}
             />
             <Route path="/loans" element={<LoanListPage />} />
-            <Route path="/loans/:reference" element={<LoanDetailsPage />} />
-            <Route
-              path="/loans/:reference/:tab"
-              element={<LoanDetailsPage />}
-            />
+            <Route path="/loans/:loanId" element={<LoanDetailsPage />} />
+            <Route path="/loans/:loanId/:tab" element={<LoanDetailsPage />} />
           </Route>
         </Routes>
       </Router>
