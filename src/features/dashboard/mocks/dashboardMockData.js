@@ -1,4 +1,10 @@
-import { Wallet, Repeat, Server } from "lucide-react";
+import {
+  Wallet,
+  Repeat,
+  Server,
+  ArrowLeftRight,
+  LayoutGrid,
+} from "lucide-react";
 
 export const STATS = [
   {
@@ -95,3 +101,89 @@ export const STATUS_BADGE_STYLES = {
   Pending: "bg-gray-100 text-gray-500",
   Failed: "bg-red-50 text-red-500",
 };
+
+export const STATS_FILTER_OPTIONS = [
+  { id: "all", menuLabel: "All stats", buttonLabel: "All stats" },
+  { id: "loans", menuLabel: "Loan", buttonLabel: "Loans" },
+  { id: "investment", menuLabel: "Investment", buttonLabel: "Investment" },
+];
+
+export const TIME_FILTER_OPTIONS = [
+  { id: "today", menuLabel: "Today", buttonLabel: "Today" },
+  { id: "week", menuLabel: "This week", buttonLabel: "This week" },
+  { id: "month", menuLabel: "This month", buttonLabel: "This month" },
+  { id: "year", menuLabel: "This year", buttonLabel: "This year" },
+  { id: "allTime", menuLabel: "All time", buttonLabel: "All time" },
+];
+
+export const STATS_INVESTMENT = [
+  {
+    label: "Total Investment",
+    value: "343,209,329.55",
+    icon: Wallet,
+    iconBg: "bg-purple-100 text-purple-600",
+  },
+  {
+    label: "Total Interest Volume",
+    value: "343,209,329.55",
+    icon: Wallet,
+    iconBg: "bg-purple-100 text-purple-600",
+  },
+  {
+    label: "Total Transactions",
+    value: "8,421",
+    icon: ArrowLeftRight,
+    iconBg: "bg-orange-100 text-orange-600",
+  },
+  {
+    label: "Assets Managed",
+    value: "1,329",
+    icon: LayoutGrid,
+    iconBg: "bg-teal-100 text-teal-600",
+  },
+];
+
+export const STATS_LOANS = [
+  {
+    label: "Total Disbursement",
+    value: "343,209,329.55",
+    icon: Wallet,
+    iconBg: "bg-purple-100 text-purple-600",
+  },
+  {
+    label: "Total Repayment",
+    value: "343,209,329.55",
+    icon: Wallet,
+    iconBg: "bg-purple-100 text-purple-600",
+  },
+  {
+    label: "Total Transactions",
+    value: "8,421",
+    icon: ArrowLeftRight,
+    iconBg: "bg-orange-100 text-orange-600",
+  },
+  {
+    label: "Assets Managed",
+    value: "1,329",
+    icon: LayoutGrid,
+    iconBg: "bg-teal-100 text-teal-600",
+  },
+];
+
+export const ACTIVE_SAVING_USERS = {
+  title: "Active Saving Users",
+  value: "4,272",
+  data: [40, 55, 48, 60, 52, 65, 58, 70, 62, 75, 68, 80],
+};
+
+export const ACTIVE_LOAN_USERS = {
+  title: "Active Loan Users",
+  value: "4,272",
+  data: [40, 55, 48, 60, 52, 65, 58, 70, 62, 75, 68, 80],
+};
+
+export const RECENT_INVESTMENTS = Array.from({ length: 6 }).map(() => ({
+  name: "Olamilekan Adams",
+  date: "Apr 9, 2025",
+  amount: "₦14,054.25",
+}));

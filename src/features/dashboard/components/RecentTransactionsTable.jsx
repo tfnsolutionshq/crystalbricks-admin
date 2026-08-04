@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import Badge from "@/shared/components/Badge";
 
 import { TRANSACTIONS } from "@/features/dashboard/mocks/dashboardMockData";
@@ -9,12 +10,13 @@ export default function RecentTransactionsTable() {
         <h3 className="text-base font-bold text-gray-900">
           Recent Transactions
         </h3>
-        <button
+        <Link
+          to="/transactions"
           type="button"
-          className="text-sm font-medium text-emerald-600 hover:text-emerald-700"
+          className="text-sm font-medium text-emerald-600 hover:text-emerald-700 hover:underline"
         >
           See all
-        </button>
+        </Link>
       </div>
 
       <div className="overflow-x-auto">
