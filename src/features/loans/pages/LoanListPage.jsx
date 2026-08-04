@@ -65,6 +65,7 @@ export default function LoanList() {
     setError(null);
     try {
       const { data } = await fetchLoans();
+      console.log("the data: ", data[0].user);
       setLoans(data);
     } catch (err) {
       setError(
@@ -244,11 +245,12 @@ export default function LoanList() {
                       >
                         <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900">
                           <Link
-                            href={`/customers/${loan.customerId ?? ""}`}
+                            href={`/customers/${loan?.user?.id ?? ""}`}
                             onClick={(e) => e.stopPropagation()}
                             className="text-gray-900 underline underline-offset-2"
                           >
-                            {loan.customer ?? "N/A"}
+                            {`${loan?.user?.first_name} ${loan?.user?.last_name}` ??
+                              "N/A"}
                           </Link>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
