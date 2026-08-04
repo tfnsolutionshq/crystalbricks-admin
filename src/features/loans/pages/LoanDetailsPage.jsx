@@ -51,6 +51,7 @@ export default function LoanDetail() {
     setError(null);
     try {
       const { data } = await fetchLoanDetail(reference);
+      console.log("over here: ", data);
       setLoan(data);
       setDetail(data);
     } catch (err) {
@@ -252,7 +253,7 @@ export default function LoanDetail() {
                 <div>
                   <div className="flex items-center gap-2 flex-wrap">
                     <h1 className="text-lg font-bold text-gray-900">
-                      {loan.reference ?? "N/A"}
+                      {loan.user.first_name ?? "N/A"}
                     </h1>
                     <Badge variant={getStatusVariant(loan.status)}>
                       {formatStatus(loan.status)}

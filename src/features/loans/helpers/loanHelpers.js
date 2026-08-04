@@ -2,6 +2,8 @@
 // Centralizes the status -> UI mapping so LoanList / LoanDetail / tabs
 // all agree on colors, available tabs, and which header actions to show.
 
+import exportToExcel from "@/shared/utils/exportToExcel";
+
 // ---- Status -> Badge variant ------------------------------------------------
 // NOTE: 'neutral' (gray) and 'dark' (solid black) are new Badge variants —
 // see the shared-file callout for src/components/Badge.jsx.
@@ -210,4 +212,22 @@ export function buildFallbackDetail(loan) {
         : null,
     notes: [],
   };
+}
+
+// ---- Exporting Spreadsheet --------------------------------------------------------------
+const columns = [
+  { key: "customer", header: "Customer", width: 25 },
+  { key: "loan_name", header: "Loan Name", width: 25 },
+  { key: "plan", header: "Plan", width: 15 },
+  { key: "amount", header: "Amount (₦)", width: 15 },
+  { key: "created_at", header: "Date", width: 25 },
+  { key: "status", header: "Status", width: 15 },
+];
+
+export function handleExport(loanList) {
+  exportToExcel(loanList, {
+    fileName: "Crystal_Bricks_Loan_Request_List",
+    sheetName: "Loan Request List",
+    columns,
+  });
 }

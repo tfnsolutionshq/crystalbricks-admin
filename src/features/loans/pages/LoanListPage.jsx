@@ -1,5 +1,5 @@
 import { useMemo, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Download, RefreshCw } from "lucide-react";
 
 import Layout from "@/shared/components/Layout";
@@ -19,6 +19,7 @@ import {
 } from "@/features/loans/helpers/loanHelpers";
 
 import { fetchLoans } from "@/features/loans/api/loansApi";
+import { handleExport } from "../helpers/loanHelpers";
 
 const PAGE_SIZE = 10;
 
@@ -109,6 +110,7 @@ export default function LoanList() {
             <button
               type="button"
               className="cursor-pointer inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-pink-700 hover:bg-pink-800 text-white text-sm font-medium transition-colors"
+              onClick={() => handleExport(pageLoans)}
             >
               Export
               <Download size={16} />
@@ -157,16 +159,13 @@ export default function LoanList() {
                 <thead>
                   <tr className="border-b border-gray-100 text-left text-gray-500">
                     <th className="px-6 py-3 font-medium whitespace-nowrap">
-                      Reference
-                    </th>
-                    <th className="px-6 py-3 font-medium whitespace-nowrap">
                       Customer
                     </th>
                     <th className="px-6 py-3 font-medium whitespace-nowrap">
-                      Type
+                      Loan Name
                     </th>
                     <th className="px-6 py-3 font-medium whitespace-nowrap">
-                      Category
+                      Plan
                     </th>
                     <th className="px-6 py-3 font-medium whitespace-nowrap">
                       Amount
@@ -244,24 +243,21 @@ export default function LoanList() {
                         className="cursor-pointer hover:bg-gray-50"
                       >
                         <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900">
-                          {loan.reference ?? "N/A"}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <a
+                          <Link
                             href={`/customers/${loan.customerId ?? ""}`}
                             onClick={(e) => e.stopPropagation()}
                             className="text-gray-900 underline underline-offset-2"
                           >
                             {loan.customer ?? "N/A"}
-                          </a>
+                          </Link>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          {loan.loan_name ?? "N/A"}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <Badge variant={getTypeVariant(loan.type)}>
-                            {loan.type ?? "N/A"}
+                            {loan?.plan?.name ?? "N/A"}
                           </Badge>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-gray-700 max-w-45 truncate">
-                          {loan.category ?? "N/A"}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900">
                           {loan.amount != null
