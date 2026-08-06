@@ -8,7 +8,7 @@ const PublicRouteGuard = () => {
     return <div className="bg-white h-screen"></div>;
   }
 
-  if (!user) {
+  if (!user && !user?.roles?.includes("admin")) {
     return <Navigate to="/signin" replace />;
   }
 

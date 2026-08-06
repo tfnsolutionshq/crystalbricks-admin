@@ -22,6 +22,12 @@ export const AuthProvider = ({ children }) => {
     try {
       const { data } = await loginRequest(credentials);
 
+      const isAdmin = data.user?.roles?.includes("admin");
+
+      if (!isAdmin) {
+        throw "Invalid credentials";
+      }
+
       setToken(data.token);
       setUser(data.user);
 

@@ -12,7 +12,7 @@ import ProductsTable from "@/features/products/components/ProductsTable";
 import { DATA_BY_TAB } from "@/features/products/mocks/productsMockData";
 
 export default function Products() {
-  const [activeTab, setActiveTab] = useState("loans");
+  const [activeTab, setActiveTab] = useState("fixed-deposits");
   const [search, setSearch] = useState("");
 
   const { stats, rows, showing, total, page, pageCount } =
