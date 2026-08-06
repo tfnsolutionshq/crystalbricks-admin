@@ -45,19 +45,6 @@ export default function ApplicationDetailsTab({ loan }) {
       </h3>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-5">
         <Field label="Loan Name">{loan_name}</Field>
-        <Field label="Reference">
-          <span className="inline-flex items-center gap-2">
-            {id}
-            <button
-              type="button"
-              onClick={handleCopy}
-              aria-label="Copy reference"
-              className="text-gray-400 hover:text-gray-600"
-            >
-              <Copy size={14} />
-            </button>
-          </span>
-        </Field>
         <Field label="Plan">{plan?.name ?? "-"}</Field>
         <Field label="Plan Description">{plan?.description ?? "-"}</Field>
         <Field label="Amount">{formatCurrency(amount)}</Field>

@@ -18,7 +18,7 @@ export default function Header({ onToggleSidebar }) {
           type="button"
           onClick={onToggleSidebar}
           aria-label="Toggle sidebar"
-          className="p-1 -ml-1 rounded-md text-gray-500 hover:bg-gray-100 transition-colors lg:hidden"
+          className="p-1 -ml-1 rounded-md text-gray-500 hover:bg-gray-100 transition-colors cursor-pointer"
         >
           <Menu size={22} />
         </button>

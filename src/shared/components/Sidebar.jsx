@@ -36,8 +36,10 @@ const NAV_ITEMS = [
  */
 export default function Sidebar({ activeItem = "Dashboard", isOpen, onClose }) {
   const { logout } = useAuth();
+  const isDesktop = () => window.matchMedia("(min-width: 1024px)").matches;
+
   useEffect(() => {
-    if (isOpen) {
+    if (isOpen && !isDesktop()) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "";
@@ -46,6 +48,10 @@ export default function Sidebar({ activeItem = "Dashboard", isOpen, onClose }) {
       document.body.style.overflow = "";
     };
   }, [isOpen]);
+
+  const handleNavClick = () => {
+    if (!isDesktop()) onClose();
+  };
 
   return (
     <>
@@ -57,10 +63,12 @@ export default function Sidebar({ activeItem = "Dashboard", isOpen, onClose }) {
         />
       )}
 
-      {/* Mobile off-canvas sidebar */}
+      {/* Mobile off-canvas sidebar / collapsible desktop sidebar */}
       <aside
-        className={`fixed top-0 left-0 z-50 h-full w-64 shrink-0 bg-white border-r border-gray-200 flex flex-col justify-between transition-transform duration-300 lg:static lg:z-auto lg:flex lg:translate-x-0 pb-4 ${
-          isOpen ? "translate-x-0" : "-translate-x-full"
+        className={`fixed top-0 left-0 z-50 h-full w-64 shrink-0 bg-white flex flex-col justify-between overflow-hidden transition-all duration-300 ease-in-out lg:static lg:z-auto pb-4 ${
+          isOpen
+            ? "translate-x-0 border-r border-gray-200 lg:w-64"
+            : "-translate-x-full lg:w-0"
         }`}
       >
         {/* Close button — mobile only */}
@@ -81,7 +89,7 @@ export default function Sidebar({ activeItem = "Dashboard", isOpen, onClose }) {
                 <li key={label}>
                   <Link
                     to={href}
-                    onClick={onClose}
+                    onClick={handleNavClick}
                     className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                       isActive
                         ? "bg-pink-50 text-pink-600"

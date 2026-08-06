@@ -6,6 +6,10 @@ import Layout from "@/shared/components/Layout";
 import Card from "@/shared/components/Card";
 import Badge from "@/shared/components/Badge";
 import FilterPill from "@/shared/components/FilterPill";
+import FilterDropdown from "@/shared/components/FilterDropdown";
+import AmountRangeFilter from "@/shared/components/AmountRangeFilter";
+import DateRangeFilter from "@/shared/components/DateRangeFilter";
+import SortDropdown from "@/shared/components/SortDropdown";
 import SearchInput from "@/shared/components/SearchInput";
 import Pagination from "@/shared/components/Pagination";
 
@@ -26,23 +30,12 @@ const PAGE_SIZE = 10;
 const TYPE_OPTIONS = ["All", "Individual", "Corporate"];
 const CATEGORY_OPTIONS = ["All", "Government Salary Workers Loan"];
 const STATUS_OPTIONS = [
-  "All",
-  "New",
-  "Processing",
-  "On hold",
-  "Awaiting",
-  "Pending",
-  "Active",
-  "Declined",
-  "Rejected",
-  "Repaid",
-];
-const DATE_OPTIONS = [
-  "This week",
-  "Today",
-  "This month",
-  "This year",
-  "All time",
+  { id: "", menuLabel: "All statuses", buttonLabel: "All statuses" },
+  { id: "Waiting", menuLabel: "Waiting", buttonLabel: "Waiting" },
+  { id: "Pending", menuLabel: "Pending", buttonLabel: "Pending" },
+  { id: "Active", menuLabel: "Active", buttonLabel: "Active" },
+  { id: "Completed", menuLabel: "Completed", buttonLabel: "Completed" },
+  { id: "Rejected", menuLabel: "Rejected", buttonLabel: "Rejected" },
 ];
 
 export default function LoanList() {
@@ -52,20 +45,60 @@ export default function LoanList() {
   const [search, setSearch] = useState("");
   const [type, setType] = useState("All");
   const [category, setCategory] = useState("All");
-  const [status, setStatus] = useState("All");
-  const [dateRange, setDateRange] = useState("This week");
+  const [status, setStatus] = useState("");
+  const [minAmount, setMinAmount] = useState(undefined);
+  const [maxAmount, setMaxAmount] = useState(undefined);
+  const [startDate, setStartDate] = useState(undefined);
+  const [endDate, setEndDate] = useState(undefined);
+  const [sortBy, setSortBy] = useState(undefined);
+  const [sortOrder, setSortOrder] = useState(undefined);
   const [page, setPage] = useState(1);
+  const [appliedSearch, setAppliedSearch] = useState("");
 
   const [loans, setLoans] = useState([]);
+  const [meta, setMeta] = useState({ total: 0, last_page: 1, per_page: 0 });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  async function loadLoans() {
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setAppliedSearch(search.trim());
+    }, 400);
+
+    return () => clearTimeout(timer);
+  }, [search]);
+
+  async function loadLoans(
+    pageNumber = page,
+    query = appliedSearch,
+    statusFilter = status,
+    min = minAmount,
+    max = maxAmount,
+    start = startDate,
+    end = endDate,
+    sort = sortBy,
+    order = sortOrder,
+  ) {
     setLoading(true);
     setError(null);
     try {
-      const { data } = await fetchLoans();
-      setLoans(data);
+      const { data } = await fetchLoans({
+        page: pageNumber,
+        search: query,
+        status: statusFilter,
+        min_amount: min,
+        max_amount: max,
+        start_date: start,
+        end_date: end,
+        sort_by: sort,
+        sort_order: order,
+      });
+      setLoans(data.data ?? []);
+      setMeta({
+        total: data.total ?? 0,
+        last_page: data.last_page ?? 1,
+        per_page: data.per_page ?? 0,
+      });
     } catch (err) {
       setError(
         err.response?.data?.message ?? err.message ?? "An error occurred",
@@ -76,27 +109,46 @@ export default function LoanList() {
   }
 
   useEffect(() => {
-    loadLoans();
-  }, []);
+    loadLoans(
+      page,
+      appliedSearch,
+      status,
+      minAmount,
+      maxAmount,
+      startDate,
+      endDate,
+      sortBy,
+      sortOrder,
+    );
+  }, [
+    page,
+    appliedSearch,
+    status,
+    minAmount,
+    maxAmount,
+    startDate,
+    endDate,
+    sortBy,
+    sortOrder,
+  ]);
+
+  const resetPage = () => setPage(1);
 
   // ---- Filtering (table section) ----
   const filteredLoans = useMemo(() => {
     return loans.filter((loan) => {
-      const matchesSearch =
-        !search ||
-        (loan.reference ?? "").toLowerCase().includes(search.toLowerCase()) ||
-        (loan.customer ?? "").toLowerCase().includes(search.toLowerCase());
       const matchesType = type === "All" || loan.type === type;
       const matchesCategory = category === "All" || loan.category === category;
-      const matchesStatus = status === "All" || loan.status === status;
-      return matchesSearch && matchesType && matchesCategory && matchesStatus;
+      return matchesType && matchesCategory;
     });
-  }, [search, type, category, status, loans]);
+  }, [type, category, loans]);
 
-  const totalCount = filteredLoans.length;
-  const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
-  const pageStart = (page - 1) * PAGE_SIZE;
-  const pageLoans = filteredLoans.slice(pageStart, pageStart + PAGE_SIZE);
+  const totalCount = meta.total;
+  const pageCount = Math.max(1, meta.last_page);
+
+  const loadingSkeletonCount = meta.per_page || PAGE_SIZE;
+
+  const pageLoans = filteredLoans;
 
   const goToDetail = (loanId) => {
     navigate(`/loans/${loanId}`);
@@ -124,33 +176,47 @@ export default function LoanList() {
             <div className="w-full sm:w-72">
               <SearchInput
                 value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder="Search reference, customer"
+                onChange={(e) => {
+                  setSearch(e.target.value);
+                  resetPage();
+                }}
+                placeholder="Search by loan name"
               />
             </div>
-            <FilterPill
-              label="Type"
-              value={type}
-              options={TYPE_OPTIONS}
-              onChange={setType}
-            />
-            <FilterPill
-              label="Category"
-              value={category}
-              options={CATEGORY_OPTIONS}
-              onChange={setCategory}
-            />
-            <FilterPill
-              label="Status"
-              value={status}
+            <FilterDropdown
               options={STATUS_OPTIONS}
-              onChange={setStatus}
+              selected={status}
+              onSelect={(value) => {
+                setStatus(value);
+                resetPage();
+              }}
             />
-            <FilterPill
-              label="Date"
-              value={dateRange}
-              options={DATE_OPTIONS}
-              onChange={setDateRange}
+            <AmountRangeFilter
+              minAmount={minAmount}
+              maxAmount={maxAmount}
+              onApply={({ minAmount: min, maxAmount: max }) => {
+                setMinAmount(min);
+                setMaxAmount(max);
+                resetPage();
+              }}
+            />
+            <DateRangeFilter
+              startDate={startDate}
+              endDate={endDate}
+              onApply={({ startDate: start, endDate: end }) => {
+                setStartDate(start);
+                setEndDate(end);
+                resetPage();
+              }}
+            />
+            <SortDropdown
+              sortBy={sortBy}
+              sortOrder={sortOrder}
+              onApply={({ sortBy: field, sortOrder: order }) => {
+                setSortBy(field);
+                setSortOrder(order);
+                resetPage();
+              }}
             />
           </div>
 
@@ -182,7 +248,7 @@ export default function LoanList() {
                 </thead>
                 <tbody className="divide-y divide-gray-100">
                   {loading ? (
-                    Array.from({ length: 10 }).map((_, i) => (
+                    Array.from({ length: loadingSkeletonCount }).map((_, i) => (
                       <tr key={i} className="animate-pulse">
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="h-4 w-28 bg-gray-200 rounded" />
@@ -213,7 +279,7 @@ export default function LoanList() {
                         <p className="text-sm text-gray-500 mb-3">{error}</p>
                         <button
                           type="button"
-                          onClick={loadLoans}
+                          onClick={() => loadLoans(page, appliedSearch)}
                           className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-pink-700 hover:bg-pink-800 text-white text-sm font-medium transition-colors cursor-pointer"
                         >
                           <RefreshCw size={16} />
@@ -229,7 +295,7 @@ export default function LoanList() {
                         </p>
                         <button
                           type="button"
-                          onClick={loadLoans}
+                          onClick={() => loadLoans(page, appliedSearch)}
                           className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-pink-700 hover:bg-pink-800 text-white text-sm font-medium transition-colors cursor-pointer"
                         >
                           <RefreshCw size={16} />
@@ -286,12 +352,12 @@ export default function LoanList() {
             </div>
 
             <Pagination
+              showing={pageLoans.length}
+              total={totalCount}
               page={page}
-              totalPages={totalPages}
-              totalCount={totalCount}
-              pageSize={PAGE_SIZE}
-              shownCount={pageLoans.length}
-              onPageChange={setPage}
+              pageCount={pageCount}
+              onPrev={() => setPage((p) => Math.max(1, p - 1))}
+              onNext={() => setPage((p) => Math.min(pageCount, p + 1))}
             />
           </Card>
         </div>

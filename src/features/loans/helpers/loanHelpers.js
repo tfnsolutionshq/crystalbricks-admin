@@ -226,7 +226,6 @@ const columns = [
 ];
 
 export function handleExport(loanList) {
-  console.log("the list of loans: ", loanList);
   exportToExcel(loanList, {
     fileName: "Crystal_Bricks_Loan_Request_List",
     sheetName: "Loan Request List",

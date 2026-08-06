@@ -1,7 +1,29 @@
 import { walletApi } from "@/services/walletApiClient";
 
-export async function fetchLoans() {
-  const { data } = await walletApi.get("/admin/loans");
+export async function fetchLoans({
+  page = 1,
+  search = "",
+  status = "",
+  min_amount,
+  max_amount,
+  start_date,
+  end_date,
+  sort_by,
+  sort_order,
+} = {}) {
+  const { data } = await walletApi.get("/admin/loans", {
+    params: {
+      page,
+      search,
+      status,
+      min_amount,
+      max_amount,
+      start_date,
+      end_date,
+      sort_by,
+      sort_order,
+    },
+  });
 
   return data;
 }

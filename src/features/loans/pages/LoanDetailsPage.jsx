@@ -252,7 +252,9 @@ export default function LoanDetail() {
                 <div>
                   <div className="flex items-center gap-2 flex-wrap">
                     <h1 className="text-lg font-bold text-gray-900">
-                      {loan.user ?? "N/A"}
+                      {!loan?.user?.first_name || !loan?.user?.last_name
+                        ? "N/A"
+                        : `${loan?.user?.first_name} ${loan?.user?.last_name}`}
                     </h1>
                     <Badge variant={getStatusVariant(loan.status)}>
                       {formatStatus(loan.status)}
