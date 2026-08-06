@@ -46,7 +46,7 @@ export default function SortDropdown({ sortBy, sortOrder, onApply }) {
     <div className="relative" ref={ref}>
       <button
         onClick={() => setOpen((prev) => !prev)}
-        className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#C2185B] text-white text-sm font-medium hover:bg-[#a8134d] transition-colors cursor-pointer"
+        className="flex items-center gap-2 px-4 py-2 rounded-lg bg-pink-600 text-white text-sm font-medium hover:bg-pink-700 transition-colors cursor-pointer"
       >
         <ArrowUpDown size={16} />
         {hasActive ? `${fieldLabel} · ${orderLabel}` : "Sort"}
@@ -59,9 +59,7 @@ export default function SortDropdown({ sortBy, sortOrder, onApply }) {
       {open && (
         <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-gray-100 p-4 z-20 space-y-3">
           <div className="space-y-1">
-            <label className="text-xs font-medium text-gray-500">
-              Sort by
-            </label>
+            <label className="text-xs font-medium text-gray-500">Sort by</label>
             <select
               value={field}
               onChange={(e) => setField(e.target.value)}
@@ -75,9 +73,7 @@ export default function SortDropdown({ sortBy, sortOrder, onApply }) {
             </select>
           </div>
           <div className="space-y-1">
-            <label className="text-xs font-medium text-gray-500">
-              Order
-            </label>
+            <label className="text-xs font-medium text-gray-500">Order</label>
             <select
               value={order}
               onChange={(e) => setOrder(e.target.value)}
