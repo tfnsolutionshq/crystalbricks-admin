@@ -22,32 +22,69 @@ export function getCategoryLabel(category) {
   return planCategories.find((c) => c.value === category)?.label || category;
 }
 
-/** Human-friendly frequency label. */
+/** Human-friendly frequency label (for contribution plans, e.g. "weekly"/"monthly"). */
 export function getFrequencyLabel(frequency) {
   return (
     frequencyOptions.find((f) => f.value === frequency)?.label || frequency
   );
 }
 
-/** Maps a contribution/investment status to its Badge variant. */
+/**
+ * Human-friendly payout frequency label for investment plans, which use a
+ * different (uppercase) vocabulary than contribution frequencyOptions —
+ * e.g. "QUARTERLY", "MONTHLY", "AT_MATURITY".
+ */
+export function getPayoutFrequencyLabel(frequency) {
+  const labels = {
+    MONTHLY: "Monthly",
+    QUARTERLY: "Quarterly",
+    BIANNUALLY: "Biannually",
+    ANNUALLY: "Annually",
+    AT_MATURITY: "At Maturity",
+  };
+  return labels[String(frequency).toUpperCase()] || frequency;
+}
+
+/**
+ * Maps a status (investment, contribution, or payout) to its Badge variant.
+ * Covers contribution/investment lifecycle statuses as well as individual
+ * payout statuses (PAID/FAILED), since both render through the same Badge.
+ */
 export function getStatusVariant(status) {
-  switch (status) {
-    case "active":
-      return "success";
-    case "paused":
-      return "warning";
-    case "completed":
-      return "info";
-    case "defaulted":
-      return "danger";
+  switch (String(status).toUpperCase()) {
+    case "ACTIVE":
+      return "Active";
+    case "PENDING":
+      return "Pending";
+    case "REJECTED":
+      return "Rejected";
+    case "COMPLETED":
+      return "Completed";
+    case "CANCELLED":
+      return "Cancelled";
+    case "DEFAULTED":
+      return "Defaulted";
+    case "MATURED":
+      return "Matured";
+    case "PAID":
+      return "Paid";
+    case "FAILED":
+      return "Failed";
     default:
-      return "neutral";
+      return "Pending";
   }
+}
+
+export function getStatusBadgeVariant(status) {
+  return getStatusVariant(status);
 }
 
 /** Human-friendly status label. */
 export function getStatusLabel(status) {
-  return status.charAt(0).toUpperCase() + status.slice(1);
+  return (
+    String(status).charAt(0).toUpperCase() +
+    String(status).slice(1).toLowerCase()
+  );
 }
 
 /** Maps a KYC status to its Badge variant. */
@@ -78,6 +115,24 @@ export function formatContributionDate(isoDate) {
     month: "short",
     year: "numeric",
   });
+}
+
+/**
+ * Formats a "YYYY-MM-DD HH:mm:ss" timestamp (e.g. investment.created_at) as
+ * "14 Jan, 2025, 11:12 AM". Passes through "—" as-is.
+ */
+export function formatDateTime(dateTimeStr) {
+  if (!dateTimeStr || dateTimeStr === "—") return "—";
+  const date = new Date(dateTimeStr.replace(" ", "T"));
+  if (Number.isNaN(date.getTime())) return "—";
+  return `${date.toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  })}, ${date.toLocaleTimeString("en-US", {
+    hour: "numeric",
+    minute: "2-digit",
+  })}`;
 }
 
 /** Percentage progress toward a target amount (0-100). Null target => open-ended plan. */

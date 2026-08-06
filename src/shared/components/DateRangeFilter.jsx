@@ -1,7 +1,16 @@
 import { useState, useRef, useEffect } from "react";
 import { ChevronDown } from "lucide-react";
 
-export default function DateRangeFilter({ startDate, endDate, onApply }) {
+export default function DateRangeFilter({
+  startDate,
+  endDate,
+  onApply,
+  label = "Date",
+  startLabel = "Start date",
+  endLabel = "End date",
+  missingStart = "Any",
+  missingEnd = "onwards",
+}) {
   const [open, setOpen] = useState(false);
   const [start, setStart] = useState(startDate ?? "");
   const [end, setEnd] = useState(endDate ?? "");
@@ -16,8 +25,8 @@ export default function DateRangeFilter({ startDate, endDate, onApply }) {
   }, []);
 
   const hasActive = startDate != null || endDate != null;
-  const startLabel = startDate ? startDate : "Any";
-  const endLabel = endDate ? endDate : "onwards";
+  const activeStartLabel = startDate ? startDate : missingStart;
+  const activeEndLabel = endDate ? endDate : missingEnd;
 
   const handleApply = () => {
     onApply({
@@ -40,7 +49,9 @@ export default function DateRangeFilter({ startDate, endDate, onApply }) {
         onClick={() => setOpen((prev) => !prev)}
         className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#C2185B] text-white text-sm font-medium hover:bg-[#a8134d] transition-colors cursor-pointer"
       >
-        {hasActive ? `${startLabel} - ${endLabel}` : "Date"}
+        {hasActive
+          ? `${activeStartLabel} - ${activeEndLabel}`
+          : label}
         <ChevronDown
           size={16}
           className={`transition-transform ${open ? "rotate-180" : ""}`}
@@ -51,7 +62,7 @@ export default function DateRangeFilter({ startDate, endDate, onApply }) {
         <div className="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-lg border border-gray-100 p-4 z-20 space-y-3">
           <div className="space-y-1">
             <label className="text-xs font-medium text-gray-500">
-              Start date
+              {startLabel}
             </label>
             <input
               type="date"
@@ -62,7 +73,7 @@ export default function DateRangeFilter({ startDate, endDate, onApply }) {
           </div>
           <div className="space-y-1">
             <label className="text-xs font-medium text-gray-500">
-              End date
+              {endLabel}
             </label>
             <input
               type="date"
