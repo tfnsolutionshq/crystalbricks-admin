@@ -47,11 +47,9 @@ export default function DateRangeFilter({
     <div className="relative" ref={ref}>
       <button
         onClick={() => setOpen((prev) => !prev)}
-        className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#C2185B] text-white text-sm font-medium hover:bg-[#a8134d] transition-colors cursor-pointer"
+        className="flex items-center gap-2 px-4 py-2 rounded-lg bg-pink-600 text-white text-sm font-medium hover:bg-pink-700 transition-colors cursor-pointer"
       >
-        {hasActive
-          ? `${activeStartLabel} - ${activeEndLabel}`
-          : label}
+        {hasActive ? `${activeStartLabel} - ${activeEndLabel}` : label}
         <ChevronDown
           size={16}
           className={`transition-transform ${open ? "rotate-180" : ""}`}

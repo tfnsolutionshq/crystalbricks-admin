@@ -163,7 +163,7 @@ export default function LoanList() {
             <h1 className="text-xl font-bold text-gray-900">Loans</h1>
             <button
               type="button"
-              className="cursor-pointer inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-pink-700 hover:bg-pink-800 text-white text-sm font-medium transition-colors"
+              className="cursor-pointer inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-pink-600 hover:bg-pink-700 text-white text-sm font-medium transition-colors"
               onClick={() => handleExport(pageLoans)}
             >
               Export

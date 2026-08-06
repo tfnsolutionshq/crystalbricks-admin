@@ -11,7 +11,7 @@ export default function Toggle({ checked, onChange, disabled = false, label }) {
       aria-label={label}
       disabled={disabled}
       onClick={() => onChange?.(!checked)}
-      className={`relative inline-flex h-6 w-11 shrink-0 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-pink-100 disabled:opacity-40 disabled:cursor-not-allowed ${
+      className={`relative cursor-pointer inline-flex h-6 w-11 shrink-0 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-pink-100 disabled:opacity-40 disabled:cursor-not-allowed ${
         checked ? "bg-pink-600" : "bg-slate-200"
       }`}
     >
