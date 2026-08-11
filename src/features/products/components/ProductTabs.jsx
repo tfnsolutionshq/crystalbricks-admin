@@ -10,7 +10,7 @@ export default function ProductTabs({ activeTab, onChange }) {
             key={tab.key}
             type="button"
             onClick={() => onChange(tab.key)}
-            className={`pb-3 text-sm font-medium -mb-px border-b-2 transition-colors ${
+            className={`pb-3 cursor-pointer text-sm font-medium -mb-px border-b-2 transition-colors ${
               isActive
                 ? "text-gray-900 border-gray-900"
                 : "text-gray-400 border-transparent hover:text-gray-600"
