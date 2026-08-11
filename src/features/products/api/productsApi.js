@@ -40,6 +40,12 @@ export async function deactivateInvestmentPlan(id) {
   return data;
 }
 
+export async function deleteInvestmentPlan(id) {
+  const { data } = await walletApi.delete(`/admin/investment-plans/${id}`);
+
+  return data;
+}
+
 export async function updateLoanPlan(id, payload) {
   const { data } = await walletApi.put(`/admin/loan-plans/${id}`, payload);
 

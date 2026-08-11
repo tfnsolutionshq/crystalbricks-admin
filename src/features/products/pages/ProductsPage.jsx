@@ -16,6 +16,7 @@ import {
   activateInvestmentPlan,
   createInvestmentPlan,
   deactivateInvestmentPlan,
+  deleteInvestmentPlan,
   fetchInvestmentPlans,
   fetchLoanPlans,
   updateInvestmentPlan,
@@ -212,6 +213,19 @@ export default function Products() {
 
   const handleActivate = (product) => handleToggleStatus(product, true);
 
+  const handleDelete = async (product) => {
+    try {
+      await deleteInvestmentPlan(product.id);
+      setViewingProduct(null);
+      setLoading(true);
+      await loadInvestments();
+    } catch (err) {
+      const message =
+        err.response?.data?.message ?? err.message ?? "An error occurred";
+      window.alert(message);
+    }
+  };
+
   const handleEditSave = async (updated) => {
     if (isInvestments) {
       const payload = {
@@ -386,6 +400,7 @@ export default function Products() {
           }}
           onDeactivate={handleDeactivate}
           onActivate={handleActivate}
+          onDelete={handleDelete}
         />
       )}
 

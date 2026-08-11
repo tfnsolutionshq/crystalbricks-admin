@@ -1,4 +1,5 @@
-import { X } from "lucide-react";
+import { useState } from "react";
+import { X, Loader2 } from "lucide-react";
 import Badge from "@/shared/components/Badge";
 
 function Row({ children }) {
@@ -173,14 +174,36 @@ export default function ProductDetailsPanel({
   onEdit,
   onDeactivate,
   onActivate,
+  onDelete,
 }) {
+  const [busyAction, setBusyAction] = useState(null);
   if (!product) return null;
   const isActive = product.status === "Active";
 
+  const handleToggle = async () => {
+    if (busyAction) return;
+    setBusyAction(isActive ? "deactivate" : "activate");
+    try {
+      await (isActive ? onDeactivate(product) : onActivate(product));
+    } finally {
+      setBusyAction(null);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (busyAction) return;
+    setBusyAction("delete");
+    try {
+      await onDelete(product);
+    } finally {
+      setBusyAction(null);
+    }
+  };
+
   return (
     <div className="fixed inset-0 z-50 flex justify-end">
-      <div className="absolute inset-0 bg-black/30" onClick={onClose} />
-      <div className="relative w-full max-w-100 bg-white h-full shadow-xl overflow-y-auto">
+      <div className="absolute inset-0 bg-black/30 animate-fade-in" onClick={onClose} />
+      <div className="relative w-full max-w-100 bg-white h-full shadow-xl overflow-y-auto animate-slide-in-right">
         <div className="p-6 space-y-6">
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-bold text-gray-900">Product Details</h2>
@@ -213,17 +236,37 @@ export default function ProductDetailsPanel({
             </button>
             {isActive ? (
               <button
-                onClick={() => onDeactivate(product)}
-                className="w-full bg-[#EF5350] hover:bg-[#e53e3e] transition-colors text-white text-sm font-medium py-3 rounded-lg cursor-pointer"
+                onClick={handleToggle}
+                disabled={busyAction !== null}
+                className="w-full flex items-center justify-center gap-2 bg-[#EF5350] hover:bg-[#e53e3e] transition-colors text-white text-sm font-medium py-3 rounded-lg cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
               >
+                {busyAction === "deactivate" && (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                )}
                 Deactivate
               </button>
             ) : (
               <button
-                onClick={() => onActivate(product)}
-                className="w-full bg-green-600 hover:bg-green-700 transition-colors text-white text-sm font-medium py-3 rounded-lg cursor-pointer"
+                onClick={handleToggle}
+                disabled={busyAction !== null}
+                className="w-full flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 transition-colors text-white text-sm font-medium py-3 rounded-lg cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
               >
+                {busyAction === "activate" && (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                )}
                 Activate
+              </button>
+            )}
+            {kind === "fd" && (
+              <button
+                onClick={handleDelete}
+                disabled={busyAction !== null}
+                className="w-full flex items-center justify-center gap-2 border border-[#EF5350] text-[#EF5350] hover:bg-[#EF5350] hover:text-white transition-colors text-sm font-medium py-3 rounded-lg cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+              >
+                {busyAction === "delete" && (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                )}
+                Delete
               </button>
             )}
           </div>
