@@ -1,4 +1,4 @@
-import { AlertTriangle, CheckCircle2, Trash2 } from "lucide-react";
+import { AlertTriangle, CheckCircle2 } from "lucide-react";
 import ModalShell from "@/shared/components/ModalShell";
 
 const ACTION_CONFIG = {
@@ -20,15 +20,6 @@ const ACTION_CONFIG = {
     describe: (name) =>
       `${name} will regain access to the admin panel immediately.`,
   },
-  remove: {
-    icon: Trash2,
-    iconClass: "bg-red-50 text-red-500",
-    title: "Remove Member",
-    confirmLabel: "Remove",
-    confirmClass: "bg-red-500 hover:bg-red-600",
-    describe: (name) =>
-      `This permanently removes ${name} from the team. This action cannot be undone.`,
-  },
 };
 
 export default function ConfirmActionModal({
@@ -37,6 +28,8 @@ export default function ConfirmActionModal({
   member,
   onClose,
   onConfirm,
+  submitting = false,
+  error = null,
 }) {
   if (!member || !action) return null;
   const config = ACTION_CONFIG[action];
@@ -57,20 +50,26 @@ export default function ConfirmActionModal({
           {config.describe(member.name)}
         </p>
 
+        {error && (
+          <p className="text-sm text-red-500 mb-4 w-full">{error}</p>
+        )}
+
         <div className="flex flex-col-reverse sm:flex-row gap-3 w-full">
           <button
             type="button"
             onClick={onClose}
-            className="flex-1 px-5 py-2.5 rounded-xl border border-slate-200 text-sm font-medium text-slate-600 hover:bg-slate-50 transition-colors"
+            disabled={submitting}
+            className="flex-1 px-5 py-2.5 rounded-xl border border-slate-200 text-sm font-medium text-slate-600 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             Cancel
           </button>
           <button
             type="button"
             onClick={() => onConfirm?.(member, action)}
-            className={`flex-1 px-5 py-2.5 rounded-xl text-white text-sm font-semibold transition-colors ${config.confirmClass}`}
+            disabled={submitting}
+            className={`flex-1 px-5 py-2.5 rounded-xl text-white text-sm font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${config.confirmClass}`}
           >
-            {config.confirmLabel}
+            {submitting ? "Please wait..." : config.confirmLabel}
           </button>
         </div>
       </div>

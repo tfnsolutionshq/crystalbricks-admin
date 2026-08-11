@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { UserPlus } from "lucide-react";
+import { Pencil } from "lucide-react";
 
 import ModalShell from "@/shared/components/ModalShell";
 import TextInput from "@/shared/components/TextInput";
@@ -7,23 +7,24 @@ import TextInput from "@/shared/components/TextInput";
 import Field from "./Field";
 import RoleSelect from "./RoleSelect";
 
-const emptyForm = {
-  first_name: "",
-  last_name: "",
-  email: "",
-  phone_country_code: "",
-  phone_number: "",
-  role: "",
-};
-
-export default function AddMemberModal({
+export default function EditMemberModal({
   open,
+  member,
   onClose,
   onSubmit,
   submitting = false,
   error = null,
 }) {
-  const [form, setForm] = useState(emptyForm);
+  const [form, setForm] = useState({
+    first_name: member?.first_name ?? "",
+    last_name: member?.last_name ?? "",
+    email: member?.email ?? "",
+    phone_country_code: member?.phone_country_code ?? "",
+    phone_number: member?.phone_number ?? "",
+    role: member?.role ?? "",
+  });
+
+  if (!member) return null;
 
   function handleChange(key, value) {
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -31,12 +32,7 @@ export default function AddMemberModal({
 
   function handleSubmit(event) {
     event.preventDefault();
-    onSubmit?.(form);
-  }
-
-  function handleClose() {
-    setForm(emptyForm);
-    onClose?.();
+    onSubmit?.(member, form);
   }
 
   const isValid =
@@ -46,7 +42,7 @@ export default function AddMemberModal({
     form.role;
 
   return (
-    <ModalShell open={open} onClose={handleClose} title="Add Member">
+    <ModalShell open={open} onClose={onClose} title="Edit Member">
       <form onSubmit={handleSubmit}>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <Field label="First Name" required>
@@ -100,7 +96,7 @@ export default function AddMemberModal({
         <Field
           label="Role"
           required
-          hint="Determines what this member can access."
+          hint="Changing this updates what the member can access immediately."
         >
           <RoleSelect
             value={form.role}
@@ -113,7 +109,7 @@ export default function AddMemberModal({
         <div className="flex flex-col-reverse sm:flex-row justify-end gap-3 mt-2">
           <button
             type="button"
-            onClick={handleClose}
+            onClick={onClose}
             disabled={submitting}
             className="px-5 py-2.5 rounded-xl border border-slate-200 text-sm font-medium text-slate-600 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
@@ -124,8 +120,8 @@ export default function AddMemberModal({
             disabled={!isValid || submitting}
             className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-pink-600 text-white text-sm font-semibold hover:bg-pink-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
           >
-            <UserPlus className="w-4 h-4" />
-            {submitting ? "Adding..." : "Add Member"}
+            <Pencil className="w-4 h-4" />
+            {submitting ? "Saving..." : "Save Changes"}
           </button>
         </div>
       </form>
