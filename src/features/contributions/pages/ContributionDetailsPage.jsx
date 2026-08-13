@@ -199,7 +199,9 @@ export default function ContributionDetailsPage() {
 
   return (
     <Layout activeNavItem="Contributions">
-      {loading ? skeletonContent : (
+      {loading ? (
+        skeletonContent
+      ) : (
         <div className="p-4 sm:p-6 lg:p-8 bg-slate-50 min-h-screen">
           {/* Header */}
           <button
@@ -230,7 +232,7 @@ export default function ContributionDetailsPage() {
               </p>
             </div>
             <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5">
-              <p className="text-sm text-slate-500 mb-2">Expected ROI</p>
+              <p className="text-sm text-slate-500 mb-2">Expected RORC</p>
               <p className="text-xl font-bold text-emerald-600">
                 {formatCurrency(financials.total_expected_roi, { decimals: 2 })}
               </p>
@@ -313,7 +315,7 @@ export default function ContributionDetailsPage() {
                   </p>
                 </div>
                 <div>
-                  <p className="text-slate-400 mb-1">ROI Rate</p>
+                  <p className="text-slate-400 mb-1">RORC Rate</p>
                   <p className="font-medium text-slate-800">
                     {financials.roi_percentage}% (
                     {formatCurrency(financials.roi_per_payout, { decimals: 2 })}{" "}
@@ -377,7 +379,7 @@ export default function ContributionDetailsPage() {
                   </p>
                 </div>
                 <div className="flex items-center justify-between py-3">
-                  <p className="text-slate-500 text-sm">ROI Paid So Far</p>
+                  <p className="text-slate-500 text-sm">RORC Paid So Far</p>
                   <p className="font-semibold text-slate-900">
                     {formatCurrency(financials.roi_paid_so_far, {
                       decimals: 2,
@@ -386,7 +388,7 @@ export default function ContributionDetailsPage() {
                 </div>
                 <div className="flex items-center justify-between py-3">
                   <p className="text-slate-500 text-sm">
-                    ROI Remaining ({financials.roi_percentage}%)
+                    RORC Remaining ({financials.roi_percentage}%)
                   </p>
                   <p className="font-semibold text-emerald-600">
                     +{" "}
@@ -427,7 +429,7 @@ export default function ContributionDetailsPage() {
                   <tr className="border-b border-slate-100 text-left text-slate-400">
                     <th className="px-5 py-3.5 font-medium">#</th>
                     <th className="px-5 py-3.5 font-medium">Payout Date</th>
-                    <th className="px-5 py-3.5 font-medium">ROI Amount</th>
+                    <th className="px-5 py-3.5 font-medium">RORC Amount</th>
                     <th className="px-5 py-3.5 font-medium">Principal</th>
                     <th className="px-5 py-3.5 font-medium">Total</th>
                     <th className="px-5 py-3.5 font-medium">Status</th>
