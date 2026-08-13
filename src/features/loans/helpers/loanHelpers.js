@@ -77,6 +77,8 @@ const STATUSES_WITH_APPROVAL = [
 ];
 // Repayment Schedule only exists once a loan has been disbursed.
 const STATUSES_WITH_SCHEDULE = ["Active", "Repaid"];
+// Payout Schedule is hidden while a request is still waiting/pending.
+const STATUSES_WITHOUT_PAYOUT = ["waiting", "pending", "Waiting", "Pending"];
 
 export function getAvailableTabs(loan) {
   const tabs = [
@@ -89,6 +91,9 @@ export function getAvailableTabs(loan) {
   }
   if (STATUSES_WITH_SCHEDULE.includes(loan.status)) {
     tabs.push({ key: "schedule", label: "Repayment Schedule" });
+  }
+  if (!STATUSES_WITHOUT_PAYOUT.includes(loan.status)) {
+    tabs.push({ key: "payout", label: "Payout Schedule" });
   }
   tabs.push({ key: "notes", label: "Notes" });
   return tabs;

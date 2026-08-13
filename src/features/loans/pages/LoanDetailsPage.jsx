@@ -26,6 +26,7 @@ import KYCTab from "@/features/loans/components/KYCTab";
 import CreditCheckTab from "@/features/loans/components/CreditCheckTab";
 import ApprovalDetailsTab from "@/features/loans/components/ApprovalDetailsTab";
 import RepaymentScheduleTab from "@/features/loans/components/RepaymentScheduleTab";
+import PayoutScheduleTab from "@/features/loans/components/PayoutScheduleTab";
 import NotesTab from "@/features/loans/components/NotesTab";
 
 import ApproveLoanModal from "@/features/loans/components/ApproveLoanModal";
@@ -370,6 +371,7 @@ export default function LoanDetail() {
                   onAddEntry={handleAddEntry}
                 />
               )}
+              {activeTab === "payout" && <PayoutScheduleTab loan={detail} />}
               {activeTab === "notes" && (
                 <NotesTab
                   note={detail.rejection_note}
