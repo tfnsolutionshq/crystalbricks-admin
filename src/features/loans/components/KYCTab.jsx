@@ -50,6 +50,8 @@ function RequirementValue({ type, data }) {
             <p className="text-gray-900">{g.full_name}</p>
             <p className="text-gray-500 mt-1">Phone Number</p>
             <p className="text-gray-900">{g.phone_number}</p>
+            <p className="text-gray-500 mt-1">Email</p>
+            <p className="text-gray-900">{g.email || "N/A"}</p>
           </div>
         ))}
       </div>
