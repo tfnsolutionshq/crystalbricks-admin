@@ -59,6 +59,7 @@ export default function LoanList() {
   const [meta, setMeta] = useState({ total: 0, last_page: 1, per_page: 0 });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [exporting, setExporting] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -134,6 +135,49 @@ export default function LoanList() {
 
   const resetPage = () => setPage(1);
 
+  // ---- Export (entire filtered list, not just the current page) ----
+  async function exportAllLoans() {
+    setExporting(true);
+    setError(null);
+    try {
+      const allLoans = [];
+      let pageNumber = 1;
+      let lastPage = 1;
+
+      do {
+        const { data } = await fetchLoans({
+          page: pageNumber,
+          search: appliedSearch,
+          status,
+          min_amount: minAmount,
+          max_amount: maxAmount,
+          start_date: startDate,
+          end_date: endDate,
+          sort_by: sortBy,
+          sort_order: sortOrder,
+        });
+        allLoans.push(...(data.data ?? []));
+        lastPage = data.last_page ?? 1;
+        pageNumber += 1;
+      } while (pageNumber <= lastPage);
+
+      const filtered = allLoans.filter((loan) => {
+        const matchesType = type === "All" || loan.type === type;
+        const matchesCategory =
+          category === "All" || loan.category === category;
+        return matchesType && matchesCategory;
+      });
+
+      handleExport(filtered);
+    } catch (err) {
+      setError(
+        err.response?.data?.message ?? err.message ?? "An error occurred",
+      );
+    } finally {
+      setExporting(false);
+    }
+  }
+
   // ---- Filtering (table section) ----
   const filteredLoans = useMemo(() => {
     return loans.filter((loan) => {
@@ -163,10 +207,11 @@ export default function LoanList() {
             <h1 className="text-xl font-bold text-gray-900">Loans</h1>
             <button
               type="button"
-              className="cursor-pointer inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-pink-600 hover:bg-pink-700 text-white text-sm font-medium transition-colors"
-              onClick={() => handleExport(pageLoans)}
+              className="cursor-pointer inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-pink-600 hover:bg-pink-700 text-white text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              onClick={exportAllLoans}
+              disabled={exporting}
             >
-              Export
+              {exporting ? "Exporting..." : "Export"}
               <Download size={16} />
             </button>
           </div>
