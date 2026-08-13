@@ -8,11 +8,11 @@ import {
   ReferenceLine,
 } from "recharts";
 
-import { ACTIVE_USERS_DATA } from "@/features/dashboard/mocks/dashboardMockData";
-
-export default function ActiveUsersChart() {
-  const highlightMonth = "AUG";
-
+export default function ActiveUsersChart({
+  data = [],
+  value = 0,
+  highlightMonth = null,
+}) {
   return (
     <div className="bg-white rounded-2xl border border-gray-200 p-6 flex-[1.6] min-w-[320px]">
       <div className="flex items-start justify-between mb-6">
@@ -25,14 +25,14 @@ export default function ActiveUsersChart() {
           </p>
         </div>
         <span className="text-2xl font-bold text-gray-900 shrink-0 ml-4">
-          24,500
+          {value}
         </span>
       </div>
 
       <div className="h-64">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart
-            data={ACTIVE_USERS_DATA}
+            data={data}
             margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
           >
             <XAxis
@@ -42,7 +42,7 @@ export default function ActiveUsersChart() {
               tick={{ fill: "#9ca3af", fontSize: 12 }}
             />
             <YAxis hide domain={["dataMin - 40", "dataMax + 40"]} />
-            <ReferenceLine x={highlightMonth} stroke="#e5e7eb" />
+            {highlightMonth && <ReferenceLine x={highlightMonth} stroke="#e5e7eb" />}
             <Tooltip
               cursor={false}
               content={({ active, payload, label }) => {

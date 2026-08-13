@@ -1,13 +1,11 @@
-import { REPAYMENTS } from "@/features/dashboard/mocks/dashboardMockData";
-
-export default function UpcomingRepayments() {
+export default function UpcomingRepayments({ repayments = [] }) {
   return (
     <div className="bg-white rounded-2xl border border-gray-200 p-6 flex-1 min-w-55">
       <h3 className="text-base font-bold text-gray-900 mb-4">
         Upcoming Repayments
       </h3>
       <ul className="space-y-3">
-        {REPAYMENTS.map((r) => (
+        {repayments.map((r) => (
           <li
             key={r.id}
             className="flex items-center justify-between border border-gray-100 rounded-xl px-4 py-3"
