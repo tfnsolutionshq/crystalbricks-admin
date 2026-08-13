@@ -1,13 +1,14 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Download, RefreshCw } from "lucide-react";
 
 import Layout from "@/shared/components/Layout.jsx";
 
 import Badge from "@/shared/components/Badge";
-import FilterPill from "@/shared/components/FilterPill";
+import FilterDropdown from "@/shared/components/FilterDropdown";
 import Pagination from "@/shared/components/Pagination";
 import SearchInput from "@/shared/components/SearchInput";
+import SortDropdown from "@/shared/components/SortDropdown";
 
 import formatCurrency from "@/shared/utils/formatCurrency";
 import formatDateTime from "@/shared/utils/formatDateTime";
@@ -16,10 +17,30 @@ import formatStatus from "@/shared/utils/formatStatus";
 import { fetchTransactions } from "@/features/transactions/api/transactionsApi";
 
 import {
-  filterTransactions,
   formatTransactionType,
   handleExport,
+  TRANSACTION_TYPES,
 } from "@/features/transactions/helpers/transactionHelpers.js";
+
+const STATUS_OPTIONS = [
+  { id: "", menuLabel: "All statuses", buttonLabel: "All statuses" },
+  { id: "pending", menuLabel: "Pending", buttonLabel: "Pending" },
+  { id: "failed", menuLabel: "Failed", buttonLabel: "Failed" },
+  { id: "reversed", menuLabel: "Reversed", buttonLabel: "Reversed" },
+  { id: "success", menuLabel: "Success", buttonLabel: "Success" },
+];
+
+const TYPE_LABELS = {
+  investment_roi_credit: "Investment RORC Credit",
+};
+
+const TYPE_OPTIONS = [
+  { id: "", menuLabel: "All types", buttonLabel: "All types" },
+  ...TRANSACTION_TYPES.map((type) => {
+    const label = TYPE_LABELS[type] ?? formatTransactionType(type);
+    return { id: type, menuLabel: label, buttonLabel: label };
+  }),
+];
 
 // ============================================================================
 // TRANSACTIONS PAGE
@@ -30,15 +51,50 @@ import {
 export default function TransactionsPage() {
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
+  const [appliedSearch, setAppliedSearch] = useState("");
+  const [status, setStatus] = useState("");
+  const [type, setType] = useState("");
+  const [sortBy, setSortBy] = useState(undefined);
+  const [sortOrder, setSortOrder] = useState(undefined);
 
   const [transactions, setTransactions] = useState([]);
+  const [meta, setMeta] = useState({ total: 0, last_page: 1, per_page: 0 });
+  const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [exporting, setExporting] = useState(false);
+
+  const appliedSearchRef = useRef("");
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const next = search.trim();
+      if (next !== appliedSearchRef.current) {
+        appliedSearchRef.current = next;
+        setLoading(true);
+        setAppliedSearch(next);
+      }
+    }, 400);
+
+    return () => clearTimeout(timer);
+  }, [search]);
 
   const loadTransactions = useCallback(() => {
-    return fetchTransactions()
+    return fetchTransactions({
+      page,
+      reference: appliedSearch,
+      status,
+      type,
+      sort_by: sortBy,
+      sort_order: sortOrder,
+    })
       .then((response) => {
-        setTransactions(response.data ?? []);
+        setTransactions(response.data.data ?? []);
+        setMeta({
+          total: response.data.meta?.total ?? 0,
+          last_page: response.data.meta?.last_page ?? 1,
+          per_page: response.data.meta?.per_page ?? 0,
+        });
         setError(null);
       })
       .catch((err) => {
@@ -49,23 +105,59 @@ export default function TransactionsPage() {
       .finally(() => {
         setLoading(false);
       });
-  }, []);
-
-  const handleRetry = () => {
-    setLoading(true);
-    setError(null);
-    setTransactions([]);
-    loadTransactions();
-  };
+  }, [page, appliedSearch, status, type, sortBy, sortOrder]);
 
   useEffect(() => {
     loadTransactions();
   }, [loadTransactions]);
 
-  const filtered = useMemo(
-    () => filterTransactions(transactions, search),
-    [transactions, search],
-  );
+  const resetPage = () => setPage(1);
+
+  const handleRetry = () => {
+    setLoading(true);
+    setTransactions([]);
+    loadTransactions();
+  };
+
+  const goToPage = (nextPage) => {
+    setLoading(true);
+    setPage(nextPage);
+  };
+
+  async function exportAllTransactions() {
+    setExporting(true);
+    setError(null);
+    try {
+      const allTransactions = [];
+      let pageNumber = 1;
+      let lastPage = 1;
+
+      do {
+        const response = await fetchTransactions({
+          page: pageNumber,
+          reference: appliedSearch,
+          status,
+          type,
+          sort_by: sortBy,
+          sort_order: sortOrder,
+        });
+        allTransactions.push(...(response.data.data ?? []));
+        lastPage = response.data.meta?.last_page ?? 1;
+        pageNumber += 1;
+      } while (pageNumber <= lastPage);
+
+      handleExport(allTransactions);
+    } catch (err) {
+      setError(
+        err.response?.data?.message ?? err.message ?? "An error occurred",
+      );
+    } finally {
+      setExporting(false);
+    }
+  }
+
+  const pageCount = Math.max(1, meta.last_page);
+  const loadingSkeletonCount = meta.per_page || 10;
 
   return (
     <Layout activeNavItem="Transactions">
@@ -77,10 +169,11 @@ export default function TransactionsPage() {
           <h1 className="text-2xl font-bold text-gray-900">Transactions</h1>
           <button
             type="button"
-            onClick={() => handleExport(filtered)}
-            className="flex items-center gap-2 bg-pink-600 hover:bg-pink-700 text-white text-sm font-medium px-4 py-2.5 rounded-lg transition-colors"
+            onClick={exportAllTransactions}
+            disabled={exporting}
+            className="flex items-center gap-2 bg-pink-600 hover:bg-pink-700 text-white text-sm font-medium px-4 py-2.5 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Export
+            {exporting ? "Exporting..." : "Export"}
             <Download size={16} />
           </button>
         </div>
@@ -90,15 +183,48 @@ export default function TransactionsPage() {
       ------------------------------------------------------------------ */}
         <div className="flex items-center gap-3 mb-5 flex-wrap">
           <SearchInput
-            placeholder="Search reference, type or description"
+            placeholder="Search by reference"
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              resetPage();
+            }}
           />
           <div className="flex items-center gap-3 ml-auto">
-            <FilterPill label="Date" />
-            <FilterPill label="Type" />
-            <FilterPill label="Category" />
-            <FilterPill label="Status" />
+            <FilterDropdown
+              options={STATUS_OPTIONS}
+              selected={status}
+              onSelect={(value) => {
+                if (value !== status) {
+                  setLoading(true);
+                  setStatus(value);
+                  resetPage();
+                }
+              }}
+            />
+            <FilterDropdown
+              options={TYPE_OPTIONS}
+              selected={type}
+              onSelect={(value) => {
+                if (value !== type) {
+                  setLoading(true);
+                  setType(value);
+                  resetPage();
+                }
+              }}
+            />
+            <SortDropdown
+              sortBy={sortBy}
+              sortOrder={sortOrder}
+              onApply={({ sortBy: field, sortOrder: order }) => {
+                if (field !== sortBy || order !== sortOrder) {
+                  setLoading(true);
+                  setSortBy(field);
+                  setSortOrder(order);
+                  resetPage();
+                }
+              }}
+            />
           </div>
         </div>
 
@@ -119,7 +245,7 @@ export default function TransactionsPage() {
             </thead>
             <tbody>
               {loading ? (
-                Array.from({ length: 8 }).map((_, i) => (
+                Array.from({ length: loadingSkeletonCount }).map((_, i) => (
                   <tr key={i} className="animate-pulse">
                     <td className="px-6 py-4">
                       <div className="h-4 w-32 bg-gray-200 rounded" />
@@ -155,11 +281,11 @@ export default function TransactionsPage() {
                     </button>
                   </td>
                 </tr>
-              ) : filtered.length === 0 ? (
+              ) : transactions.length === 0 ? (
                 <tr>
                   <td colSpan={6} className="px-6 py-10 text-center">
                     <p className="text-sm text-gray-500 mb-3">
-                      No transactions match your search.
+                      No transactions match your filters.
                     </p>
                     <button
                       type="button"
@@ -172,7 +298,7 @@ export default function TransactionsPage() {
                   </td>
                 </tr>
               ) : (
-                filtered.map((txn) => (
+                transactions.map((txn) => (
                   <tr
                     key={txn.id}
                     onClick={() => navigate(`/transactions/${txn.id}`)}
@@ -204,10 +330,12 @@ export default function TransactionsPage() {
 
           <div className="px-6 pb-4">
             <Pagination
-              showing={filtered.length}
-              total={transactions.length}
-              page={1}
-              pageCount={1}
+              showing={transactions.length}
+              total={meta.total}
+              page={page}
+              pageCount={pageCount}
+              onPrev={() => goToPage(Math.max(1, page - 1))}
+              onNext={() => goToPage(Math.min(pageCount, page + 1))}
             />
           </div>
         </div>

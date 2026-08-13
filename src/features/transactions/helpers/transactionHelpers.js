@@ -7,6 +7,20 @@
 
 import exportToExcel from "@/shared/utils/exportToExcel";
 
+// Complete list of transaction types the wallet API can return.
+export const TRANSACTION_TYPES = [
+  "deposit",
+  "withdrawal",
+  "transfer",
+  "fee",
+  "refund",
+  "adjustment",
+  "bill_payment",
+  "investment_debit",
+  "investment_roi_credit",
+  "investment_redemption",
+];
+
 // Whether a transaction type adds money to the balance (credit) or takes it
 // away (debit). Used to work out the "New Available" figure after approval.
 const CREDIT_TYPES = ["Deposit"];
@@ -84,6 +98,26 @@ export function getTransactionDetailFields(txn) {
       );
       break;
 
+    case "withdrawal":
+      fields.push(
+        field("Withdrawal Reference", details.reference),
+        field("Currency", details.currency),
+        field("Amount", details.amount, "currency"),
+        field("Fee", details.fee, "currency"),
+        field("Net Amount", details.net_amount, "currency"),
+        field(
+          "Payment Method",
+          details.payment_method_type ?? details.method,
+        ),
+        field(
+          "Destination",
+          details.display_account ?? details.account_number ?? details.destination,
+        ),
+        field("Bank", details.bank),
+        field("Processed At", details.processed_at, "date"),
+      );
+      break;
+
     case "transfer": {
       const counterparty = details.counterparty ?? txn.counterparty;
       fields.push(
@@ -99,7 +133,60 @@ export function getTransactionDetailFields(txn) {
       break;
     }
 
+    case "fee":
+      fields.push(
+        field("Fee Reference", details.reference),
+        field("Amount", details.amount, "currency"),
+        field("Fee", details.fee, "currency"),
+        field("Description", details.description ?? details.narration),
+        field("Status", details.status),
+        field("Processed At", details.processed_at, "date"),
+      );
+      break;
+
+    case "refund":
+      fields.push(
+        field("Refund Reference", details.reference),
+        field("Amount", details.amount, "currency"),
+        field(
+          "Original Reference",
+          details.original_reference ?? details.source_reference,
+        ),
+        field("Reason", details.reason ?? details.description),
+        field("Status", details.status),
+        field("Processed At", details.processed_at, "date"),
+      );
+      break;
+
+    case "adjustment":
+      fields.push(
+        field("Adjustment Reference", details.reference),
+        field("Amount", details.amount, "currency"),
+        field("Note", details.note ?? details.description),
+        field("Status", details.status),
+        field("Processed At", details.processed_at, "date"),
+      );
+      break;
+
+    case "bill_payment":
+      fields.push(
+        field("Bill Reference", details.reference),
+        field("Amount", details.amount, "currency"),
+        field("Fee", details.fee, "currency"),
+        field("Total Amount", details.total_amount, "currency"),
+        field(
+          "Provider",
+          details.provider ?? details.biller ?? details.service_provider,
+        ),
+        field("Description", details.description),
+        field("Status", details.status),
+        field("Processed At", details.processed_at, "date"),
+      );
+      break;
+
     case "investment_debit":
+    case "investment_roi_credit":
+    case "investment_redemption":
       fields.push(
         field("Investment Name", details.investment_name),
         field("Investment Reference", details.reference),

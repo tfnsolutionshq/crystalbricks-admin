@@ -1,7 +1,23 @@
 import { walletApi } from "@/services/walletApiClient";
 
-export async function fetchTransactions() {
-  const { data } = await walletApi.get("/admin/transactions");
+export async function fetchTransactions({
+  page = 1,
+  reference = "",
+  status = "",
+  type = "",
+  sort_by,
+  sort_order,
+} = {}) {
+  const { data } = await walletApi.get("/admin/transactions", {
+    params: {
+      page: page > 1 ? page : undefined,
+      reference: reference || undefined,
+      status: status || undefined,
+      type: type || undefined,
+      sort_by: sort_by || undefined,
+      sort_order: sort_order || undefined,
+    },
+  });
 
   return data;
 }
