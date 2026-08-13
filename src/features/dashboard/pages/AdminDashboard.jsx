@@ -158,14 +158,13 @@ export default function Dashboard() {
     (transaction) => ({
       id: transaction.reference ?? (transaction.id ?? "").slice(0, 8),
       customer:
-        transaction.counterparty?.name ??
-        transaction.description ??
-        "-",
+        transaction.counterparty?.name ?? transaction.description ?? "-",
       amount: `${transaction.direction === "debit" ? "-" : "+"}${formatCurrency(
         transaction.amount,
       )}`,
       date: formatDateTime(transaction.created_at),
-      status: STATUS_LABELS[transaction.status] ?? formatStatus(transaction.status),
+      status:
+        STATUS_LABELS[transaction.status] ?? formatStatus(transaction.status),
     }),
   );
 
@@ -235,7 +234,7 @@ export default function Dashboard() {
       <div className="p-6 space-y-6 max-w-[1600px]">
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
-          <div className="flex items-center gap-3">
+          {/* <div className="flex items-center gap-3">
             <FilterDropdown
               options={STATS_FILTER_OPTIONS}
               selected={statsFilter}
@@ -246,7 +245,7 @@ export default function Dashboard() {
               selected={timeFilter}
               onSelect={setTimeFilter}
             />
-          </div>
+          </div> */}
         </div>
 
         {error ? (
