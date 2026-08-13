@@ -3,6 +3,7 @@ const BADGE_STYLES = {
   // KYC / general success states
   Verified: "bg-green-50 text-green-600",
   Completed: "bg-green-50 text-green-600",
+  Success: "bg-green-50 text-green-600",
   Active: "bg-blue-50 text-blue-600",
   // Neutral / in-progress
   Pending: "bg-gray-100 text-gray-500",
