@@ -5,6 +5,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import { AuthProvider } from "@/shared/context/AuthContext";
+import { SidebarProvider } from "@/shared/context/SidebarContext";
 
 import SignInPage from "./features/auth/pages/SignInPage";
 import SetPasscodePage from "./features/auth/pages/SetPasscodePage";
@@ -32,14 +33,15 @@ import LoanListPage from "./features/loans/pages/LoanListPage";
 export default function App() {
   return (
     <AuthProvider>
-      <Router>
-        <Routes>
-          <Route element={<PublicRouteGuard />}>
-            <Route path="/" element={<Navigate to="/signin" replace />} />
-            <Route path="/signin" element={<SignInPage />} />
-            <Route path="/set-passcode" element={<SetPasscodePage />} />
-            <Route path="/reset-passcode" element={<ResetPasscodePage />} />
-          </Route>
+      <SidebarProvider>
+        <Router>
+          <Routes>
+            <Route element={<PublicRouteGuard />}>
+              <Route path="/" element={<Navigate to="/signin" replace />} />
+              <Route path="/signin" element={<SignInPage />} />
+              <Route path="/set-passcode" element={<SetPasscodePage />} />
+              <Route path="/reset-passcode" element={<ResetPasscodePage />} />
+            </Route>
 
           <Route element={<PrivateRouteGuard />}>
             <Route path="/dashboard" element={<DashboardPage />} />
@@ -66,27 +68,28 @@ export default function App() {
             <Route path="/analytics" element={<AnalyticsPage />} />
             <Route path="/team-management" element={<TeamManagementPage />} />
 
-            <Route
-              path="/settings"
-              element={<Navigate to="/settings/personal-info" replace />}
-            />
-            <Route
-              path="/settings/personal-info"
-              element={<PersonalInfoPage />}
-            />
-            <Route path="/settings/security" element={<SecurityPage />} />
-            <Route path="/settings/devices" element={<DevicesPage />} />
-            <Route path="/contributions" element={<ContributionsPage />} />
-            <Route
-              path="/contributions/:investmentId"
-              element={<ContributionDetailsPage />}
-            />
-            <Route path="/loans" element={<LoanListPage />} />
-            <Route path="/loans/:loanId" element={<LoanDetailsPage />} />
-            <Route path="/loans/:loanId/:tab" element={<LoanDetailsPage />} />
-          </Route>
-        </Routes>
-      </Router>
+              <Route
+                path="/settings"
+                element={<Navigate to="/settings/personal-info" replace />}
+              />
+              <Route
+                path="/settings/personal-info"
+                element={<PersonalInfoPage />}
+              />
+              <Route path="/settings/security" element={<SecurityPage />} />
+              <Route path="/settings/devices" element={<DevicesPage />} />
+              <Route path="/contributions" element={<ContributionsPage />} />
+              <Route
+                path="/contributions/:investmentId"
+                element={<ContributionDetailsPage />}
+              />
+              <Route path="/loans" element={<LoanListPage />} />
+              <Route path="/loans/:loanId" element={<LoanDetailsPage />} />
+              <Route path="/loans/:loanId/:tab" element={<LoanDetailsPage />} />
+            </Route>
+          </Routes>
+        </Router>
+      </SidebarProvider>
     </AuthProvider>
   );
 }
