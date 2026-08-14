@@ -1,7 +1,13 @@
 import { useState } from "react";
 import { X, Loader2 } from "lucide-react";
-import { TextInput, TextArea, Select, SuffixInput } from "./FormFields";
-import { STATUS_OPTIONS, PAYOUT_FREQUENCY_OPTIONS, capitalizeLabel } from "../mocks/productsMockData";
+import { TextInput, TextArea, Select, SuffixInput, CheckboxList } from "./FormFields";
+import {
+  STATUS_OPTIONS,
+  PAYOUT_FREQUENCY_OPTIONS,
+  KYC_CHECK_REQUIREMENT_OPTIONS,
+  DEFAULT_REPAYMENT_STRUCTURE,
+  capitalizeLabel,
+} from "../mocks/productsMockData";
 
 const emptyLoanForm = {
   name: "",
@@ -11,6 +17,8 @@ const emptyLoanForm = {
   min_amount: "",
   max_amount: "",
   processing_fee_percentage: "",
+  kyc_check_requirements: [],
+  repayment_structure: DEFAULT_REPAYMENT_STRUCTURE,
   is_active: true,
 };
 
@@ -36,6 +44,9 @@ export default function AddProductModal({ kind, onClose, onSave }) {
 
   const updateIsActive = (e) =>
     setForm((f) => ({ ...f, is_active: e.target.value === "Active" }));
+
+  const updateKycRequirements = (next) =>
+    setForm((f) => ({ ...f, kyc_check_requirements: next }));
 
   const handleSave = async () => {
     setSaving(true);
@@ -114,6 +125,17 @@ export default function AddProductModal({ kind, onClose, onSave }) {
               placeholder="Enter processing fee percentage"
               value={form.processing_fee_percentage}
               onChange={update("processing_fee_percentage")}
+            />
+            <CheckboxList
+              label="KYC Check Requirements"
+              options={KYC_CHECK_REQUIREMENT_OPTIONS}
+              value={form.kyc_check_requirements}
+              onChange={updateKycRequirements}
+            />
+            <TextArea
+              label="Repayment Structure"
+              value={form.repayment_structure}
+              onChange={update("repayment_structure")}
             />
             <Select
               label="Status"
