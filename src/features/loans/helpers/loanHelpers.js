@@ -67,14 +67,6 @@ export function getRiskVariant(risk) {
 }
 
 // ---- Tab visibility ---------------------------------------------------------
-// Approval Details only shows once a loan has reached a decision stage.
-const STATUSES_WITH_APPROVAL = [
-  "awaiting",
-  "pending",
-  "declined",
-  "active",
-  "repaid",
-];
 // Repayment Schedule only exists once a loan has been disbursed.
 const STATUSES_WITH_SCHEDULE = ["Active", "Repaid"];
 // Payout Schedule is hidden while a request is still waiting/pending.
@@ -84,18 +76,13 @@ export function getAvailableTabs(loan) {
   const tabs = [
     { key: "application", label: "Application Details" },
     { key: "kyc", label: "KYC" },
-    { key: "credit", label: "Credit Check" },
   ];
-  if (STATUSES_WITH_APPROVAL.includes(loan.status)) {
-    tabs.push({ key: "approval", label: "Approval Details" });
-  }
   if (STATUSES_WITH_SCHEDULE.includes(loan.status)) {
     tabs.push({ key: "schedule", label: "Repayment Schedule" });
   }
   if (!STATUSES_WITHOUT_PAYOUT.includes(loan.status)) {
     tabs.push({ key: "payout", label: "Payout Schedule" });
   }
-  tabs.push({ key: "notes", label: "Notes" });
   return tabs;
 }
 

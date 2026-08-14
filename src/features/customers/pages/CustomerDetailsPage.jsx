@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { RefreshCw } from "lucide-react";
+import { ArrowLeft, RefreshCw } from "lucide-react";
 
 import Layout from "@/shared/components/Layout.jsx";
 import Badge from "@/shared/components/Badge.jsx";
@@ -165,19 +165,12 @@ export default function CustomerDetailsPage() {
             <>
               <div className="flex items-center gap-3 flex-1 min-w-0">
                 <button
+                  type="button"
                   onClick={() => navigate("/customers")}
-                  className="w-9 cursor-pointer h-9 shrink-0 rounded-lg border border-gray-200 bg-white flex items-center justify-center text-gray-600 hover:bg-gray-50"
+                  className="w-9 h-9 shrink-0 rounded-xl bg-white border border-gray-200 flex items-center justify-center hover:bg-gray-50 cursor-pointer"
                   aria-label="Back to customers"
                 >
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    className="w-4 h-4"
-                  >
-                    <polyline points="15 18 9 12 15 6" />
-                  </svg>
+                  <ArrowLeft size={16} />
                 </button>
                 {customer?.avatar ? (
                   <img
