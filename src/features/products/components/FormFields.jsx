@@ -90,3 +90,36 @@ export function Checkbox({ label, checked, onChange }) {
     </label>
   );
 }
+
+export function CheckboxList({ label, options, value, onChange }) {
+  const toggle = (option) => (e) =>
+    onChange(
+      e.target.checked
+        ? [...value, option]
+        : value.filter((v) => v !== option),
+    );
+
+  return (
+    <div>
+      {label && (
+        <label className="block text-sm text-gray-500 mb-2">{label}</label>
+      )}
+      <div className="flex flex-wrap gap-x-6 gap-y-3">
+        {options.map((option) => (
+          <label
+            key={option}
+            className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer select-none"
+          >
+            <input
+              type="checkbox"
+              checked={value.includes(option)}
+              onChange={toggle(option)}
+              className="w-4 h-4 rounded border-gray-300 accent-[#111827]"
+            />
+            {option}
+          </label>
+        ))}
+      </div>
+    </div>
+  );
+}
