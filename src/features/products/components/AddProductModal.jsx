@@ -6,6 +6,7 @@ import {
   PAYOUT_FREQUENCY_OPTIONS,
   KYC_CHECK_REQUIREMENT_OPTIONS,
   DEFAULT_REPAYMENT_STRUCTURE,
+  DEFAULT_ELIGIBILITY_CRITERIA,
   capitalizeLabel,
 } from "../mocks/productsMockData";
 
@@ -19,6 +20,7 @@ const emptyLoanForm = {
   processing_fee_percentage: "",
   kyc_check_requirements: [],
   repayment_structure: DEFAULT_REPAYMENT_STRUCTURE,
+  eligibility_criteria: DEFAULT_ELIGIBILITY_CRITERIA,
   is_active: true,
 };
 
@@ -136,6 +138,11 @@ export default function AddProductModal({ kind, onClose, onSave }) {
               label="Repayment Structure"
               value={form.repayment_structure}
               onChange={update("repayment_structure")}
+            />
+            <TextArea
+              label="Eligibility Criteria"
+              value={form.eligibility_criteria}
+              onChange={update("eligibility_criteria")}
             />
             <Select
               label="Status"

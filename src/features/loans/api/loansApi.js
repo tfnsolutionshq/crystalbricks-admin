@@ -34,10 +34,8 @@ export async function fetchLoanDetail(id) {
   return data;
 }
 
-export async function disburseLoan(id, amount) {
-  const { data } = await walletApi.post(`/admin/loans/${id}/approve`, {
-    amount,
-  });
+export async function disburseLoan(id, payload) {
+  const { data } = await walletApi.post(`/admin/loans/${id}/approve`, payload);
 
   return data;
 }

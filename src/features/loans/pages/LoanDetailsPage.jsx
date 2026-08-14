@@ -25,6 +25,7 @@ import ApplicationDetailsTab from "@/features/loans/components/ApplicationDetail
 import KYCTab from "@/features/loans/components/KYCTab";
 import RepaymentScheduleTab from "@/features/loans/components/RepaymentScheduleTab";
 import PayoutScheduleTab from "@/features/loans/components/PayoutScheduleTab";
+import ApprovalDetailsTab from "@/features/loans/components/ApprovalDetailsTab";
 
 import ApproveLoanModal from "@/features/loans/components/ApproveLoanModal";
 import RejectLoanModal from "@/features/loans/components/RejectLoanModal";
@@ -141,14 +142,20 @@ export default function LoanDetail() {
   };
 
   // ---- Disburse handler ----
-  const handleDisburse = async (amount) => {
+  const handleDisburse = async ({ amount, period, interest, note }) => {
     setDisbursing(true);
     try {
-      await disburseLoan(detail.id, amount);
+      await disburseLoan(detail.id, {
+        amount: amount ? Number(amount) : null,
+        interest_rate: interest ? Number(interest) : null,
+        tenure_months: period ? Number(period) : null,
+        admin_note: note || null,
+      });
       setSuccessContent({
         label: "Loan Disbursement",
-        title: "Loan Disbursed",
-        subtitle: "The loan amount has been disbursed to the customer's wallet",
+        title: "Awaiting confirmation from the recipient",
+        subtitle:
+          "The customer has been informed of the counter request and will be funded once they accept it",
       });
       setHeaderModal("success");
       loadLoan();
@@ -325,6 +332,9 @@ export default function LoanDetail() {
                 />
               )}
               {activeTab === "payout" && <PayoutScheduleTab loan={detail} />}
+              {activeTab === "approval" && (
+                <ApprovalDetailsTab loan={detail} />
+              )}
             </>
           )}
 
