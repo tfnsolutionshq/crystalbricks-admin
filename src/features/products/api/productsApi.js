@@ -7,7 +7,7 @@ export async function fetchInvestmentPlans() {
 }
 
 export async function fetchLoanPlans() {
-  const { data } = await walletApi.get("/loans/plans");
+  const { data } = await walletApi.get("/admin/loan-plans");
 
   return data;
 }
@@ -56,13 +56,13 @@ export async function updateLoanPlan(id, payload) {
 }
 
 export async function activateLoanPlan(id) {
-  const { data } = await walletApi.post(`/admin/loans/${id}/activate`);
+  const { data } = await walletApi.post(`/admin/loan-plans/${id}/activate`);
 
   return data;
 }
 
 export async function deactivateLoanPlan(id) {
-  const { data } = await walletApi.post(`/admin/loans/${id}/deactivate`);
+  const { data } = await walletApi.post(`/admin/loan-plans/${id}/deactivate`);
 
   return data;
 }
