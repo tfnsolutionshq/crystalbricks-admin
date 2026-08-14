@@ -22,6 +22,12 @@ export async function fetchTeamMemberStats() {
   return data;
 }
 
+export async function fetchTeamMember(id) {
+  const { data } = await idApi.get(`/admin/team-members/${id}`);
+
+  return data;
+}
+
 export async function updateTeamMember(id, payload) {
   const { data } = await idApi.put(`/admin/team-members/${id}`, payload);
 
