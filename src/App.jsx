@@ -77,7 +77,8 @@ export default function App() {
             <Route path="/loans/:loanId/:tab" element={<LoanDetailsPage />} />
           </Route>
         </Routes>
-      </Router>
+        </Router>
+      </SidebarProvider>
     </AuthProvider>
   );
 }
