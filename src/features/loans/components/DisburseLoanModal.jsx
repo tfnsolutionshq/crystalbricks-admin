@@ -12,14 +12,32 @@ export default function DisburseLoanModal({
     ? Number(defaultAmount).toLocaleString("en-US")
     : "";
   const [amount, setAmount] = useState(initialAmount);
+  const [period, setPeriod] = useState("");
+  const [interest, setInterest] = useState("");
+  const [note, setNote] = useState("");
 
   const handleAmountChange = (e) => {
     const digits = e.target.value.replace(/[^\d]/g, "");
     setAmount(digits ? Number(digits).toLocaleString("en-US") : "");
   };
 
+  const handlePeriodChange = (e) => {
+    const digits = e.target.value.replace(/[^\d]/g, "");
+    setPeriod(digits ? Number(digits).toString() : "");
+  };
+
+  const handleInterestChange = (e) => {
+    const value = e.target.value.replace(/[^\d.]/g, "");
+    setInterest(value);
+  };
+
   const handleConfirm = () => {
-    onConfirm(amount.replace(/,/g, ""));
+    onConfirm({
+      amount: amount.replace(/,/g, ""),
+      period,
+      interest,
+      note,
+    });
   };
 
   return (
@@ -41,6 +59,39 @@ export default function DisburseLoanModal({
             className="w-full rounded-xl border border-gray-200 pl-8 pr-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-green-200 focus:border-green-400"
           />
         </div>
+      </div>
+      <div className="mt-5 grid grid-cols-2 gap-4">
+        <div>
+          <label className="block text-sm text-gray-400 mb-2">Period</label>
+          <input
+            type="text"
+            inputMode="numeric"
+            value={period}
+            onChange={handlePeriodChange}
+            className="w-full rounded-xl border border-gray-200 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-green-200 focus:border-green-400"
+          />
+        </div>
+        <div>
+          <label className="block text-sm text-gray-400 mb-2">Interest</label>
+          <input
+            type="text"
+            inputMode="decimal"
+            value={interest}
+            onChange={handleInterestChange}
+            className="w-full rounded-xl border border-gray-200 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-green-200 focus:border-green-400"
+          />
+        </div>
+      </div>
+      <div className="mt-5">
+        <label className="block text-sm text-gray-400 mb-2">
+          Note <span className="text-gray-400">(Optional)</span>
+        </label>
+        <textarea
+          rows={3}
+          value={note}
+          onChange={(e) => setNote(e.target.value)}
+          className="w-full rounded-xl border border-gray-200 px-4 py-3 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-green-200 focus:border-green-400"
+        />
       </div>
       <ModalFooter>
         <button

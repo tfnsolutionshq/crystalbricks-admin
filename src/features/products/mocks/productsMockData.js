@@ -42,6 +42,14 @@ export const DEFAULT_REPAYMENT_STRUCTURE = [
   "• Repayment begins in the month following loan disbursement (or as defined by policy).",
 ].join("\n");
 
+export const DEFAULT_ELIGIBILITY_CRITERIA = [
+  "• Nigeria-registered business (Limited Company or Incorporated Partnership)",
+  "• Minimum 6 months operational",
+  "• Annual revenue from 5,000,000 naira",
+  "• Good credit history",
+  "• Business bank account",
+].join("\n");
+
 export const STATUS_OPTIONS = ["Active", "Inactive"];
 export const PAYOUT_FREQUENCY_OPTIONS = [
   "MONTHLY",

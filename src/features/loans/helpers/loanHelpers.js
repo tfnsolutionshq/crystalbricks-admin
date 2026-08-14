@@ -71,8 +71,11 @@ export function getRiskVariant(risk) {
 const STATUSES_WITH_SCHEDULE = ["Active", "Repaid"];
 // Payout Schedule is hidden while a request is still waiting/pending.
 const STATUSES_WITHOUT_PAYOUT = ["waiting", "pending", "Waiting", "Pending"];
+// Approval Details only exists once a loan has been approved (active/completed).
+const STATUSES_WITH_APPROVAL = ["active", "completed"];
 
 export function getAvailableTabs(loan) {
+  const status = String(loan.status ?? "").toLowerCase();
   const tabs = [
     { key: "application", label: "Application Details" },
     { key: "kyc", label: "KYC" },
@@ -82,6 +85,9 @@ export function getAvailableTabs(loan) {
   }
   if (!STATUSES_WITHOUT_PAYOUT.includes(loan.status)) {
     tabs.push({ key: "payout", label: "Payout Schedule" });
+  }
+  if (STATUSES_WITH_APPROVAL.includes(status)) {
+    tabs.push({ key: "approval", label: "Approval Details" });
   }
   return tabs;
 }
