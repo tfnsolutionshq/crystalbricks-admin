@@ -372,42 +372,44 @@ export default function Products() {
   return (
     <Layout activeNavItem="Products">
       <div className="p-6 space-y-6 max-w-[1600px]">
-        <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-bold text-gray-900">Products</h1>
-          <button
-            type="button"
-            onClick={() => setIsAddOpen(true)}
-            className="flex items-center gap-2 bg-pink-600 hover:bg-pink-700 transition-colors text-white text-sm font-medium pl-4 pr-3 py-2.5 rounded-lg cursor-pointer"
-          >
-            Add product
-            <Plus size={16} />
-          </button>
-        </div>
+        <div className="p-4 sm:p-6 space-y-6">
+          <div className="flex items-center justify-between mb-6">
+            <h1 className="text-xl font-bold text-gray-900">Products</h1>
+            <button
+              type="button"
+              onClick={() => setIsAddOpen(true)}
+              className="cursor-pointer inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-pink-600 hover:bg-pink-700 text-white text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Add product
+              <Plus size={16} />
+            </button>
+          </div>
 
-        <ProductTabs activeTab={activeTab} onChange={setActiveTab} />
+          <ProductTabs activeTab={activeTab} onChange={setActiveTab} />
 
-        <div className="flex flex-wrap gap-6">
-          <StatCard
-            label={
-              isInvestments ? "Avg ROI Percentage" : "Avg Processing Fee Percentage"
-            }
-            value={statsLoading ? skeletonValue : stats.avgInterestRate}
-          />
-          <StatCard
-            label="Total Active Products"
-            value={statsLoading ? skeletonValue : stats.totalActiveProducts}
-          />
-        </div>
+          <div className="flex flex-wrap gap-6">
+            <StatCard
+              label={
+                isInvestments ? "Avg ROI Percentage" : "Avg Processing Fee Percentage"
+              }
+              value={statsLoading ? skeletonValue : stats.avgInterestRate}
+            />
+            <StatCard
+              label="Total Active Products"
+              value={statsLoading ? skeletonValue : stats.totalActiveProducts}
+            />
+          </div>
 
-        <div className="bg-white rounded-2xl border border-gray-200 p-6 space-y-4">
-          <ProductsTable
-            rows={rows}
-            tab={activeTab}
-            loading={isLoading}
-            error={tableError}
-            onRetry={handleRetry}
-            onRowClick={setViewingProduct}
-          />
+          <div className="bg-white rounded-2xl border border-gray-200 p-6 space-y-4">
+            <ProductsTable
+              rows={rows}
+              tab={activeTab}
+              loading={isLoading}
+              error={tableError}
+              onRetry={handleRetry}
+              onRowClick={setViewingProduct}
+            />
+          </div>
         </div>
       </div>
 

@@ -3,7 +3,6 @@ import { Wallet, Repeat, Server, Users } from "lucide-react";
 
 import Layout from "@/shared/components/Layout";
 import StatCard from "@/shared/components/StatCard";
-import FilterDropdown from "@/shared/components/FilterDropdown";
 
 import ActiveUsersChart from "@/features/dashboard/components/ActiveUsersChart";
 import ActiveEngagementChart from "@/features/dashboard/components/ActiveEngagementChart";
@@ -22,8 +21,6 @@ import { fetchDashboard } from "@/features/dashboard/api/dashboardApi.js";
 import {
   STATS_INVESTMENT,
   STATS_LOANS,
-  STATS_FILTER_OPTIONS,
-  TIME_FILTER_OPTIONS,
   ACTIVE_SAVING_USERS,
   ACTIVE_LOAN_USERS,
   RECENT_INVESTMENTS,
@@ -47,7 +44,6 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [statsFilter, setStatsFilter] = useState("all");
-  const [timeFilter, setTimeFilter] = useState("allTime");
 
   useEffect(() => {
     fetchDashboard()
@@ -220,23 +216,12 @@ export default function Dashboard() {
   return (
     <Layout activeNavItem="Dashboard">
       <div className="p-6 space-y-6 max-w-[1600px]">
-        <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
-          {/* <div className="flex items-center gap-3">
-            <FilterDropdown
-              options={STATS_FILTER_OPTIONS}
-              selected={statsFilter}
-              onSelect={setStatsFilter}
-            />
-            <FilterDropdown
-              options={TIME_FILTER_OPTIONS}
-              selected={timeFilter}
-              onSelect={setTimeFilter}
-            />
-          </div> */}
-        </div>
+        <div className="p-4 sm:p-6 space-y-6">
+          <div className="flex items-center justify-between mb-6">
+            <h1 className="text-xl font-bold text-gray-900">Dashboard</h1>
+          </div>
 
-        {error ? (
+          {error ? (
           <div className="bg-white rounded-2xl border border-gray-200 p-10 text-center">
             <p className="text-sm text-gray-500 mb-3">{error}</p>
             <button
@@ -269,6 +254,7 @@ export default function Dashboard() {
         ) : (
           renderContent()
         )}
+        </div>
       </div>
     </Layout>
   );
