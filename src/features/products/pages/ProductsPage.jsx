@@ -22,6 +22,7 @@ import {
   fetchInvestmentPlans,
   fetchLoanPlans,
   updateInvestmentPlan,
+  createLoanPlan,
   updateLoanPlan,
 } from "@/features/products/api/productsApi";
 
@@ -176,7 +177,9 @@ export default function Products() {
         (sum, i) =>
           sum +
           Number(
-            isInvestments ? (i.roi_percentage ?? 0) : (i.processing_fee_percentage ?? 0),
+            isInvestments
+              ? (i.roi_percentage ?? 0)
+              : (i.processing_fee_percentage ?? 0),
           ),
         0,
       ) / source.length;
@@ -335,38 +338,33 @@ export default function Products() {
       return;
     }
 
-    const dateCreated = new Date().toLocaleString("en-US", {
-      month: "short",
-      day: "2-digit",
-      year: "numeric",
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: true,
-    });
-    const status = newProduct.is_active ? "Active" : "Inactive";
-    setLoans((prev) => [
-      {
-        id: `loan-${Date.now()}`,
-        name: newProduct.name,
-        rate: "-",
-        status,
-        is_active: newProduct.is_active,
-        dateCreated,
-        min_interest_rate: newProduct.min_interest_rate ?? null,
-        max_interest_rate: newProduct.max_interest_rate ?? null,
-        min_amount: newProduct.min_amount ?? null,
-        max_amount: newProduct.max_amount ?? null,
-        minimum_amount: newProduct.min_amount ?? null,
-        maximum_amount: newProduct.max_amount ?? null,
-        minAmount: newProduct.min_amount ?? null,
-        maxAmount: newProduct.max_amount ?? null,
-        processing_fee_percentage: newProduct.processing_fee_percentage ?? null,
-        ...newProduct,
-      },
-      ...prev,
-    ]);
-    setIsAddOpen(false);
-    loadLoans();
+    const payload = {
+      name: newProduct.name,
+      description: newProduct.description,
+      min_interest_rate: newProduct.min_interest_rate
+        ? Number(newProduct.min_interest_rate)
+        : null,
+      max_interest_rate: newProduct.max_interest_rate
+        ? Number(newProduct.max_interest_rate)
+        : null,
+      min_amount: newProduct.min_amount ? Number(newProduct.min_amount) : null,
+      max_amount: newProduct.max_amount ? Number(newProduct.max_amount) : null,
+      processing_fee_percentage: newProduct.processing_fee_percentage
+        ? Number(newProduct.processing_fee_percentage)
+        : null,
+      // kyc_check_requirements: newProduct.kyc_check_requirements ?? [],
+      // repayment_structure: newProduct.repayment_structure ?? "",
+      is_active: newProduct.is_active,
+    };
+    try {
+      await createLoanPlan(payload);
+      setIsAddOpen(false);
+      loadLoans();
+    } catch (err) {
+      const message =
+        err.response?.data?.message ?? err.message ?? "An error occurred";
+      window.alert(message);
+    }
   };
 
   return (
@@ -390,7 +388,9 @@ export default function Products() {
           <div className="flex flex-wrap gap-6">
             <StatCard
               label={
-                isInvestments ? "Avg ROI Percentage" : "Avg Processing Fee Percentage"
+                isInvestments
+                  ? "Avg ROI Percentage"
+                  : "Avg Processing Fee Percentage"
               }
               value={statsLoading ? skeletonValue : stats.avgInterestRate}
             />

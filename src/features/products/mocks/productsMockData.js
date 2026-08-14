@@ -28,6 +28,20 @@ export const DURATION_OPTIONS = [
   "180 days",
   "365 days",
 ];
+export const KYC_CHECK_REQUIREMENT_OPTIONS = [
+  "Business Profile",
+  "Bank Verification Number (BVN)",
+  "Tax Compliance Document",
+  "Guarantors Details (2 required)",
+];
+
+export const DEFAULT_REPAYMENT_STRUCTURE = [
+  "• Repay via direct wallet debit or bank transfer",
+  "• Monthly repayments consists of Principal and Interest",
+  "• Repayment amounts are fixed for the duration of the loan",
+  "• Repayment begins in the month following loan disbursement (or as defined by policy).",
+].join("\n");
+
 export const STATUS_OPTIONS = ["Active", "Inactive"];
 export const PAYOUT_FREQUENCY_OPTIONS = [
   "MONTHLY",

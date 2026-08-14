@@ -49,6 +49,12 @@ export async function deleteInvestmentPlan(id) {
   return data;
 }
 
+export async function createLoanPlan(payload) {
+  const { data } = await walletApi.post("/admin/loan-plans", payload);
+
+  return data;
+}
+
 export async function updateLoanPlan(id, payload) {
   const { data } = await walletApi.put(`/admin/loan-plans/${id}`, payload);
 
