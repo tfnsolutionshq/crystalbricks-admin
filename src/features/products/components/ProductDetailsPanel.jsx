@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { X, Loader2 } from "lucide-react";
 import Badge from "@/shared/components/Badge";
+import formatCurrency from "@/shared/utils/formatCurrency";
 
 function Row({ children }) {
   return <div className="grid grid-cols-2 gap-4">{children}</div>;
@@ -13,10 +14,6 @@ function Field({ label, value }) {
       <p className="text-sm font-semibold text-gray-900 mt-1">{value || "-"}</p>
     </div>
   );
-}
-
-function Naira({ amount }) {
-  return <>{amount ? `₦${amount}` : "-"}</>;
 }
 
 function LoanFullDetails({ product }) {
@@ -50,11 +47,11 @@ function LoanFullDetails({ product }) {
       <Row>
         <Field
           label="Minimum Amount"
-          value={<Naira amount={product.minAmount} />}
+          value={product.minAmount ? formatCurrency(product.minAmount) : "-"}
         />
         <Field
           label="Maximum Amount"
-          value={<Naira amount={product.maxAmount} />}
+          value={product.maxAmount ? formatCurrency(product.maxAmount) : "-"}
         />
       </Row>
       <Row>
@@ -110,11 +107,11 @@ function LoanSimpleDetails({ product }) {
       <Row>
         <Field
           label="Minimum Amount"
-          value={<Naira amount={product.minAmount} />}
+          value={product.minAmount ? formatCurrency(product.minAmount) : "-"}
         />
         <Field
           label="Maximum Amount"
-          value={<Naira amount={product.maxAmount} />}
+          value={product.maxAmount ? formatCurrency(product.maxAmount) : "-"}
         />
       </Row>
       <Row>
@@ -161,13 +158,13 @@ function FdFullDetails({ product }) {
         <Field label="ROI Percentage" value={product.rate} />
         <Field
           label="Minimum Amount"
-          value={<Naira amount={product.minAmount} />}
+          value={product.minAmount ? formatCurrency(product.minAmount) : "-"}
         />
       </Row>
       <Row>
         <Field
           label="Maximum Amount"
-          value={<Naira amount={product.maxAmount} />}
+          value={product.maxAmount ? formatCurrency(product.maxAmount) : "-"}
         />
         <div>
           <p className="text-sm text-gray-500">Status</p>
@@ -204,13 +201,13 @@ function FdSimpleDetails({ product }) {
         <Field label="ROI Percentage" value={product.rate} />
         <Field
           label="Minimum Amount"
-          value={<Naira amount={product.minAmount} />}
+          value={product.minAmount ? formatCurrency(product.minAmount) : "-"}
         />
       </Row>
       <Row>
         <Field
           label="Maximum Amount"
-          value={<Naira amount={product.maxAmount} />}
+          value={product.maxAmount ? formatCurrency(product.maxAmount) : "-"}
         />
         <div>
           <p className="text-sm text-gray-500">Status</p>
