@@ -17,7 +17,7 @@ import {
   ResponsiveContainer,
   Tooltip,
 } from "recharts";
-import { Download, Info, DollarSign, Users, FileText } from "lucide-react";
+import { Info, DollarSign, Users, FileText } from "lucide-react";
 
 import formatCurrency from "@/shared/utils/formatCurrency";
 import formatNumber from "@/shared/utils/formatNumber";
@@ -282,13 +282,6 @@ export default function AnalyticsPage() {
           {/* ------------------------------------------------------------- */}
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
             <h1 className="text-2xl font-bold text-slate-900">Analytics</h1>
-            <button
-              type="button"
-              className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-pink-600 text-white text-sm font-semibold hover:bg-pink-700 transition-colors w-full sm:w-auto"
-            >
-              Export
-              <Download className="w-4 h-4" />
-            </button>
           </div>
 
           {error ? (
