@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { X } from "lucide-react";
+import { X, Loader2 } from "lucide-react";
 import { TextInput, TextArea, Select, SuffixInput } from "./FormFields";
 import {
   STATUS_OPTIONS,
@@ -39,6 +39,7 @@ function getInitialForm(product, kind) {
 
 export default function EditProductModal({ product, kind, onClose, onSave }) {
   const [form, setForm] = useState(() => getInitialForm(product, kind));
+  const [saving, setSaving] = useState(false);
 
   if (!product) return null;
 
@@ -48,7 +49,14 @@ export default function EditProductModal({ product, kind, onClose, onSave }) {
   const updateIsActive = (e) =>
     setForm((f) => ({ ...f, is_active: e.target.value === "Active" }));
 
-  const handleSave = () => onSave(form);
+  const handleSave = async () => {
+    setSaving(true);
+    try {
+      await onSave(form);
+    } finally {
+      setSaving(false);
+    }
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -176,15 +184,18 @@ export default function EditProductModal({ product, kind, onClose, onSave }) {
         <div className="border-t border-gray-100 pt-6 flex gap-4">
           <button
             onClick={onClose}
-            className="flex-1 bg-gray-100 hover:bg-gray-200 transition-colors text-gray-700 text-sm font-medium py-3 rounded-lg cursor-pointer"
+            disabled={saving}
+            className="flex-1 bg-gray-100 hover:bg-gray-200 transition-colors text-gray-700 text-sm font-medium py-3 rounded-lg cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
           >
             Cancel
           </button>
           <button
             onClick={handleSave}
-            className="flex-1 bg-[#C2185B] hover:opacity-90 transition-opacity text-white text-sm font-medium py-3 rounded-lg cursor-pointer"
+            disabled={saving}
+            className="flex-1 flex items-center justify-center gap-2 bg-[#C2185B] hover:opacity-90 transition-opacity text-white text-sm font-medium py-3 rounded-lg cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            Save
+            {saving && <Loader2 className="h-4 w-4 animate-spin" />}
+            {saving ? "Saving..." : "Save"}
           </button>
         </div>
       </div>

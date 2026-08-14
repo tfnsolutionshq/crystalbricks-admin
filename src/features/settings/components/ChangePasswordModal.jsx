@@ -49,7 +49,7 @@ export default function ChangePasswordModal({ open, onClose, onSubmit }) {
 
   return (
     <ModalShell open={open} onClose={handleClose} title="Change Password">
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="space-y-5">
         <Field label="Current Password" required>
           <div className="relative">
             <TextInput
@@ -62,7 +62,7 @@ export default function ChangePasswordModal({ open, onClose, onSubmit }) {
             <button
               type="button"
               onClick={() => toggleReveal("current")}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer"
               tabIndex={-1}
             >
               {reveal.current ? (
@@ -90,7 +90,7 @@ export default function ChangePasswordModal({ open, onClose, onSubmit }) {
             <button
               type="button"
               onClick={() => toggleReveal("next")}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer"
               tabIndex={-1}
             >
               {reveal.next ? (
@@ -119,7 +119,7 @@ export default function ChangePasswordModal({ open, onClose, onSubmit }) {
             <button
               type="button"
               onClick={() => toggleReveal("confirm")}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer"
               tabIndex={-1}
             >
               {reveal.confirm ? (
@@ -140,14 +140,14 @@ export default function ChangePasswordModal({ open, onClose, onSubmit }) {
           <button
             type="button"
             onClick={handleClose}
-            className="px-5 py-2.5 rounded-xl border border-slate-200 text-sm font-medium text-slate-600 hover:bg-slate-50 transition-colors"
+            className="px-5 py-2.5 rounded-xl border border-slate-200 text-sm font-medium text-slate-600 hover:bg-slate-50 transition-colors cursor-pointer"
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={!isValid}
-            className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-pink-600 text-white text-sm font-semibold hover:bg-pink-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-pink-600 text-white text-sm font-semibold hover:bg-pink-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer"
           >
             <KeyRound className="w-4 h-4" />
             Save Password

@@ -46,7 +46,7 @@ export default function SortDropdown({ sortBy, sortOrder, onApply }) {
     <div className="relative" ref={ref}>
       <button
         onClick={() => setOpen((prev) => !prev)}
-        className="flex items-center gap-2 px-4 py-2 rounded-lg bg-pink-600 text-white text-sm font-medium hover:bg-pink-700 transition-colors cursor-pointer"
+        className="flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-200 bg-white text-sm text-gray-700 font-medium hover:bg-gray-50 transition-colors cursor-pointer"
       >
         <ArrowUpDown size={16} />
         {hasActive ? `${fieldLabel} · ${orderLabel}` : "Sort"}

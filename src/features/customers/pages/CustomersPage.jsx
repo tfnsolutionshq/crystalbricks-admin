@@ -169,23 +169,19 @@ export default function CustomersPage() {
 
   return (
     <Layout activeNavItem="Customers">
-      <div className="p-4 sm:p-6 space-y-6 max-w-[1600px]">
-        {/* ------------------------------------------------------------------
-          PAGE HEADER: title + Export button
-      ------------------------------------------------------------------ */}
-        <div className="flex items-center justify-between mb-6">
-          <h1 className="text-xl sm:text-2xl font-bold text-gray-900">
-            Customers
-          </h1>
-          <button
-            onClick={handleExport}
-            disabled={loading}
-            className="flex items-center gap-2 bg-pink-600 hover:bg-pink-700 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-medium px-4 py-2.5 rounded-lg transition-colors cursor-pointer"
-          >
-            Export
-            <Download size={16} />
-          </button>
-        </div>
+      <div className="p-6 space-y-6 max-w-[1600px]">
+        <div className="p-4 sm:p-6">
+          <div className="flex items-center justify-between mb-6">
+            <h1 className="text-xl font-bold text-gray-900">Customers</h1>
+            <button
+              onClick={handleExport}
+              disabled={loading}
+              className="cursor-pointer inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-pink-600 hover:bg-pink-700 text-white text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Export
+              <Download size={16} />
+            </button>
+          </div>
 
         {/* ------------------------------------------------------------------
           STAT CARDS
@@ -379,6 +375,7 @@ export default function CustomersPage() {
               onNext={() => setPage((p) => Math.min(pageCount, p + 1))}
             />
           </div>
+        </div>
         </div>
       </div>
     </Layout>

@@ -161,22 +161,20 @@ export default function TransactionsPage() {
 
   return (
     <Layout activeNavItem="Transactions">
-      <div className="p-4 sm:p-6 space-y-6 max-w-[1600px]">
-        {/* ------------------------------------------------------------------
-          PAGE HEADER: title + Export button
-      ------------------------------------------------------------------ */}
-        <div className="flex items-center justify-between mb-6">
-          <h1 className="text-2xl font-bold text-gray-900">Transactions</h1>
-          <button
-            type="button"
-            onClick={exportAllTransactions}
-            disabled={exporting}
-            className="flex items-center gap-2 bg-pink-600 hover:bg-pink-700 text-white text-sm font-medium px-4 py-2.5 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {exporting ? "Exporting..." : "Export"}
-            <Download size={16} />
-          </button>
-        </div>
+      <div className="p-6 space-y-6 max-w-[1600px]">
+        <div className="p-4 sm:p-6">
+          <div className="flex items-center justify-between mb-6">
+            <h1 className="text-xl font-bold text-gray-900">Transactions</h1>
+            <button
+              type="button"
+              onClick={exportAllTransactions}
+              disabled={exporting}
+              className="cursor-pointer inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-pink-600 hover:bg-pink-700 text-white text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {exporting ? "Exporting..." : "Export"}
+              <Download size={16} />
+            </button>
+          </div>
 
         {/* ------------------------------------------------------------------
           SEARCH + FILTER BAR
@@ -338,6 +336,7 @@ export default function TransactionsPage() {
               onNext={() => goToPage(Math.min(pageCount, page + 1))}
             />
           </div>
+        </div>
         </div>
       </div>
     </Layout>
