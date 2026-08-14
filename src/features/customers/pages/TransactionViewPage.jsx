@@ -1,4 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom";
+import { ArrowLeft } from "lucide-react";
 
 import Layout from "@/shared/components/DashboardComponents/Layout.jsx";
 
@@ -41,19 +42,12 @@ export default function TransactionViewPage() {
         <div className="flex flex-wrap items-center gap-3 mb-6">
           <div className="flex items-center gap-3 flex-1 min-w-0">
             <button
+              type="button"
               onClick={() => navigate(`/customers/${customerId}`)}
-              className="w-9 h-9 shrink-0 rounded-lg border border-gray-200 bg-white flex items-center justify-center text-gray-600 hover:bg-gray-50"
+              className="w-9 h-9 shrink-0 rounded-xl bg-white border border-gray-200 flex items-center justify-center hover:bg-gray-50 cursor-pointer"
               aria-label="Back to customer"
             >
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                className="w-4 h-4"
-              >
-                <polyline points="15 18 9 12 15 6" />
-              </svg>
+              <ArrowLeft size={16} />
             </button>
             <div className="min-w-0">
               <div className="flex items-center gap-3">

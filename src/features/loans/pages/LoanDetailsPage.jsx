@@ -23,11 +23,8 @@ import {
 
 import ApplicationDetailsTab from "@/features/loans/components/ApplicationDetailsTab";
 import KYCTab from "@/features/loans/components/KYCTab";
-import CreditCheckTab from "@/features/loans/components/CreditCheckTab";
-import ApprovalDetailsTab from "@/features/loans/components/ApprovalDetailsTab";
 import RepaymentScheduleTab from "@/features/loans/components/RepaymentScheduleTab";
 import PayoutScheduleTab from "@/features/loans/components/PayoutScheduleTab";
-import NotesTab from "@/features/loans/components/NotesTab";
 
 import ApproveLoanModal from "@/features/loans/components/ApproveLoanModal";
 import RejectLoanModal from "@/features/loans/components/RejectLoanModal";
@@ -70,7 +67,6 @@ export default function LoanDetail() {
   const SKELETON_TABS = [
     { key: "application", label: "Application Details" },
     { key: "kyc", label: "KYC" },
-    { key: "credit", label: "Credit Check" },
   ];
 
   if (!loading && error) {
@@ -122,18 +118,6 @@ export default function LoanDetail() {
   const goToTab = (key) => navigate(`/loans/${loanId}/${key}`);
 
   const updateDetail = (patch) => setDetail((prev) => ({ ...prev, ...patch }));
-
-  // ---- Credit handlers ----
-  const handleApproveCredit = () =>
-    updateDetail({ credit: { ...detail.credit, status: "approved" } });
-  const handleRejectCredit = (reason) =>
-    updateDetail({
-      credit: {
-        ...detail.credit,
-        status: "rejected",
-        reason: reason || "Rejected by reviewer.",
-      },
-    });
 
   // ---- Reject handler ----
   const handleReject = async (reason) => {
@@ -199,22 +183,6 @@ export default function LoanDetail() {
           status: "Pending",
         },
         ...detail.schedule,
-      ],
-    });
-  };
-
-  // ---- Notes ----
-  const handlePostComment = (message) => {
-    updateDetail({
-      notes: [
-        {
-          author: "You",
-          role: "Admin",
-          tag: "Comment",
-          message,
-          date: new Date().toISOString(),
-        },
-        ...detail.notes,
       ],
     });
   };
@@ -348,21 +316,6 @@ export default function LoanDetail() {
               {activeTab === "kyc" && (
                 <KYCTab kycDetails={detail.kyc_details} />
               )}
-              {activeTab === "credit" && (
-                <CreditCheckTab
-                  credit={detail.credit}
-                  onApprove={handleApproveCredit}
-                  onReject={handleRejectCredit}
-                />
-              )}
-              {activeTab === "approval" && (
-                <ApprovalDetailsTab
-                  approval={detail.approval}
-                  canEdit={
-                    loan.status === "Awaiting" || loan.status === "Pending"
-                  }
-                />
-              )}
               {activeTab === "schedule" && (
                 <RepaymentScheduleTab
                   schedule={detail.schedule}
@@ -372,12 +325,6 @@ export default function LoanDetail() {
                 />
               )}
               {activeTab === "payout" && <PayoutScheduleTab loan={detail} />}
-              {activeTab === "notes" && (
-                <NotesTab
-                  note={detail.rejection_note}
-                  onPostComment={handlePostComment}
-                />
-              )}
             </>
           )}
 

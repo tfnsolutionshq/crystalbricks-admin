@@ -1,9 +1,10 @@
 import { ArrowLeft, Mail } from "lucide-react";
 import skyscraperImage from "@/assets/images/skyscrapers.jpg";
 import crystalBricksLogo from "@/assets/images/crystal_bricks_logo.png";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const ResetPasscodePage = () => {
+  const navigate = useNavigate();
   return (
     <div className="min-h-screen flex flex-col md:flex-row">
       {/* LEFT PANEL */}
@@ -44,14 +45,14 @@ const ResetPasscodePage = () => {
         </div>
         <div className="flex flex-1 items-center justify-center px-4 sm:px-6 pb-12 sm:pb-16">
           <form className="w-full max-w-sm">
-            <Link
-              to={-1}
+            <button
               type="button"
-              className="mb-6 flex items-center gap-1.5 text-sm text-slate-500 transition hover:text-slate-700"
+              onClick={() => navigate(-1)}
+              className="w-9 h-9 shrink-0 rounded-xl bg-white border border-gray-200 flex items-center justify-center hover:bg-gray-50 cursor-pointer mb-6"
+              aria-label="Go back"
             >
               <ArrowLeft size={16} />
-              Back
-            </Link>
+            </button>
 
             <h2 className="mb-1 text-2xl font-bold text-slate-900">
               Reset Passcode

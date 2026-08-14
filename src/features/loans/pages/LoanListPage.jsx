@@ -356,15 +356,19 @@ export default function LoanList() {
                         className="cursor-pointer hover:bg-gray-50"
                       >
                         <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900">
-                          <Link
-                            href={`/customers/${loan?.user?.id ?? ""}`}
-                            onClick={(e) => e.stopPropagation()}
-                            className="text-gray-900 underline underline-offset-2"
-                          >
-                            {!loan?.user?.first_name || !loan?.user?.last_name
-                              ? "N/A"
-                              : `${loan?.user?.first_name} ${loan?.user?.last_name}`}
-                          </Link>
+                          {loan?.user?.id ? (
+                            <Link
+                              to={`/customers/${loan.user.id}`}
+                              onClick={(e) => e.stopPropagation()}
+                              className="text-gray-900 underline underline-offset-2 hover:text-pink-600 transition-colors"
+                            >
+                              {!loan?.user?.first_name || !loan?.user?.last_name
+                                ? "N/A"
+                                : `${loan?.user?.first_name} ${loan?.user?.last_name}`}
+                            </Link>
+                          ) : (
+                            <span className="text-gray-900">N/A</span>
+                          )}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           {loan.loan_name ?? "N/A"}

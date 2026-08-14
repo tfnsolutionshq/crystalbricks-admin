@@ -49,9 +49,9 @@ export default function RateConfigDetail() {
               type="button"
               onClick={() => navigate(-1)}
               aria-label="Go back"
-              className="w-9 h-9 flex items-center justify-center rounded-lg border border-gray-200 bg-white hover:bg-gray-50 transition-colors"
+              className="w-9 h-9 shrink-0 rounded-xl bg-white border border-gray-200 flex items-center justify-center hover:bg-gray-50 cursor-pointer"
             >
-              <ArrowLeft size={16} className="text-gray-700" />
+              <ArrowLeft size={16} />
             </button>
             <h1 className="text-2xl font-bold text-gray-900">{product.name}</h1>
             <span className="text-sm font-medium text-emerald-600">
