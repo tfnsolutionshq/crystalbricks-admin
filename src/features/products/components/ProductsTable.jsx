@@ -7,14 +7,14 @@ const COLUMNS = {
     "Minimum Amount",
     "Maximum Amount",
     "ROI Percentage",
-    "Payout Frequency",
+    "Status",
   ],
   loans: [
     "Name",
     "Minimum Amount",
-    "Percentage Per Annum",
+    "Maximum Amount",
+    "Processing Fee Percentage",
     "Status",
-    "Date Created",
   ],
 };
 
@@ -109,8 +109,10 @@ export default function ProductsTable({
                         : "-"}
                     </td>
                     <td className="py-4 pr-4 text-gray-900">{row.rate}</td>
-                    <td className="py-4 text-gray-500">
-                      {row.payoutFrequency}
+                    <td className="py-4 pr-4">
+                      <Badge variant={row.is_active ? "success" : "error"}>
+                        {row.status}
+                      </Badge>
                     </td>
                   </>
                 ) : (
@@ -123,11 +125,21 @@ export default function ProductsTable({
                         ? formatCurrency(row.minimum_amount)
                         : "-"}
                     </td>
-                    <td className="py-4 pr-4 text-gray-900">{row.rate}</td>
-                    <td className="py-4 pr-4">
-                      <Badge>{row.status}</Badge>
+                    <td className="py-4 pr-4 text-gray-900">
+                      {row.maximum_amount != null || row.maxAmount != null
+                        ? formatCurrency(row.maximum_amount ?? row.maxAmount)
+                        : "-"}
                     </td>
-                    <td className="py-4 text-gray-500">{row.dateCreated}</td>
+                    <td className="py-4 pr-4 text-gray-900">
+                      {row.processing_fee_percentage != null
+                        ? `${row.processing_fee_percentage}%`
+                        : "-"}
+                    </td>
+                    <td className="py-4 pr-4">
+                      <Badge variant={row.is_active ? "success" : "error"}>
+                        {row.status}
+                      </Badge>
+                    </td>
                   </>
                 )}
               </tr>

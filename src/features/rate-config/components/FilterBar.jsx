@@ -21,7 +21,7 @@ export default function FilterBar({ searchValue, onSearchChange }) {
       <div className="flex items-center gap-2.5">
         <DropdownButton label="Date" />
         <div className="flex items-center gap-2 border border-gray-200 rounded-lg pl-3 pr-1 py-1 text-sm bg-white">
-          <span className="bg-gray-900 text-white text-xs font-medium px-2.5 py-1.5 rounded-md">
+          <span className="bg-white border border-gray-200 text-gray-700 text-xs font-medium px-2.5 py-1.5 rounded-md">
             This week
           </span>
         </div>
