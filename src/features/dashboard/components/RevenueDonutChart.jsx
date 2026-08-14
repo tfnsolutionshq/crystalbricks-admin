@@ -38,7 +38,7 @@ export default function RevenueDonutChart({ data = [], total = "₦0.00" }) {
         </div>
       </div>
 
-      <div className="flex items-center justify-center gap-6 mt-2">
+      <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6 mt-2">
         {data.map((entry) => (
           <div key={entry.name} className="flex items-center gap-2">
             <span
