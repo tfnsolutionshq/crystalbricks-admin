@@ -5,6 +5,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import { AuthProvider } from "@/shared/context/AuthContext";
+import { SidebarProvider } from "@/shared/context/SidebarContext";
 
 import SignInPage from "./features/auth/pages/SignInPage";
 import SetPasscodePage from "./features/auth/pages/SetPasscodePage";
@@ -30,14 +31,15 @@ import LoanListPage from "./features/loans/pages/LoanListPage";
 export default function App() {
   return (
     <AuthProvider>
-      <Router>
-        <Routes>
-          <Route element={<PublicRouteGuard />}>
-            <Route path="/" element={<Navigate to="/signin" replace />} />
-            <Route path="/signin" element={<SignInPage />} />
-            <Route path="/set-passcode" element={<SetPasscodePage />} />
-            <Route path="/reset-passcode" element={<ResetPasscodePage />} />
-          </Route>
+      <SidebarProvider>
+        <Router>
+          <Routes>
+            <Route element={<PublicRouteGuard />}>
+              <Route path="/" element={<Navigate to="/signin" replace />} />
+              <Route path="/signin" element={<SignInPage />} />
+              <Route path="/set-passcode" element={<SetPasscodePage />} />
+              <Route path="/reset-passcode" element={<ResetPasscodePage />} />
+            </Route>
 
           <Route element={<PrivateRouteGuard />}>
             <Route path="/dashboard" element={<DashboardPage />} />

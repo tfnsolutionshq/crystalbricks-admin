@@ -1,6 +1,6 @@
-import { useState } from "react";
 import Header from "./Header.jsx";
 import Sidebar from "./Sidebar.jsx";
+import { useSidebar } from "@/shared/context/SidebarContext";
 
 /**
  * Layout
@@ -8,7 +8,7 @@ import Sidebar from "./Sidebar.jsx";
  * Pass `activeNavItem` so the Sidebar can highlight the current page.
  */
 export default function AppLayout({ children, activeNavItem }) {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const { isSidebarOpen, setIsSidebarOpen } = useSidebar();
 
   return (
     <div className="h-screen w-full flex flex-col bg-gray-50">
