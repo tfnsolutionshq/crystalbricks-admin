@@ -1,9 +1,4 @@
-import {
-  ResponsiveContainer,
-  PieChart,
-  Pie,
-  Cell,
-} from "recharts";
+import { ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 
 import formatCurrency from "@/shared/utils/formatCurrency";
 
@@ -38,14 +33,19 @@ export default function RevenueDonutChart({ data = [], total = "₦0.00" }) {
         </div>
       </div>
 
-      <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6 mt-2">
+      <div className="flex flex-col items-center justify-center gap-6 mt-2">
         {data.map((entry) => (
-          <div key={entry.name} className="flex items-center gap-2">
-            <span
-              className="w-3 h-3 rounded-sm"
-              style={{ backgroundColor: entry.color }}
-            />
-            <span className="text-sm text-gray-600">{entry.name}</span>
+          <div
+            key={entry.name}
+            className="flex flex-col sm:flex-row sm:items-center items-center gap-1 sm:gap-2"
+          >
+            <div className="flex items-center gap-2">
+              <span
+                className="w-3 h-3 rounded-sm shrink-0"
+                style={{ backgroundColor: entry.color }}
+              />
+              <span className="text-sm text-gray-600">{entry.name}</span>
+            </div>
             <span className="text-sm font-semibold text-gray-900">
               {formatCurrency(entry.value)}
             </span>
