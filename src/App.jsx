@@ -23,8 +23,6 @@ import PublicRouteGuard from "./routes/PublicRouteGuard";
 import PrivateRouteGuard from "./routes/PrivateRouteGuard";
 import TeamManagementPage from "./features/team-management/pages/TeamManagementPage";
 import PersonalInfoPage from "./features/settings/pages/PersonalInfoPage";
-import SecurityPage from "./features/settings/pages/SecurityPage";
-import DevicesPage from "./features/settings/pages/DevicesPage";
 import ContributionsPage from "./features/contributions/pages/ContributionsPage";
 import ContributionDetailsPage from "./features/contributions/pages/ContributionDetailsPage";
 import LoanDetailsPage from "./features/loans/pages/LoanDetailsPage";
@@ -68,28 +66,18 @@ export default function App() {
             <Route path="/analytics" element={<AnalyticsPage />} />
             <Route path="/team-management" element={<TeamManagementPage />} />
 
-              <Route
-                path="/settings"
-                element={<Navigate to="/settings/personal-info" replace />}
-              />
-              <Route
-                path="/settings/personal-info"
-                element={<PersonalInfoPage />}
-              />
-              <Route path="/settings/security" element={<SecurityPage />} />
-              <Route path="/settings/devices" element={<DevicesPage />} />
-              <Route path="/contributions" element={<ContributionsPage />} />
-              <Route
-                path="/contributions/:investmentId"
-                element={<ContributionDetailsPage />}
-              />
-              <Route path="/loans" element={<LoanListPage />} />
-              <Route path="/loans/:loanId" element={<LoanDetailsPage />} />
-              <Route path="/loans/:loanId/:tab" element={<LoanDetailsPage />} />
-            </Route>
-          </Routes>
-        </Router>
-      </SidebarProvider>
+            <Route path="/settings" element={<PersonalInfoPage />} />
+            <Route path="/contributions" element={<ContributionsPage />} />
+            <Route
+              path="/contributions/:investmentId"
+              element={<ContributionDetailsPage />}
+            />
+            <Route path="/loans" element={<LoanListPage />} />
+            <Route path="/loans/:loanId" element={<LoanDetailsPage />} />
+            <Route path="/loans/:loanId/:tab" element={<LoanDetailsPage />} />
+          </Route>
+        </Routes>
+      </Router>
     </AuthProvider>
   );
 }

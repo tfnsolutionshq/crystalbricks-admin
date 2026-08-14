@@ -14,8 +14,10 @@ import formatDateTime from "@/shared/utils/formatDateTime";
 
 import {
   activateInvestmentPlan,
+  activateLoanPlan,
   createInvestmentPlan,
   deactivateInvestmentPlan,
+  deactivateLoanPlan,
   deleteInvestmentPlan,
   fetchInvestmentPlans,
   fetchLoanPlans,
@@ -60,6 +62,7 @@ function normalizeInvestment(item) {
 function normalizeLoanPlan(item) {
   const isActive = item.is_active === true;
   const minAmount = item.min_amount != null ? Number(item.min_amount) : null;
+  const maxAmount = item.max_amount != null ? Number(item.max_amount) : null;
 
   return {
     id: item.id,
@@ -74,10 +77,15 @@ function normalizeLoanPlan(item) {
     updatedAt: formatDateTime(item.updated_at),
     updated_at: item.updated_at,
     percentage_per_annum: item.percentage_per_annum,
+    min_interest_rate: item.min_interest_rate,
+    max_interest_rate: item.max_interest_rate,
+    processing_fee_percentage: item.processing_fee_percentage,
     minimum_amount: minAmount,
-    maximum_amount: null,
+    maximum_amount: maxAmount,
     minAmount,
-    maxAmount: null,
+    maxAmount,
+    min_amount: item.min_amount,
+    max_amount: item.max_amount,
     roi_percentage: item.percentage_per_annum
       ? parseFloat(item.percentage_per_annum)
       : null,
@@ -164,8 +172,14 @@ export default function Products() {
       };
     }
     const avg =
-      source.reduce((sum, i) => sum + Number(i.roi_percentage ?? 0), 0) /
-      source.length;
+      source.reduce(
+        (sum, i) =>
+          sum +
+          Number(
+            isInvestments ? (i.roi_percentage ?? 0) : (i.processing_fee_percentage ?? 0),
+          ),
+        0,
+      ) / source.length;
     return {
       avgInterestRate: `${avg.toFixed(1)}%`,
       totalActiveProducts: source.filter((i) => i.is_active).length,
@@ -187,8 +201,10 @@ export default function Products() {
         } else {
           await deactivateInvestmentPlan(product.id);
         }
+      } else if (nextActive) {
+        await activateLoanPlan(product.id);
       } else {
-        await updateLoanPlan(product.id, { is_active: nextActive });
+        await deactivateLoanPlan(product.id);
       }
       const nextStatus = nextActive ? "Active" : "Inactive";
       setViewingProduct((v) =>
@@ -327,20 +343,24 @@ export default function Products() {
       minute: "2-digit",
       hour12: true,
     });
-    const status = newProduct.status ?? "Active";
+    const status = newProduct.is_active ? "Active" : "Inactive";
     setLoans((prev) => [
       {
         id: `loan-${Date.now()}`,
         name: newProduct.name,
-        rate: newProduct.rate,
+        rate: "-",
         status,
-        is_active: status === "Active",
+        is_active: newProduct.is_active,
         dateCreated,
-        percentage_per_annum: newProduct.rate ?? null,
-        minimum_amount: newProduct.minAmount ?? null,
-        minAmount: newProduct.minAmount ?? null,
-        maxAmount: null,
-        roi_percentage: newProduct.rate ? parseFloat(newProduct.rate) : null,
+        min_interest_rate: newProduct.min_interest_rate ?? null,
+        max_interest_rate: newProduct.max_interest_rate ?? null,
+        min_amount: newProduct.min_amount ?? null,
+        max_amount: newProduct.max_amount ?? null,
+        minimum_amount: newProduct.min_amount ?? null,
+        maximum_amount: newProduct.max_amount ?? null,
+        minAmount: newProduct.min_amount ?? null,
+        maxAmount: newProduct.max_amount ?? null,
+        processing_fee_percentage: newProduct.processing_fee_percentage ?? null,
         ...newProduct,
       },
       ...prev,
@@ -352,40 +372,44 @@ export default function Products() {
   return (
     <Layout activeNavItem="Products">
       <div className="p-6 space-y-6 max-w-[1600px]">
-        <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-bold text-gray-900">Products</h1>
-          <button
-            type="button"
-            onClick={() => setIsAddOpen(true)}
-            className="flex items-center gap-2 bg-pink-600 hover:bg-pink-700 transition-colors text-white text-sm font-medium pl-4 pr-3 py-2.5 rounded-lg cursor-pointer"
-          >
-            Add product
-            <Plus size={16} />
-          </button>
-        </div>
+        <div className="p-4 sm:p-6 space-y-6">
+          <div className="flex items-center justify-between mb-6">
+            <h1 className="text-xl font-bold text-gray-900">Products</h1>
+            <button
+              type="button"
+              onClick={() => setIsAddOpen(true)}
+              className="cursor-pointer inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-pink-600 hover:bg-pink-700 text-white text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Add product
+              <Plus size={16} />
+            </button>
+          </div>
 
-        <ProductTabs activeTab={activeTab} onChange={setActiveTab} />
+          <ProductTabs activeTab={activeTab} onChange={setActiveTab} />
 
-        <div className="flex flex-wrap gap-6">
-          <StatCard
-            label="Avg ROI Percentage"
-            value={statsLoading ? skeletonValue : stats.avgInterestRate}
-          />
-          <StatCard
-            label="Total Active Products"
-            value={statsLoading ? skeletonValue : stats.totalActiveProducts}
-          />
-        </div>
+          <div className="flex flex-wrap gap-6">
+            <StatCard
+              label={
+                isInvestments ? "Avg ROI Percentage" : "Avg Processing Fee Percentage"
+              }
+              value={statsLoading ? skeletonValue : stats.avgInterestRate}
+            />
+            <StatCard
+              label="Total Active Products"
+              value={statsLoading ? skeletonValue : stats.totalActiveProducts}
+            />
+          </div>
 
-        <div className="bg-white rounded-2xl border border-gray-200 p-6 space-y-4">
-          <ProductsTable
-            rows={rows}
-            tab={activeTab}
-            loading={isLoading}
-            error={tableError}
-            onRetry={handleRetry}
-            onRowClick={setViewingProduct}
-          />
+          <div className="bg-white rounded-2xl border border-gray-200 p-6 space-y-4">
+            <ProductsTable
+              rows={rows}
+              tab={activeTab}
+              loading={isLoading}
+              error={tableError}
+              onRetry={handleRetry}
+              onRowClick={setViewingProduct}
+            />
+          </div>
         </div>
       </div>
 

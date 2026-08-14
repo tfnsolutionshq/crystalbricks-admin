@@ -30,21 +30,50 @@ function LoanFullDetails({ product }) {
         </p>
       </div>
       <Row>
-        <Field label="Percentage Per Annum" value={product.rate} />
+        <Field
+          label="Min Interest Rate"
+          value={
+            product.min_interest_rate != null
+              ? `${product.min_interest_rate}%`
+              : "-"
+          }
+        />
+        <Field
+          label="Max Interest Rate"
+          value={
+            product.max_interest_rate != null
+              ? `${product.max_interest_rate}%`
+              : "-"
+          }
+        />
+      </Row>
+      <Row>
         <Field
           label="Minimum Amount"
           value={<Naira amount={product.minAmount} />}
         />
+        <Field
+          label="Maximum Amount"
+          value={<Naira amount={product.maxAmount} />}
+        />
       </Row>
       <Row>
+        <Field
+          label="Processing Fee Percentage"
+          value={
+            product.processing_fee_percentage != null
+              ? `${product.processing_fee_percentage}%`
+              : "-"
+          }
+        />
         <div>
           <p className="text-sm text-gray-500">Status</p>
           <div className="mt-1">
             <Badge variant="success">{product.status}</Badge>
           </div>
         </div>
-        <Field label="Date Created" value={product.dateCreated} />
       </Row>
+      <Field label="Date Created" value={product.dateCreated} />
       <Field label="Last Updated" value={product.updatedAt} />
     </>
   );
@@ -61,21 +90,50 @@ function LoanSimpleDetails({ product }) {
         </p>
       </div>
       <Row>
-        <Field label="Percentage Per Annum" value={product.rate} />
+        <Field
+          label="Min Interest Rate"
+          value={
+            product.min_interest_rate != null
+              ? `${product.min_interest_rate}%`
+              : "-"
+          }
+        />
+        <Field
+          label="Max Interest Rate"
+          value={
+            product.max_interest_rate != null
+              ? `${product.max_interest_rate}%`
+              : "-"
+          }
+        />
+      </Row>
+      <Row>
         <Field
           label="Minimum Amount"
           value={<Naira amount={product.minAmount} />}
         />
+        <Field
+          label="Maximum Amount"
+          value={<Naira amount={product.maxAmount} />}
+        />
       </Row>
       <Row>
+        <Field
+          label="Processing Fee Percentage"
+          value={
+            product.processing_fee_percentage != null
+              ? `${product.processing_fee_percentage}%`
+              : "-"
+          }
+        />
         <div>
           <p className="text-sm text-gray-500">Status</p>
           <div className="mt-1">
             <Badge variant="error">{product.status}</Badge>
           </div>
         </div>
-        <Field label="Date Created" value={product.dateCreated} />
       </Row>
+      <Field label="Date Created" value={product.dateCreated} />
       <Field label="Last Updated" value={product.updatedAt} />
     </>
   );

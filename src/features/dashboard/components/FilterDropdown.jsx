@@ -4,7 +4,7 @@ export default function FilterDropdown({ label }) {
   return (
     <button
       type="button"
-      className="flex items-center gap-1.5 bg-pink-600 hover:bg-pink-700 transition-colors text-white text-sm font-medium px-4 py-2 rounded-lg"
+      className="flex items-center gap-1.5 border border-gray-200 bg-white hover:bg-gray-50 transition-colors text-sm text-gray-700 font-medium px-4 py-2 rounded-lg"
     >
       {label}
       <ChevronDown size={16} />

@@ -16,7 +16,7 @@ export default function FilterDropdown({ label, options, selected, onSelect }) {
   // Backward compatible: static button when no options are passed
   if (!options) {
     return (
-      <button className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#C2185B] text-white text-sm font-medium">
+      <button className="flex items-center gap-2 px-4 py-2 rounded-full border border-gray-200 bg-white text-sm text-gray-700 font-medium">
         {label}
         <ChevronDown size={16} />
       </button>
@@ -29,7 +29,7 @@ export default function FilterDropdown({ label, options, selected, onSelect }) {
     <div className="relative" ref={ref}>
       <button
         onClick={() => setOpen((prev) => !prev)}
-        className="flex items-center gap-2 px-4 py-2 rounded-lg bg-pink-600 text-white text-sm font-medium hover:bg-pink-700 transition-colors cursor-pointer"
+        className="flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-200 bg-white text-sm text-gray-700 font-medium hover:bg-gray-50 transition-colors cursor-pointer"
       >
         {activeOption?.buttonLabel}
         <ChevronDown
