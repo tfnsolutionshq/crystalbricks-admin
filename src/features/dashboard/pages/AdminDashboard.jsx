@@ -154,19 +154,7 @@ export default function Dashboard() {
     }),
   );
 
-  const recentTransactions = (data?.recent_transactions ?? []).map(
-    (transaction) => ({
-      id: transaction.reference ?? (transaction.id ?? "").slice(0, 8),
-      customer:
-        transaction.counterparty?.name ?? transaction.description ?? "-",
-      amount: `${transaction.direction === "debit" ? "-" : "+"}${formatCurrency(
-        transaction.amount,
-      )}`,
-      date: formatDateTime(transaction.created_at),
-      status:
-        STATUS_LABELS[transaction.status] ?? formatStatus(transaction.status),
-    }),
-  );
+  const recentTransactions = data?.recent_transactions ?? [];
 
   const renderContent = () => {
     if (statsFilter === "investment") {
