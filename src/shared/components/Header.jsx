@@ -24,7 +24,7 @@ export default function Header({ onToggleSidebar }) {
         >
           <Menu size={22} />
         </button>
-        <div className="flex items-center gap-2">
+        <div className="items-center gap-2 hidden sm:flex">
           <img src={crystalBricksLogo} alt="" />
           <span className="text-lg font-semibold">Crystal Bricks</span>
         </div>
@@ -35,7 +35,7 @@ export default function Header({ onToggleSidebar }) {
         <button
           type="button"
           onClick={() => setProfileOpen((prev) => !prev)}
-          className="flex items-center gap-2 pl-1 pr-2 py-1 rounded-full hover:bg-gray-100 transition-colors cursor-pointer"
+          className="hidden sm:flex items-center gap-2 pl-1 pr-2 py-1 rounded-full hover:bg-gray-100 transition-colors cursor-pointer"
         >
           <img
             src={user.avatar}
