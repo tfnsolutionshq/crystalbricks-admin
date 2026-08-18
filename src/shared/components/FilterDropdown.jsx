@@ -1,7 +1,13 @@
 import { useState, useRef, useEffect } from "react";
 import { ChevronDown, Check } from "lucide-react";
 
-export default function FilterDropdown({ label, options, selected, onSelect }) {
+export default function FilterDropdown({
+  label,
+  options,
+  selected,
+  onSelect,
+  maxHeight,
+}) {
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
 
@@ -39,7 +45,12 @@ export default function FilterDropdown({ label, options, selected, onSelect }) {
       </button>
 
       {open && (
-        <div className="absolute right-0 mt-2 w-44 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-20">
+        <div
+          className={`absolute right-0 mt-2 w-44 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-20 ${
+            maxHeight ? "overflow-y-auto" : ""
+          }`}
+          style={maxHeight ? { maxHeight } : undefined}
+        >
           {options.map((option) => (
             <button
               key={option.id}

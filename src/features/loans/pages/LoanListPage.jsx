@@ -209,7 +209,7 @@ export default function LoanList() {
               type="button"
               className="cursor-pointer inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-pink-600 hover:bg-pink-700 text-white text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               onClick={exportAllLoans}
-              disabled={exporting}
+              disabled={loading || exporting}
             >
               {exporting ? "Exporting..." : "Export"}
               <Download size={16} />
@@ -218,7 +218,7 @@ export default function LoanList() {
 
           {/* ---- Search + filter bar ---- */}
           <div className="flex flex-wrap items-center gap-3 mb-5">
-            <div className="w-full sm:w-72">
+            <div className="flex-1 min-w-55">
               <SearchInput
                 value={search}
                 onChange={(e) => {
@@ -272,6 +272,9 @@ export default function LoanList() {
                 <thead>
                   <tr className="border-b border-gray-100 text-left text-gray-500">
                     <th className="px-6 py-3 font-medium whitespace-nowrap">
+                      Reference
+                    </th>
+                    <th className="px-6 py-3 font-medium whitespace-nowrap">
                       Customer
                     </th>
                     <th className="px-6 py-3 font-medium whitespace-nowrap">
@@ -295,6 +298,9 @@ export default function LoanList() {
                   {loading ? (
                     Array.from({ length: loadingSkeletonCount }).map((_, i) => (
                       <tr key={i} className="animate-pulse">
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="h-4 w-28 bg-gray-200 rounded" />
+                        </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="h-4 w-28 bg-gray-200 rounded" />
                         </td>
@@ -355,6 +361,9 @@ export default function LoanList() {
                         onClick={() => goToDetail(loan.id)}
                         className="cursor-pointer hover:bg-gray-50"
                       >
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          {loan.reference ?? "N/A"}
+                        </td>
                         <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900">
                           {loan?.user?.id ? (
                             <Link

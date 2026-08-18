@@ -83,11 +83,11 @@ export function getAvailableTabs(loan) {
   if (STATUSES_WITH_SCHEDULE.includes(loan.status)) {
     tabs.push({ key: "schedule", label: "Repayment Schedule" });
   }
-  if (!STATUSES_WITHOUT_PAYOUT.includes(loan.status)) {
-    tabs.push({ key: "payout", label: "Payout Schedule" });
-  }
   if (STATUSES_WITH_APPROVAL.includes(status)) {
     tabs.push({ key: "approval", label: "Approval Details" });
+  }
+  if (!STATUSES_WITHOUT_PAYOUT.includes(loan.status)) {
+    tabs.push({ key: "payout", label: "Payout Schedule" });
   }
   return tabs;
 }

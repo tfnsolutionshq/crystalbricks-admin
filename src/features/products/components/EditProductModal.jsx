@@ -6,6 +6,7 @@ import {
   PAYOUT_FREQUENCY_OPTIONS,
   KYC_CHECK_REQUIREMENT_OPTIONS,
   DEFAULT_REPAYMENT_STRUCTURE,
+  DEFAULT_ELIGIBILITY_CRITERIA,
   capitalizeLabel,
 } from "../mocks/productsMockData";
 
@@ -24,6 +25,10 @@ function getInitialForm(product, kind) {
       kyc_check_requirements: product.kyc_check_requirements ?? [],
       repayment_structure:
         product.repayment_structure ?? DEFAULT_REPAYMENT_STRUCTURE,
+      eligibility_criteria:
+        product.eligibility_criteria ??
+        product.eligibilityCriteria?.join("\n") ??
+        DEFAULT_ELIGIBILITY_CRITERIA,
       is_active: product.is_active,
     };
   }
@@ -136,6 +141,11 @@ export default function EditProductModal({ product, kind, onClose, onSave }) {
               label="Repayment Structure"
               value={form.repayment_structure}
               onChange={update("repayment_structure")}
+            />
+            <TextArea
+              label="Eligibility Criteria"
+              value={form.eligibility_criteria}
+              onChange={update("eligibility_criteria")}
             />
             <Select
               label="Status"
