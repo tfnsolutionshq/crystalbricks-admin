@@ -23,7 +23,7 @@ export default function RoleSelect({ value, onChange }) {
       <button
         type="button"
         onClick={() => setOpen((prev) => !prev)}
-        className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-lg border border-slate-200 bg-white text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-pink-100 focus:border-pink-300"
+        className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-lg border border-slate-200 bg-white text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-pink-100 focus:border-pink-300 cursor-pointer"
       >
         <span className={selected ? "text-slate-700" : "text-slate-400"}>
           {selected ? selected.label : "Select a role"}
@@ -41,7 +41,7 @@ export default function RoleSelect({ value, onChange }) {
                 onChange(role.value);
                 setOpen(false);
               }}
-              className="w-full flex items-center justify-between px-4 py-2.5 text-sm text-left text-slate-600 hover:bg-slate-50 transition-colors"
+              className="w-full flex items-center justify-between px-4 py-2.5 text-sm text-left text-slate-600 hover:bg-slate-50 transition-colors cursor-pointer"
             >
               <span>
                 <span className="block font-medium text-slate-700">

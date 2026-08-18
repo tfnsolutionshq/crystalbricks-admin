@@ -22,6 +22,24 @@ export async function fetchTeamMemberStats() {
   return data;
 }
 
+export async function fetchRoles() {
+  const { data } = await idApi.get("/admin/roles");
+
+  return data;
+}
+
+export async function createRole(payload) {
+  const { data } = await idApi.post("/admin/roles", payload);
+
+  return data;
+}
+
+export async function updateRole(id, payload) {
+  const { data } = await idApi.put(`/admin/roles/${id}`, payload);
+
+  return data;
+}
+
 export async function fetchTeamMember(id) {
   const { data } = await idApi.get(`/admin/team-members/${id}`);
 
