@@ -142,9 +142,7 @@ export default function Dashboard() {
         repayment.days_until_due === 0
           ? "Due today"
           : `Due in ${repayment.days_until_due} days`,
-      name:
-        repayment.reference ??
-        `Loan ${(repayment.loan_id ?? "").slice(-6).toUpperCase()}`,
+      name: repayment.customer_name ?? "N/A",
       date: formatDateTime(repayment.due_date),
       amount: formatCurrency(repayment.amount_due),
     }),
@@ -222,73 +220,79 @@ export default function Dashboard() {
           </div>
 
           {error ? (
-          <div className="bg-white rounded-2xl border border-gray-200 p-10 text-center">
-            <p className="text-sm text-gray-500 mb-3">{error}</p>
-            <button
-              type="button"
-              onClick={handleRetry}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-pink-700 hover:bg-pink-800 text-white text-sm font-medium transition-colors cursor-pointer"
-            >
-              Retry
-            </button>
-          </div>
-        ) : loading ? (
-          <div className="space-y-6">
-            <div className="flex flex-wrap gap-6">
-              {statCards.map((s) => (
-                <StatCard
-                  key={s.label}
-                  label={s.label}
-                  value={
-                    <span className="h-7 w-20 bg-gray-200 rounded animate-pulse block" />
-                  }
-                />
-              ))}
+            <div className="bg-white rounded-2xl border border-gray-200 p-10 text-center">
+              <p className="text-sm text-gray-500 mb-3">{error}</p>
+              <button
+                type="button"
+                onClick={handleRetry}
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-pink-700 hover:bg-pink-800 text-white text-sm font-medium transition-colors cursor-pointer"
+              >
+                Retry
+              </button>
             </div>
-            <div className="flex flex-wrap gap-6 items-stretch">
-              <div className="bg-white rounded-2xl border border-gray-100 flex-[1.6] min-w-[320px] h-96 p-6 animate-pulse">
-                <div className="h-4 w-32 bg-gray-200 rounded mb-8" />
-                <div className="flex items-end gap-4 h-56">
-                  {[0, 1, 2, 3, 4, 5].map((i) => (
+          ) : loading ? (
+            <div className="space-y-6">
+              <div className="flex flex-wrap gap-6">
+                {statCards.map((s) => (
+                  <StatCard
+                    key={s.label}
+                    label={s.label}
+                    value={
+                      <span className="h-7 w-20 bg-gray-200 rounded animate-pulse block" />
+                    }
+                  />
+                ))}
+              </div>
+              <div className="flex flex-wrap gap-6 items-stretch">
+                <div className="bg-white rounded-2xl border border-gray-100 flex-[1.6] min-w-[320px] h-96 p-6 animate-pulse">
+                  <div className="h-4 w-32 bg-gray-200 rounded mb-8" />
+                  <div className="flex items-end gap-4 h-56">
+                    {[0, 1, 2, 3, 4, 5].map((i) => (
+                      <div
+                        key={i}
+                        className="flex-1 bg-gray-200 rounded"
+                        style={{ height: `${40 + ((i * 13) % 50)}%` }}
+                      />
+                    ))}
+                  </div>
+                </div>
+                <div className="bg-white rounded-2xl border border-gray-100 flex-1 min-w-55 h-96 p-6 animate-pulse">
+                  {[0, 1, 2, 3].map((i) => (
                     <div
                       key={i}
-                      className="flex-1 bg-gray-200 rounded"
-                      style={{ height: `${40 + ((i * 13) % 50)}%` }}
-                    />
+                      className="flex items-center justify-between gap-4 mb-6"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 bg-gray-200 rounded-full shrink-0" />
+                        <div className="h-4 w-28 bg-gray-200 rounded" />
+                      </div>
+                      <div className="h-4 w-16 bg-gray-200 rounded" />
+                    </div>
                   ))}
                 </div>
               </div>
-              <div className="bg-white rounded-2xl border border-gray-100 flex-1 min-w-55 h-96 p-6 animate-pulse">
-                {[0, 1, 2, 3].map((i) => (
-                  <div key={i} className="flex items-center justify-between gap-4 mb-6">
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 bg-gray-200 rounded-full shrink-0" />
-                      <div className="h-4 w-28 bg-gray-200 rounded" />
+              <div className="flex flex-wrap gap-6 items-stretch">
+                <div className="bg-white rounded-2xl border border-gray-100 flex-1 min-w-55 h-80 p-6 animate-pulse">
+                  <div className="h-4 w-32 bg-gray-200 rounded mb-8" />
+                  <div className="h-5 w-40 bg-gray-200 rounded mb-6" />
+                  <div className="h-5 w-40 bg-gray-200 rounded" />
+                </div>
+                <div className="bg-white rounded-2xl border border-gray-100 flex-[1.6] min-w-[320px] h-80 p-6 animate-pulse">
+                  {[0, 1, 2, 3].map((i) => (
+                    <div
+                      key={i}
+                      className="flex items-center justify-between gap-4 mb-5"
+                    >
+                      <div className="h-4 w-24 bg-gray-200 rounded" />
+                      <div className="h-4 w-16 bg-gray-200 rounded" />
                     </div>
-                    <div className="h-4 w-16 bg-gray-200 rounded" />
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             </div>
-            <div className="flex flex-wrap gap-6 items-stretch">
-              <div className="bg-white rounded-2xl border border-gray-100 flex-1 min-w-55 h-80 p-6 animate-pulse">
-                <div className="h-4 w-32 bg-gray-200 rounded mb-8" />
-                <div className="h-5 w-40 bg-gray-200 rounded mb-6" />
-                <div className="h-5 w-40 bg-gray-200 rounded" />
-              </div>
-              <div className="bg-white rounded-2xl border border-gray-100 flex-[1.6] min-w-[320px] h-80 p-6 animate-pulse">
-                {[0, 1, 2, 3].map((i) => (
-                  <div key={i} className="flex items-center justify-between gap-4 mb-5">
-                    <div className="h-4 w-24 bg-gray-200 rounded" />
-                    <div className="h-4 w-16 bg-gray-200 rounded" />
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        ) : (
-          renderContent()
-        )}
+          ) : (
+            renderContent()
+          )}
         </div>
       </div>
     </Layout>

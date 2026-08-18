@@ -3,9 +3,7 @@ import formatCurrency from "@/shared/utils/formatCurrency";
 
 function formatCell(value, { currency, suffix }) {
   if (value == null || value === "") return "-";
-  const display = currency
-    ? formatCurrency(value)
-    : Number(value) || value;
+  const display = currency ? formatCurrency(value) : Number(value) || value;
   return `${display}${suffix ?? ""}`;
 }
 
@@ -13,6 +11,10 @@ export default function ApprovalDetailsTab({ loan }) {
   if (!loan) return null;
 
   const approved = loan.approved_terms ?? {};
+
+  const sameAsRequested =
+    !loan.approved_terms &&
+    (loan.status === "active" || loan.status === "completed");
 
   const rows = [
     {
@@ -69,7 +71,9 @@ export default function ApprovalDetailsTab({ loan }) {
                   {formatCell(row.requested, row)}
                 </td>
                 <td className="py-4 whitespace-nowrap font-medium text-gray-900">
-                  {formatCell(row.approved, row)}
+                  {sameAsRequested
+                    ? "Same as Requested"
+                    : formatCell(row.approved, row)}
                 </td>
               </tr>
             ))}

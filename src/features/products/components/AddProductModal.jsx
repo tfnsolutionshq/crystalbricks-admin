@@ -1,6 +1,12 @@
 import { useState } from "react";
 import { X, Loader2 } from "lucide-react";
-import { TextInput, TextArea, Select, SuffixInput, CheckboxList } from "./FormFields";
+import {
+  TextInput,
+  TextArea,
+  Select,
+  SuffixInput,
+  CheckboxList,
+} from "./FormFields";
 import {
   STATUS_OPTIONS,
   PAYOUT_FREQUENCY_OPTIONS,
@@ -217,14 +223,14 @@ export default function AddProductModal({ kind, onClose, onSave }) {
           <button
             onClick={onClose}
             disabled={saving}
-            className="flex-1 bg-gray-100 hover:bg-gray-200 transition-colors text-gray-700 text-sm font-medium py-3 rounded-lg disabled:opacity-60 disabled:cursor-not-allowed"
+            className="flex-1 bg-gray-100 hover:bg-gray-200 transition-colors text-gray-700 text-sm font-medium py-3 rounded-lg disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
           >
             Cancel
           </button>
           <button
             onClick={handleSave}
             disabled={saving}
-            className="flex-1 flex items-center justify-center gap-2 bg-[#C2185B] hover:opacity-90 transition-opacity text-white text-sm font-medium py-3 rounded-lg disabled:opacity-60 disabled:cursor-not-allowed"
+            className="flex-1 flex items-center justify-center gap-2 bg-[#C2185B] hover:opacity-90 transition-opacity text-white text-sm font-medium py-3 rounded-lg disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
           >
             {saving && <Loader2 className="h-4 w-4 animate-spin" />}
             {saving ? "Saving..." : "Save"}

@@ -1,9 +1,16 @@
 import Card from "@/shared/components/Card";
 import Badge from "@/shared/components/Badge";
 
-import formatStatus from "@/shared/utils/formatStatus";
 import formatDateTime from "@/shared/utils/formatDateTime";
 import formatCurrency from "@/shared/utils/formatCurrency";
+
+function formatStatusLabel(status) {
+  if (!status) return status;
+  return String(status)
+    .split("_")
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1).toLowerCase())
+    .join(" ");
+}
 
 export default function PayoutScheduleTab({ loan }) {
   if (!loan) return null;
@@ -98,7 +105,7 @@ export default function PayoutScheduleTab({ loan }) {
                       : "—"}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right">
-                    <Badge>{formatStatus(repayment.status)}</Badge>
+                    <Badge>{formatStatusLabel(repayment.status)}</Badge>
                   </td>
                 </tr>
               ))}
