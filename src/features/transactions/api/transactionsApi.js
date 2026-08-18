@@ -7,6 +7,7 @@ export async function fetchTransactions({
   type = "",
   sort_by,
   sort_order,
+  user_id,
 } = {}) {
   const { data } = await walletApi.get("/admin/transactions", {
     params: {
@@ -16,6 +17,7 @@ export async function fetchTransactions({
       type: type || undefined,
       sort_by: sort_by || undefined,
       sort_order: sort_order || undefined,
+      user_id: user_id || undefined,
     },
   });
 

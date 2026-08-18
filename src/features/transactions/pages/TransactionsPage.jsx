@@ -19,16 +19,9 @@ import { fetchTransactions } from "@/features/transactions/api/transactionsApi";
 import {
   formatTransactionType,
   handleExport,
+  STATUS_OPTIONS,
   TRANSACTION_TYPES,
 } from "@/features/transactions/helpers/transactionHelpers.js";
-
-const STATUS_OPTIONS = [
-  { id: "", menuLabel: "All statuses", buttonLabel: "All statuses" },
-  { id: "pending", menuLabel: "Pending", buttonLabel: "Pending" },
-  { id: "failed", menuLabel: "Failed", buttonLabel: "Failed" },
-  { id: "reversed", menuLabel: "Reversed", buttonLabel: "Reversed" },
-  { id: "success", menuLabel: "Success", buttonLabel: "Success" },
-];
 
 const TYPE_LABELS = {
   investment_roi_credit: "Investment RORC Credit",
@@ -168,7 +161,7 @@ export default function TransactionsPage() {
             <button
               type="button"
               onClick={exportAllTransactions}
-              disabled={exporting}
+              disabled={loading || exporting}
               className="cursor-pointer inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-pink-600 hover:bg-pink-700 text-white text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {exporting ? "Exporting..." : "Export"}
@@ -203,6 +196,7 @@ export default function TransactionsPage() {
             <FilterDropdown
               options={TYPE_OPTIONS}
               selected={type}
+              maxHeight="260px"
               onSelect={(value) => {
                 if (value !== type) {
                   setLoading(true);

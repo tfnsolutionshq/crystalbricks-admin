@@ -223,7 +223,7 @@ export default function CustomersPage() {
           SEARCH + FILTER BAR
       ------------------------------------------------------------------ */}
         <div className="flex flex-wrap items-center gap-3 mb-5">
-          <div className="w-full sm:w-72">
+          <div className="flex-1 min-w-55">
             <SearchInput
               placeholder="Search customer name or email"
               value={search}

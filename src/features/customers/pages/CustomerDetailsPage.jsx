@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ArrowLeft, RefreshCw } from "lucide-react";
 
@@ -8,15 +8,40 @@ import Card from "@/shared/components/Card.jsx";
 import Field from "@/shared/components/Field.jsx";
 import KebabButton from "@/shared/components/KebabButton.jsx";
 import Toggle from "@/shared/components/Toggle.jsx";
+import SearchInput from "@/shared/components/SearchInput.jsx";
+import FilterDropdown from "@/shared/components/FilterDropdown.jsx";
+import SortDropdown from "@/shared/components/SortDropdown.jsx";
+import Pagination from "@/shared/components/Pagination.jsx";
 
+import formatCurrency from "@/shared/utils/formatCurrency";
 import formatDateTime from "@/shared/utils/formatDateTime";
+import formatStatus from "@/shared/utils/formatStatus";
 
 import {
   fetchCustomerDetail,
   toggleCustomerStatus,
 } from "@/features/customers/api/customerApi.js";
 
-const TABS = ["Details", "KYC Documents"];
+import { fetchTransactions } from "@/features/transactions/api/transactionsApi";
+import {
+  formatTransactionType,
+  STATUS_OPTIONS,
+  TRANSACTION_TYPES,
+} from "@/features/transactions/helpers/transactionHelpers";
+
+const TABS = ["Details", "KYC Documents", "Transactions"];
+
+const TYPE_LABELS = {
+  investment_roi_credit: "Investment RORC Credit",
+};
+
+const TYPE_OPTIONS = [
+  { id: "", menuLabel: "All types", buttonLabel: "All types" },
+  ...TRANSACTION_TYPES.map((type) => {
+    const label = TYPE_LABELS[type] ?? formatTransactionType(type);
+    return { id: type, menuLabel: label, buttonLabel: label };
+  }),
+];
 
 function getCustomerName(customer) {
   return (
@@ -257,6 +282,9 @@ export default function CustomerDetailsPage() {
             {activeTab === "KYC Documents" && (
               <KycDocumentsTab customer={customer} />
             )}
+            {activeTab === "Transactions" && (
+              <TransactionsTab customerId={customerId} />
+            )}
           </>
         )}
       </div>
@@ -372,5 +400,242 @@ function KycDocumentsTab({ customer }) {
         ))}
       </div>
     </Card>
+  );
+}
+
+// ============================================================================
+// TAB: Transactions
+// List of wallet transactions carried out by the customer. Backed by
+// GET /admin/transactions?user_id={{customerId}}.
+// ============================================================================
+function TransactionsTab({ customerId }) {
+  const navigate = useNavigate();
+  const [search, setSearch] = useState("");
+  const [appliedSearch, setAppliedSearch] = useState("");
+  const [status, setStatus] = useState("");
+  const [type, setType] = useState("");
+  const [sortBy, setSortBy] = useState(undefined);
+  const [sortOrder, setSortOrder] = useState(undefined);
+  const [page, setPage] = useState(1);
+  const [transactions, setTransactions] = useState([]);
+  const [meta, setMeta] = useState({ total: 0, last_page: 1, per_page: 0 });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const appliedSearchRef = useRef("");
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const next = search.trim();
+      if (next !== appliedSearchRef.current) {
+        appliedSearchRef.current = next;
+        setLoading(true);
+        setAppliedSearch(next);
+      }
+    }, 400);
+
+    return () => clearTimeout(timer);
+  }, [search]);
+
+  const loadTransactions = useCallback(() => {
+    return fetchTransactions({
+      page,
+      user_id: customerId,
+      reference: appliedSearch,
+      status,
+      type,
+      sort_by: sortBy,
+      sort_order: sortOrder,
+    })
+      .then((response) => {
+        setTransactions(response.data.data ?? []);
+        setMeta({
+          total: response.data.meta?.total ?? 0,
+          last_page: response.data.meta?.last_page ?? 1,
+          per_page: response.data.meta?.per_page ?? 0,
+        });
+        setError(null);
+      })
+      .catch((err) => {
+        setError(
+          err.response?.data?.message ?? err.message ?? "An error occurred",
+        );
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [page, customerId, appliedSearch, status, type, sortBy, sortOrder]);
+
+  useEffect(() => {
+    loadTransactions();
+  }, [loadTransactions]);
+
+  const resetPage = () => setPage(1);
+
+  const goToPage = (nextPage) => {
+    setLoading(true);
+    setPage(nextPage);
+  };
+
+  const handleRetry = () => {
+    setLoading(true);
+    setTransactions([]);
+    loadTransactions();
+  };
+
+  const pageCount = Math.max(1, meta.last_page);
+  const loadingSkeletonCount = Math.min(meta.per_page || 5, 10);
+
+  return (
+    <div className="bg-white rounded-2xl border border-gray-100">
+      {/* Search + filter bar */}
+      <div className="flex items-center gap-3 p-4 sm:p-5 flex-wrap">
+        <SearchInput
+          placeholder="Search by reference"
+          value={search}
+          onChange={(e) => {
+            setSearch(e.target.value);
+            resetPage();
+          }}
+        />
+        <div className="flex items-center gap-3 ml-auto">
+          <FilterDropdown
+            options={STATUS_OPTIONS}
+            selected={status}
+            onSelect={(value) => {
+              if (value !== status) {
+                setLoading(true);
+                setStatus(value);
+                resetPage();
+              }
+            }}
+          />
+          <FilterDropdown
+            options={TYPE_OPTIONS}
+            selected={type}
+            maxHeight="260px"
+            onSelect={(value) => {
+              if (value !== type) {
+                setLoading(true);
+                setType(value);
+                resetPage();
+              }
+            }}
+          />
+          <SortDropdown
+            sortBy={sortBy}
+            sortOrder={sortOrder}
+            onApply={({ sortBy: field, sortOrder: order }) => {
+              if (field !== sortBy || order !== sortOrder) {
+                setLoading(true);
+                setSortBy(field);
+                setSortOrder(order);
+                resetPage();
+              }
+            }}
+          />
+        </div>
+      </div>
+
+      {loading ? (
+        <div className="p-6">
+          {Array.from({ length: loadingSkeletonCount }).map((_, i) => (
+            <div key={i} className="flex items-center gap-4 py-3 animate-pulse">
+              <div className="h-4 w-32 bg-gray-200 rounded" />
+              <div className="h-4 w-24 bg-gray-200 rounded" />
+              <div className="h-4 w-48 bg-gray-200 rounded" />
+              <div className="h-4 w-24 bg-gray-200 rounded" />
+              <div className="h-4 w-28 bg-gray-200 rounded" />
+              <div className="h-5 w-16 bg-gray-200 rounded-full" />
+            </div>
+          ))}
+        </div>
+      ) : error ? (
+        <div className="flex flex-col items-center justify-center gap-3 py-10">
+          <p className="text-sm text-gray-500">{error}</p>
+          <button
+            type="button"
+            onClick={handleRetry}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-pink-700 hover:bg-pink-800 text-white text-sm font-medium transition-colors cursor-pointer"
+          >
+            <RefreshCw size={16} />
+            Retry
+          </button>
+        </div>
+      ) : (
+        <>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-y border-gray-100 text-left text-gray-400">
+                  <th className="font-medium px-6 py-4">Reference</th>
+                  <th className="font-medium px-6 py-4">Type</th>
+                  <th className="font-medium px-6 py-4">Description</th>
+                  <th className="font-medium px-6 py-4">Amount</th>
+                  <th className="font-medium px-6 py-4">Date</th>
+                  <th className="font-medium px-6 py-4">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {transactions.length === 0 ? (
+                  <tr>
+                    <td colSpan={6} className="px-6 py-10 text-center">
+                      <p className="text-sm text-gray-500 mb-3">
+                        No transactions match your filters.
+                      </p>
+                      <button
+                        type="button"
+                        onClick={handleRetry}
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-pink-700 hover:bg-pink-800 text-white text-sm font-medium transition-colors cursor-pointer"
+                      >
+                        <RefreshCw size={16} />
+                        Retry
+                      </button>
+                    </td>
+                  </tr>
+                ) : (
+                  transactions.map((txn) => (
+                    <tr
+                      key={txn.id}
+                      onClick={() => navigate(`/transactions/${txn.id}`)}
+                      className="border-b border-gray-50 last:border-0 hover:bg-gray-50/70 cursor-pointer"
+                    >
+                      <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                        {txn.reference}
+                      </td>
+                      <td className="px-6 py-4">
+                        {formatTransactionType(txn.type)}
+                      </td>
+                      <td className="px-6 py-4 text-gray-500 max-w-xs truncate">
+                        {txn.description}
+                      </td>
+                      <td className="px-6 py-4 text-gray-900 whitespace-nowrap">
+                        {formatCurrency(txn.amount)}
+                      </td>
+                      <td className="px-6 py-4 text-gray-500 whitespace-nowrap">
+                        {formatDateTime(txn.created_at)}
+                      </td>
+                      <td className="px-6 py-4">
+                        <Badge>{formatStatus(txn.status)}</Badge>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+          <div className="px-6 pb-4">
+            <Pagination
+              showing={transactions.length}
+              total={meta.total}
+              page={page}
+              pageCount={pageCount}
+              onPrev={() => goToPage(Math.max(1, page - 1))}
+              onNext={() => goToPage(Math.min(pageCount, page + 1))}
+            />
+          </div>
+        </>
+      )}
+    </div>
   );
 }

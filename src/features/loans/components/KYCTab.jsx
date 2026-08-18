@@ -45,7 +45,7 @@ function RequirementValue({ type, data }) {
     return (
       <div className="mt-1 space-y-2">
         {(data.guarantors ?? []).map((g, i) => (
-          <div key={i} className="text-sm">
+          <div key={i} className="text-sm mb-2 bg-gray-50 rounded-xl px-4 py-3">
             <p className="text-gray-500">Name</p>
             <p className="text-gray-900">{g.full_name}</p>
             <p className="text-gray-500 mt-1">Phone Number</p>

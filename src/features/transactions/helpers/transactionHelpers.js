@@ -19,6 +19,18 @@ export const TRANSACTION_TYPES = [
   "investment_debit",
   "investment_roi_credit",
   "investment_redemption",
+  "loan_repayment",
+  "loan_disbursement",
+];
+
+// Status filter options shared by the main transactions list and the
+// per-customer transactions tab.
+export const STATUS_OPTIONS = [
+  { id: "", menuLabel: "All statuses", buttonLabel: "All statuses" },
+  { id: "pending", menuLabel: "Pending", buttonLabel: "Pending" },
+  { id: "failed", menuLabel: "Failed", buttonLabel: "Failed" },
+  { id: "reversed", menuLabel: "Reversed", buttonLabel: "Reversed" },
+  { id: "success", menuLabel: "Success", buttonLabel: "Success" },
 ];
 
 // Whether a transaction type adds money to the balance (credit) or takes it

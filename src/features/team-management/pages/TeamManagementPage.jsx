@@ -1,11 +1,5 @@
 import { useState, useEffect } from "react";
-import {
-  UserPlus,
-  Pencil,
-  UserX,
-  UserCheck,
-  RefreshCw,
-} from "lucide-react";
+import { UserPlus, Pencil, UserX, UserCheck, RefreshCw } from "lucide-react";
 
 import Layout from "@/shared/components/Layout";
 import Badge from "@/shared/components/Badge";
@@ -226,9 +220,7 @@ export default function TeamManagementPage() {
       loadStats(true);
     } catch (err) {
       setEditError(
-        err.response?.data?.message ??
-          err.message ??
-          "Failed to update member",
+        err.response?.data?.message ?? err.message ?? "Failed to update member",
       );
     } finally {
       setEditSubmitting(false);
@@ -322,14 +314,14 @@ export default function TeamManagementPage() {
           {/* Search + filter bar                                          */}
           {/* ------------------------------------------------------------- */}
           <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-6">
-            <div className="w-full sm:max-w-xs">
+            <div className="flex-1 min-w-55">
               <SearchInput
                 value={search}
                 onChange={(e) => {
                   setSearch(e.target.value);
                   resetPage();
                 }}
-                placeholder="Search by name or email"
+                placeholder="Search team member name or email"
               />
             </div>
             <FilterDropdown

@@ -92,20 +92,10 @@ function DonutTooltip({ active, payload }) {
   if (!slice) return null;
 
   return (
-    <div className="bg-white rounded-xl shadow-lg border border-slate-100 px-4 py-3 text-sm min-w-55">
-      <p className="text-slate-500 mb-1">Total {slice.name}</p>
-      <div className="flex items-center justify-between gap-6">
-        <span className="flex items-center gap-1.5 text-slate-700">
-          <span
-            className="w-2 h-2 rounded-full inline-block"
-            style={{ backgroundColor: slice.color }}
-          />
-          {slice.count} ({slice.share}%)
-        </span>
-        <span className="font-semibold text-slate-800">
-          {formatCurrency(slice.amount)}
-        </span>
-      </div>
+    <div className="bg-white rounded-xl shadow-lg border border-slate-100 px-4 py-3 text-sm">
+      <span className="font-semibold text-slate-800">
+        {formatCurrency(slice.amount)}
+      </span>
     </div>
   );
 }
@@ -462,7 +452,7 @@ export default function AnalyticsPage() {
                   {loading ? (
                     <div className="h-52 rounded-xl bg-slate-100 animate-pulse" />
                   ) : (
-                    <div className="flex flex-col sm:flex-row items-center gap-6">
+                    <div className="flex flex-col items-center gap-6">
                       <div className="h-52 w-52 shrink-0">
                         <ResponsiveContainer width="100%" height="100%">
                           <PieChart>
@@ -485,7 +475,7 @@ export default function AnalyticsPage() {
                         </ResponsiveContainer>
                       </div>
 
-                      <div className="flex sm:flex-col gap-4 sm:gap-3">
+                      <div className="flex flex-col items-center gap-3">
                         {products.breakdown.map((entry) => (
                           <div
                             key={entry.key}

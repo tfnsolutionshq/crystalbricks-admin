@@ -166,7 +166,7 @@ export default function TransactionViewPage() {
       ------------------------------------------------------------------ */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           <Card title="Transaction">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-5 gap-x-8">
               <Field label="Reference">{transaction.reference}</Field>
               <Field label="Type">
                 {formatTransactionType(transaction.type)}
