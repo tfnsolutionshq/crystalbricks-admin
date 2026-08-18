@@ -1,20 +1,19 @@
 import { AlertTriangle, CheckCircle2 } from "lucide-react";
 import ModalShell from "@/shared/components/ModalShell";
+import { capitalizeFirst } from "../helpers/teamManagementHelpers";
 
 const ACTION_CONFIG = {
   deactivate: {
     icon: AlertTriangle,
     iconClass: "bg-red-50 text-red-500",
-    title: "Deactivate Member",
     confirmLabel: "Deactivate",
     confirmClass: "bg-red-500 hover:bg-red-600",
-    describe: (name) =>
-      `${name} will lose access to the admin panel immediately. You can reactivate this member at any time.`,
+    describe: (name, subject) =>
+      `${name} will lose access to the admin panel immediately. You can reactivate this ${subject.toLowerCase()} at any time.`,
   },
   activate: {
     icon: CheckCircle2,
     iconClass: "bg-emerald-50 text-emerald-600",
-    title: "Activate Member",
     confirmLabel: "Activate",
     confirmClass: "bg-emerald-600 hover:bg-emerald-700",
     describe: (name) =>
@@ -30,6 +29,9 @@ export default function ConfirmActionModal({
   onConfirm,
   submitting = false,
   error = null,
+  subject = "Member",
+  title,
+  description,
 }) {
   if (!member || !action) return null;
   const config = ACTION_CONFIG[action];
@@ -44,10 +46,11 @@ export default function ConfirmActionModal({
           <Icon className="w-6 h-6" />
         </span>
         <h2 className="text-lg font-semibold text-slate-900 mb-2">
-          {config.title}?
+          {title ?? `${config.confirmLabel} ${subject}?`}
         </h2>
         <p className="text-sm text-slate-500 mb-6">
-          {config.describe(member.name)}
+          {description ??
+            config.describe(capitalizeFirst(member.name), subject)}
         </p>
 
         {error && (
@@ -59,7 +62,7 @@ export default function ConfirmActionModal({
             type="button"
             onClick={onClose}
             disabled={submitting}
-            className="flex-1 px-5 py-2.5 rounded-xl border border-slate-200 text-sm font-medium text-slate-600 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="flex-1 px-5 py-2.5 rounded-xl border border-slate-200 text-sm font-medium text-slate-600 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer"
           >
             Cancel
           </button>
@@ -67,7 +70,7 @@ export default function ConfirmActionModal({
             type="button"
             onClick={() => onConfirm?.(member, action)}
             disabled={submitting}
-            className={`flex-1 px-5 py-2.5 rounded-xl text-white text-sm font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${config.confirmClass}`}
+            className={`flex-1 px-5 py-2.5 rounded-xl text-white text-sm font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer ${config.confirmClass}`}
           >
             {submitting ? "Please wait..." : config.confirmLabel}
           </button>

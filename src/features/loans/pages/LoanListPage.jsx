@@ -5,7 +5,6 @@ import { Download, RefreshCw } from "lucide-react";
 import Layout from "@/shared/components/Layout";
 import Card from "@/shared/components/Card";
 import Badge from "@/shared/components/Badge";
-import FilterPill from "@/shared/components/FilterPill";
 import FilterDropdown from "@/shared/components/FilterDropdown";
 import AmountRangeFilter from "@/shared/components/AmountRangeFilter";
 import DateRangeFilter from "@/shared/components/DateRangeFilter";

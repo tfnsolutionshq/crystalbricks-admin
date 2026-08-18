@@ -8,6 +8,12 @@ export function getInitials(name = "") {
   return `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase();
 }
 
+/** Capitalizes the first letter of a string. */
+export function capitalizeFirst(value = "") {
+  if (!value) return value;
+  return value.charAt(0).toUpperCase() + value.slice(1);
+}
+
 /** Deterministic avatar background color derived from the member's name. */
 const AVATAR_COLORS = [
   "bg-pink-100 text-pink-700",
