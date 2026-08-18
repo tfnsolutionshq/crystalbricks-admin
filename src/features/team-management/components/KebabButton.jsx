@@ -69,7 +69,7 @@ export default function KebabButton({ items = [], align = "right" }) {
         ref={buttonRef}
         type="button"
         onClick={toggle}
-        className="w-8 h-8 flex items-center justify-center rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-colors"
+        className="w-8 h-8 flex items-center justify-center rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-colors cursor-pointer"
         aria-label="Row actions"
       >
         <MoreVertical className="w-4 h-4" />
@@ -97,7 +97,7 @@ export default function KebabButton({ items = [], align = "right" }) {
                   setOpen(false);
                   item.onClick?.();
                 }}
-                className={`w-full flex items-center gap-2.5 px-4 py-2 text-sm text-left hover:bg-slate-50 transition-colors ${
+                className={`w-full flex items-center gap-2.5 px-4 py-2 text-sm text-left hover:bg-slate-50 transition-colors cursor-pointer ${
                   item.danger ? "text-red-500" : "text-slate-600"
                 }`}
               >
