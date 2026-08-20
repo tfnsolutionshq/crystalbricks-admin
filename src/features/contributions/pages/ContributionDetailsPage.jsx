@@ -13,13 +13,15 @@ import Badge from "@/shared/components/Badge";
 import formatCurrency from "@/shared/utils/formatCurrency";
 import formatDateTime from "@/shared/utils/formatDateTime";
 
-import { fetchInvestmentDetail } from "@/features/contributions/api/contributionsApi";
+import { fetchInvestmentDetail, approveInvestment, rejectInvestment } from "@/features/contributions/api/contributionsApi";
 
 import {
   getStatusVariant,
   formatContributionDate,
   getPayoutFrequencyLabel,
 } from "@/features/contributions/helpers/contributionsHelpers";
+
+import InvestmentDecisionModal from "@/features/contributions/components/InvestmentDecisionModal";
 
 const USE_MOCK = false; // flip to false once the endpoint is wired up
 
@@ -36,6 +38,8 @@ export default function ContributionDetailsPage() {
   const [loading, setLoading] = useState(!USE_MOCK);
   const [error, setError] = useState(null);
   const [copied, setCopied] = useState(false);
+  const [decisionModal, setDecisionModal] = useState(null);
+  const [decisionLoading, setDecisionLoading] = useState(false);
 
   const handleCopyReference = async () => {
     const value = investment?.reference ?? "";
@@ -79,6 +83,25 @@ export default function ContributionDetailsPage() {
   useEffect(() => {
     loadContributionDetails();
   }, [loadContributionDetails]);
+
+  const handleDecision = async (mode, note) => {
+    setDecisionLoading(true);
+    try {
+      if (mode === "approve") {
+        await approveInvestment(investmentId, note);
+      } else {
+        await rejectInvestment(investmentId, note);
+      }
+      setDecisionModal(null);
+      loadContributionDetails();
+    } catch (err) {
+      setError(
+        err.response?.data?.message ?? err.message ?? "An error occurred",
+      );
+    } finally {
+      setDecisionLoading(false);
+    }
+  };
 
   if (!loading && error) {
     return (
@@ -213,15 +236,40 @@ export default function ContributionDetailsPage() {
             <ArrowLeft size={16} />
           </button>
 
-          <div className="flex flex-wrap items-center gap-3 mb-1">
-            <h1 className="text-lg font-bold text-slate-900">
-              {investment.name}
-            </h1>
-            <Badge variant={getStatusVariant(investment.status)}>
-              {getStatusVariant(investment.status)}
-            </Badge>
+          <div className="flex flex-wrap items-start justify-between gap-4 mb-6">
+            <div>
+              <div className="flex flex-wrap items-center gap-3 mb-1">
+                <h1 className="text-lg font-bold text-slate-900">
+                  {investment.name}
+                </h1>
+                <Badge variant={getStatusVariant(investment.status)}>
+                  {getStatusVariant(investment.status)}
+                </Badge>
+              </div>
+              <p className="text-sm text-slate-400">{investment.reference}</p>
+            </div>
+
+            {String(investment.status).toUpperCase() === "PENDING" && (
+              <div className="flex items-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => setDecisionModal("approve")}
+                  disabled={decisionLoading}
+                  className="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Approve
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setDecisionModal("reject")}
+                  disabled={decisionLoading}
+                  className="px-5 py-2.5 rounded-xl bg-red-500 hover:bg-red-600 text-white text-sm font-medium transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Reject
+                </button>
+              </div>
+            )}
           </div>
-          <p className="text-sm text-slate-400 mb-6">{investment.reference}</p>
 
           {/* Stat cards */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
@@ -246,7 +294,9 @@ export default function ContributionDetailsPage() {
             <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5">
               <p className="text-sm text-slate-500 mb-2">Days Remaining</p>
               <p className="text-xl font-bold text-slate-900">
-                {progress.days_remaining} days
+                {progress.days_remaining == null
+                  ? "-"
+                  : `${progress.days_remaining} days`}
               </p>
             </div>
           </div>
@@ -489,6 +539,13 @@ export default function ContributionDetailsPage() {
           </div>
         </div>
       )}
+      <InvestmentDecisionModal
+        open={Boolean(decisionModal)}
+        mode={decisionModal ?? "approve"}
+        onClose={() => setDecisionModal(null)}
+        loading={decisionLoading}
+        onConfirm={(note) => handleDecision(decisionModal, note)}
+      />
     </Layout>
   );
 }

@@ -2,7 +2,12 @@ import { useState } from "react";
 
 import Modal, { ModalFooter } from "./Modal";
 
-export default function RejectKYCModal({ open, onClose, onConfirm }) {
+export default function RejectKYCModal({
+  open,
+  onClose,
+  onConfirm,
+  loading = false,
+}) {
   const [reason, setReason] = useState("");
 
   const handleConfirm = () => {
@@ -33,16 +38,18 @@ export default function RejectKYCModal({ open, onClose, onConfirm }) {
         <button
           type="button"
           onClick={onClose}
-          className="px-5 py-2.5 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium transition-colors"
+          disabled={loading}
+          className="px-5 py-2.5 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium transition-colors disabled:opacity-50 cursor-pointer"
         >
           Cancel
         </button>
         <button
           type="button"
           onClick={handleConfirm}
-          className="px-5 py-2.5 rounded-xl bg-red-500 hover:bg-red-600 text-white font-medium transition-colors"
+          disabled={loading}
+          className="px-5 py-2.5 rounded-xl bg-red-500 hover:bg-red-600 text-white font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
         >
-          Reject KYC
+          {loading ? "Rejecting..." : "Reject KYC"}
         </button>
       </ModalFooter>
     </Modal>

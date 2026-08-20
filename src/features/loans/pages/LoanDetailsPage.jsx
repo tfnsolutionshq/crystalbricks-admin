@@ -7,15 +7,17 @@ import Badge from "@/shared/components/Badge";
 import Card from "@/shared/components/Card";
 
 import formatDateTime from "@/shared/utils/formatDateTime";
-import formatStatus from "@/shared/utils/formatStatus";
 
 import {
   fetchLoanDetail,
   disburseLoan,
   rejectLoan,
+  approveKYC,
+  rejectKYC,
 } from "@/features/loans/api/loansApi";
 
 import {
+  formatLoanStatus,
   getAvailableTabs,
   getHeaderActions,
   getStatusVariant,
@@ -30,6 +32,8 @@ import ApprovalDetailsTab from "@/features/loans/components/ApprovalDetailsTab";
 import ApproveLoanModal from "@/features/loans/components/ApproveLoanModal";
 import RejectLoanModal from "@/features/loans/components/RejectLoanModal";
 import DisburseLoanModal from "@/features/loans/components/DisburseLoanModal";
+import ApproveKYCModal from "@/features/loans/components/ApproveKYCModal";
+import RejectKYCModal from "@/features/loans/components/RejectKYCModal";
 import SuccessModal from "@/features/loans/components/SuccessModal";
 
 export default function LoanDetail() {
@@ -41,8 +45,11 @@ export default function LoanDetail() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [headerModal, setHeaderModal] = useState(null);
+  const [kycModal, setKycModal] = useState(null);
   const [disbursing, setDisbursing] = useState(false);
   const [rejecting, setRejecting] = useState(false);
+  const [approvingKyc, setApprovingKyc] = useState(false);
+  const [rejectingKyc, setRejectingKyc] = useState(false);
   const [successContent, setSuccessContent] = useState(null);
 
   const loadLoan = useCallback(async () => {
@@ -99,7 +106,7 @@ export default function LoanDetail() {
             <button
               type="button"
               onClick={loadLoan}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-pink-700 hover:bg-pink-800 text-white text-sm font-medium transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-pink-700 hover:bg-pink-800 text-white text-sm font-medium transition-colors cursor-pointer"
             >
               <RefreshCw size={16} />
               Retry
@@ -146,9 +153,9 @@ export default function LoanDetail() {
     setDisbursing(true);
     try {
       await disburseLoan(detail.id, {
-        amount: amount ? Number(amount) : null,
+        amount: amount ? Number(String(amount).replace(/,/g, "")) : null,
         interest_rate: interest ? Number(interest) : null,
-        tenure_months: period ? Number(period) : null,
+        tenure_months: period ? parseInt(period, 10) : null,
         admin_note: note || null,
       });
       setSuccessContent({
@@ -165,6 +172,47 @@ export default function LoanDetail() {
       );
     } finally {
       setDisbursing(false);
+    }
+  };
+
+  // ---- KYC handlers ----
+  const handleApproveKYC = async () => {
+    setApprovingKyc(true);
+    try {
+      await approveKYC(detail.id);
+      setSuccessContent({
+        label: "KYC Documents",
+        title: "KYC Documents Approved",
+        subtitle: "The customer's KYC documents have been approved",
+      });
+      setKycModal("success");
+      loadLoan();
+    } catch (err) {
+      setError(
+        err.response?.data?.message ?? err.message ?? "An error occurred.",
+      );
+    } finally {
+      setApprovingKyc(false);
+    }
+  };
+
+  const handleRejectKYC = async (note) => {
+    setRejectingKyc(true);
+    try {
+      await rejectKYC(detail.id, note);
+      setSuccessContent({
+        label: "KYC Documents",
+        title: "KYC Documents Rejected",
+        subtitle: "The customer's KYC documents have been rejected",
+      });
+      setKycModal("success");
+      loadLoan();
+    } catch (err) {
+      setError(
+        err.response?.data?.message ?? err.message ?? "An error occurred.",
+      );
+    } finally {
+      setRejectingKyc(false);
     }
   };
 
@@ -233,7 +281,7 @@ export default function LoanDetail() {
                         : `${loan?.user?.first_name} ${loan?.user?.last_name}`}
                     </h1>
                     <Badge variant={getStatusVariant(loan.status)}>
-                      {formatStatus(loan.status)}
+                      {formatLoanStatus(loan.status)}
                     </Badge>
                   </div>
                   <p className="text-sm text-gray-500 mt-0.5">
@@ -249,9 +297,9 @@ export default function LoanDetail() {
                   <button
                     type="button"
                     onClick={() => setHeaderModal("approve")}
-                    className="px-5 py-2.5 rounded-xl bg-pink-700 hover:bg-pink-800 text-white text-sm font-medium transition-colors"
+                    className="px-5 py-2.5 rounded-xl bg-green-600 hover:bg-green-700 text-white text-sm font-medium transition-colors cursor-pointer"
                   >
-                    Approve
+                    Disburse
                   </button>
                 )}
                 {headerActions.includes("disburse") && (
@@ -321,7 +369,17 @@ export default function LoanDetail() {
                 <ApplicationDetailsTab loan={detail} />
               )}
               {activeTab === "kyc" && (
-                <KYCTab kycDetails={detail.kyc_details} />
+                <KYCTab
+                  kycDetails={detail.kyc_details}
+                  kycStatus={detail.kyc_status}
+                  kycRejectionNote={detail.kyc_rejection_note}
+                  kycReviewedAt={detail.kyc_reviewed_at}
+                  kycResubmittedAt={detail.kyc_resubmitted_at}
+                  onApprove={() => setKycModal("approve")}
+                  onReject={() => setKycModal("reject")}
+                  approving={approvingKyc}
+                  rejecting={rejectingKyc}
+                />
               )}
               {activeTab === "schedule" && (
                 <RepaymentScheduleTab
@@ -345,14 +403,8 @@ export default function LoanDetail() {
                 open={headerModal === "approve"}
                 onClose={() => setHeaderModal(null)}
                 defaultAmount={loan.amount}
-                onConfirm={() => {
-                  setSuccessContent({
-                    label: "Loan Application",
-                    title: "Application Approved",
-                    subtitle: "Continue with the application review process",
-                  });
-                  setHeaderModal("success");
-                }}
+                loading={disbursing}
+                onConfirm={handleDisburse}
               />
               <RejectLoanModal
                 open={headerModal === "reject"}
@@ -367,9 +419,23 @@ export default function LoanDetail() {
                 loading={disbursing}
                 onConfirm={handleDisburse}
               />
+              <ApproveKYCModal
+                open={kycModal === "approve"}
+                onClose={() => setKycModal(null)}
+                onConfirm={handleApproveKYC}
+              />
+              <RejectKYCModal
+                open={kycModal === "reject"}
+                onClose={() => setKycModal(null)}
+                loading={rejectingKyc}
+                onConfirm={handleRejectKYC}
+              />
               <SuccessModal
-                open={headerModal === "success"}
-                onClose={() => setHeaderModal(null)}
+                open={headerModal === "success" || kycModal === "success"}
+                onClose={() => {
+                  setHeaderModal(null);
+                  setKycModal(null);
+                }}
                 label={successContent?.label ?? "Loan Application"}
                 title={successContent?.title ?? "Action Completed"}
                 subtitle={successContent?.subtitle}
