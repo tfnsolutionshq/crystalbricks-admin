@@ -110,10 +110,9 @@ export const STATS_FILTER_OPTIONS = [
 
 export const TIME_FILTER_OPTIONS = [
   { id: "today", menuLabel: "Today", buttonLabel: "Today" },
-  { id: "week", menuLabel: "This week", buttonLabel: "This week" },
-  { id: "month", menuLabel: "This month", buttonLabel: "This month" },
-  { id: "year", menuLabel: "This year", buttonLabel: "This year" },
-  { id: "allTime", menuLabel: "All time", buttonLabel: "All time" },
+  { id: "this_month", menuLabel: "This month", buttonLabel: "This month" },
+  { id: "this_year", menuLabel: "This year", buttonLabel: "This year" },
+  { id: "all_time", menuLabel: "All time", buttonLabel: "All time" },
 ];
 
 export const STATS_INVESTMENT = [

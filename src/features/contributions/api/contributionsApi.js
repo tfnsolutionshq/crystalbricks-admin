@@ -42,3 +42,21 @@ export async function fetchInvestmentSummary() {
 
   return data;
 }
+
+export async function approveInvestment(id, adminNote) {
+  const { data } = await walletApi.post(
+    `/admin/investments/${id}/approve`,
+    { admin_note: adminNote },
+  );
+
+  return data;
+}
+
+export async function rejectInvestment(id, adminNote) {
+  const { data } = await walletApi.post(
+    `/admin/investments/${id}/reject`,
+    { admin_note: adminNote },
+  );
+
+  return data;
+}

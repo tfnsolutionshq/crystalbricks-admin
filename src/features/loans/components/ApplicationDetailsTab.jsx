@@ -3,10 +3,12 @@ import { Copy } from "lucide-react";
 import Card from "@/shared/components/Card";
 import Badge from "@/shared/components/Badge";
 
-import formatStatus from "@/shared/utils/formatStatus";
 import formatDateTime from "@/shared/utils/formatDateTime";
 import formatCurrency from "@/shared/utils/formatCurrency";
-import { getStatusVariant } from "@/features/loans/helpers/loanHelpers";
+import {
+  formatLoanStatus,
+  getStatusVariant,
+} from "@/features/loans/helpers/loanHelpers";
 
 function Field({ label, children }) {
   return (
@@ -53,7 +55,7 @@ export default function ApplicationDetailsTab({ loan }) {
         <Field label="Processing Fee">{formatCurrency(processing_fee)}</Field>
         <Field label="Status">
           <Badge variant={getStatusVariant(status)}>
-            {formatStatus(status)}
+            {formatLoanStatus(status)}
           </Badge>
         </Field>
         <Field label="Date Applied">{formatDateTime(created_at)}</Field>

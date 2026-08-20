@@ -32,14 +32,14 @@ export default function RejectCreditModal({ open, onClose, onConfirm }) {
         <button
           type="button"
           onClick={onClose}
-          className="px-5 py-2.5 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium transition-colors"
+          className="px-5 py-2.5 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium transition-colors cursor-pointer"
         >
           Cancel
         </button>
         <button
           type="button"
           onClick={handleConfirm}
-          className="px-5 py-2.5 rounded-xl bg-red-500 hover:bg-red-600 text-white font-medium transition-colors"
+          className="px-5 py-2.5 rounded-xl bg-red-500 hover:bg-red-600 text-white font-medium transition-colors cursor-pointer"
         >
           Reject credit check
         </button>

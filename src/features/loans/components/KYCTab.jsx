@@ -1,8 +1,14 @@
 import { Link } from "react-router-dom";
 
 import Card from "@/shared/components/Card";
+import Badge from "@/shared/components/Badge";
 
 import formatCurrency from "@/shared/utils/formatCurrency";
+import formatDateTime from "@/shared/utils/formatDateTime";
+import {
+  formatLoanStatus,
+  getReviewVariant,
+} from "@/features/loans/helpers/loanHelpers";
 
 const TYPE_LABEL = {
   bvn: "BVN",
@@ -12,6 +18,17 @@ const TYPE_LABEL = {
   id_verification: "ID Verification",
   collateral: "Collateral",
 };
+
+function ReviewField({ label, children }) {
+  return (
+    <div>
+      <p className="text-sm text-gray-500">{label}</p>
+      <div className="mt-1 text-sm font-medium text-gray-900">
+        {children ?? "-"}
+      </div>
+    </div>
+  );
+}
 
 function RequirementValue({ type, data }) {
   if (type === "bvn") {
@@ -103,13 +120,63 @@ function RequirementValue({ type, data }) {
   return <p className="text-sm text-gray-500 mt-1">-</p>;
 }
 
-export default function KYCTab({ kycDetails }) {
+export default function KYCTab({
+  kycDetails,
+  kycStatus,
+  kycRejectionNote,
+  kycReviewedAt,
+  kycResubmittedAt,
+  onApprove,
+  onReject,
+  approving,
+  rejecting,
+}) {
   if (!kycDetails || kycDetails.length === 0) return null;
 
   return (
     <Card>
-      <h3 className="text-base font-bold text-gray-900 mb-5">KYC</h3>
-      <div className="divide-y divide-gray-100">
+      <div className="flex items-center justify-between gap-4">
+        <h3 className="text-base font-bold text-gray-900">KYC</h3>
+        {kycStatus === "pending" && (
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={onApprove}
+              disabled={approving || rejecting}
+              className="px-5 py-2.5 rounded-xl bg-pink-700 hover:bg-pink-800 text-white text-sm font-medium transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Approve
+            </button>
+            <button
+              type="button"
+              onClick={onReject}
+              disabled={approving || rejecting}
+              className="px-5 py-2.5 rounded-xl bg-red-500 hover:bg-red-600 text-white text-sm font-medium transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Reject
+            </button>
+          </div>
+        )}
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-5 mt-5">
+        <ReviewField label="KYC Status">
+          <Badge variant={getReviewVariant(kycStatus)}>
+            {formatLoanStatus(kycStatus)}
+          </Badge>
+        </ReviewField>
+        <ReviewField label="Reviewed At">
+          {formatDateTime(kycReviewedAt)}
+        </ReviewField>
+        <ReviewField label="Resubmitted At">
+          {formatDateTime(kycResubmittedAt)}
+        </ReviewField>
+        {(kycStatus === "rejected" || kycRejectionNote) && (
+          <ReviewField label="Rejection Note">{kycRejectionNote}</ReviewField>
+        )}
+      </div>
+
+      <div className="divide-y divide-gray-100 mt-5 pt-5 border-t border-gray-100">
         {kycDetails.map((item) => (
           <div
             key={item.id ?? item.requirement_type}

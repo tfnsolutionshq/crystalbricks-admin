@@ -5,7 +5,20 @@ import formatCurrency from "@/shared/utils/formatCurrency";
 import formatDateTime from "@/shared/utils/formatDateTime";
 import formatStatus from "@/shared/utils/formatStatus";
 
-export default function RecentTransactionsTable({ transactions = [] }) {
+const EMPTY_MESSAGES = {
+  today: "No transactions recorded today.",
+  this_month: "No transactions recorded this month.",
+  this_year: "No transactions recorded this year.",
+  all_time: "No transactions recorded yet.",
+};
+
+export default function RecentTransactionsTable({
+  transactions = [],
+  dateFilter = "all_time",
+}) {
+  const emptyMessage =
+    EMPTY_MESSAGES[dateFilter] ?? EMPTY_MESSAGES.all_time;
+
   return (
     <div className="bg-white rounded-2xl border border-gray-200 p-6 flex-[1.6] min-w-[320px]">
       <div className="flex items-center justify-between mb-4">
@@ -33,27 +46,38 @@ export default function RecentTransactionsTable({ transactions = [] }) {
             </tr>
           </thead>
           <tbody className="text-sm">
-            {transactions.map((t) => (
-              <tr key={t.id} className="border-t border-gray-100">
-                <td className="py-3 pr-4 text-gray-900 font-medium underline decoration-gray-300 underline-offset-2">
-                  <Link to={`/transactions/${t.id}`}>{t.reference}</Link>
-                </td>
-                <td className="py-3 pr-4 text-gray-900 font-medium underline decoration-gray-300 underline-offset-2">
-                  <Link to={`/customers/${t.details.user_id}`}>
-                    {t.customer_name}
-                  </Link>
-                </td>
-                <td className="py-3 pr-4 text-gray-900">
-                  {formatCurrency(t.amount)}
-                </td>
-                <td className="py-3 pr-4 text-gray-500">
-                  {formatDateTime(t.created_at)}
-                </td>
-                <td className="py-3">
-                  <Badge>{formatStatus(t.status)}</Badge>
+            {transactions.length === 0 ? (
+              <tr>
+                <td
+                  colSpan={5}
+                  className="py-10 text-center text-sm text-gray-500"
+                >
+                  {emptyMessage}
                 </td>
               </tr>
-            ))}
+            ) : (
+              transactions.map((t) => (
+                <tr key={t.id} className="border-t border-gray-100">
+                  <td className="py-3 pr-4 text-gray-900 font-medium underline decoration-gray-300 underline-offset-2">
+                    <Link to={`/transactions/${t.id}`}>{t.reference}</Link>
+                  </td>
+                  <td className="py-3 pr-4 text-gray-900 font-medium underline decoration-gray-300 underline-offset-2">
+                    <Link to={`/customers/${t.details.user_id}`}>
+                      {t.customer_name}
+                    </Link>
+                  </td>
+                  <td className="py-3 pr-4 text-gray-900">
+                    {formatCurrency(t.amount)}
+                  </td>
+                  <td className="py-3 pr-4 text-gray-500">
+                    {formatDateTime(t.created_at)}
+                  </td>
+                  <td className="py-3">
+                    <Badge>{formatStatus(t.status)}</Badge>
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>

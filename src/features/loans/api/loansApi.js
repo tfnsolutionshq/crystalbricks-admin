@@ -47,3 +47,17 @@ export async function rejectLoan(id, reason) {
 
   return data;
 }
+
+export async function approveKYC(id) {
+  const { data } = await walletApi.post(`/admin/loans/${id}/kyc/approve`);
+
+  return data;
+}
+
+export async function rejectKYC(id, note) {
+  const { data } = await walletApi.post(`/admin/loans/${id}/kyc/reject`, {
+    note,
+  });
+
+  return data;
+}

@@ -56,6 +56,8 @@ export function getStatusVariant(status) {
       return "Active";
     case "PENDING":
       return "Pending";
+    case "APPROVED_PENDING_USER":
+      return "Waiting";
     case "REJECTED":
       return "Rejected";
     case "COMPLETED":
@@ -81,6 +83,7 @@ export function getStatusBadgeVariant(status) {
 
 /** Human-friendly status label. */
 export function getStatusLabel(status) {
+  if (String(status).toUpperCase() === "APPROVED_PENDING_USER") return "Waiting";
   return (
     String(status).charAt(0).toUpperCase() +
     String(status).slice(1).toLowerCase()

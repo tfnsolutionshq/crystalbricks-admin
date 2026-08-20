@@ -11,6 +11,7 @@ export const STATUS_BADGE_VARIANT = {
   New: "blue",
   Processing: "neutral",
   "On hold": "blue",
+  on_hold: "blue",
   Awaiting: "orange",
   Pending: "orange",
   Active: "green",
@@ -21,6 +22,15 @@ export const STATUS_BADGE_VARIANT = {
 
 export function getStatusVariant(status) {
   return STATUS_BADGE_VARIANT[status] || "neutral";
+}
+
+// Displays a loan status label nicely, converting snake_case values
+// (e.g. "on_hold") into title case ("On Hold").
+export function formatLoanStatus(status) {
+  if (!status) return status;
+  return String(status)
+    .replace(/_/g, " ")
+    .replace(/\b\w/g, (char) => char.toUpperCase());
 }
 
 // Individual/Corporate loan-type tag, and CSCS/DCS account-type tag.
@@ -69,8 +79,8 @@ export function getRiskVariant(risk) {
 // ---- Tab visibility ---------------------------------------------------------
 // Repayment Schedule only exists once a loan has been disbursed.
 const STATUSES_WITH_SCHEDULE = ["Active", "Repaid"];
-// Payout Schedule is hidden while a request is still waiting/pending.
-const STATUSES_WITHOUT_PAYOUT = ["waiting", "pending", "Waiting", "Pending"];
+// Payout Schedule is shown while a loan is active or completed.
+const STATUSES_WITH_PAYOUT = ["active", "completed"];
 // Approval Details only exists once a loan has been approved (active/completed).
 const STATUSES_WITH_APPROVAL = ["active", "completed"];
 
@@ -86,7 +96,7 @@ export function getAvailableTabs(loan) {
   if (STATUSES_WITH_APPROVAL.includes(status)) {
     tabs.push({ key: "approval", label: "Approval Details" });
   }
-  if (!STATUSES_WITHOUT_PAYOUT.includes(loan.status)) {
+  if (STATUSES_WITH_PAYOUT.includes(status)) {
     tabs.push({ key: "payout", label: "Payout Schedule" });
   }
   return tabs;
@@ -97,13 +107,12 @@ export function getAvailableTabs(loan) {
 export function getHeaderActions(loan) {
   switch (loan.status) {
     case "on hold":
+    case "on_hold":
       return ["approve", "reject"]; // Approve/Reject the overall application
     case "processing":
-      return loan.reviewReady ? ["approve", "reject"] : [];
+      return ["approve", "reject"]; // Approve/Reject the overall application
     case "awaiting":
       return ["reject"];
-    case "pending":
-      return ["disburse", "reject"];
     default:
       return [];
   }

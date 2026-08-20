@@ -50,7 +50,7 @@ function BarChartTooltip({ active, payload, label }) {
       <div className="flex items-center justify-between gap-6">
         <span className="flex items-center gap-1.5 text-slate-500">
           <span className="w-2 h-2 rounded-full bg-red-400 inline-block" />
-          Investment
+          Contributions
         </span>
         <span className="font-medium text-slate-800">
           {formatCurrency(investmentValue)}
@@ -311,15 +311,15 @@ export default function AnalyticsPage() {
               </div>
 
               {/* --------------------------------------------------------- */}
-              {/* Charts row: Loans vs Investment / Customer Growth        */}
+              {/* Charts row: Loans vs Contribution / Customer Growth        */}
               {/* --------------------------------------------------------- */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
-                {/* Loans vs Investment */}
+                {/* Loans vs Contribution */}
                 <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5">
                   <div className="flex items-start justify-between mb-1">
                     <div className="flex items-center gap-1.5">
                       <h3 className="text-sm font-medium text-slate-500">
-                        Loans vs Investment
+                        Loans vs Contributions
                       </h3>
                       <Info className="w-3.5 h-3.5 text-slate-300" />
                     </div>
