@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import {
   LayoutGrid,
   ListChecks,
-  // SlidersHorizontal,
+  SlidersHorizontal,
   Users,
   ArrowLeftRight,
   Percent,
@@ -20,7 +20,7 @@ import crystalBricksLogo from "@/assets/images/crystal_bricks_logo.png";
 const NAV_ITEMS = [
   { label: "Dashboard", icon: LayoutGrid, href: "/dashboard" },
   { label: "Products", icon: ListChecks, href: "/products" },
-  // { label: "Rate Config", icon: SlidersHorizontal, href: "/rate-config" },
+  { label: "Rate Config", icon: SlidersHorizontal, href: "/rate-config" },
   { label: "Customers", icon: Users, href: "/customers" },
   { label: "Transactions", icon: ArrowLeftRight, href: "/transactions" },
   { label: "Loans", icon: Percent, href: "/loans" },

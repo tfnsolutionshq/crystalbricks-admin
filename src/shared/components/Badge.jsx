@@ -7,6 +7,7 @@ const BADGE_STYLES = {
   Active: "bg-blue-50 text-blue-600",
   // Neutral / in-progress
   Pending: "bg-gray-100 text-gray-500",
+  Waiting: "bg-orange-50 text-orange-600",
   // Negative states
   Rejected: "bg-red-50 text-red-500",
   Inactive: "bg-red-50 text-red-500",

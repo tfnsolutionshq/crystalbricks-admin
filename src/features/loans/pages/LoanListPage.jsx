@@ -12,11 +12,11 @@ import SortDropdown from "@/shared/components/SortDropdown";
 import SearchInput from "@/shared/components/SearchInput";
 import Pagination from "@/shared/components/Pagination";
 
-import formatStatus from "@/shared/utils/formatStatus";
 import formatCurrency from "@/shared/utils/formatCurrency";
 import formatDateTime from "@/shared/utils/formatDateTime";
 
 import {
+  formatLoanStatus,
   getStatusVariant,
   getTypeVariant,
 } from "@/features/loans/helpers/loanHelpers";
@@ -32,6 +32,7 @@ const STATUS_OPTIONS = [
   { id: "", menuLabel: "All statuses", buttonLabel: "All statuses" },
   { id: "Waiting", menuLabel: "Waiting", buttonLabel: "Waiting" },
   { id: "Pending", menuLabel: "Pending", buttonLabel: "Pending" },
+  { id: "On Hold", menuLabel: "On Hold", buttonLabel: "On Hold" },
   { id: "Active", menuLabel: "Active", buttonLabel: "Active" },
   { id: "Completed", menuLabel: "Completed", buttonLabel: "Completed" },
   { id: "Rejected", menuLabel: "Rejected", buttonLabel: "Rejected" },
@@ -398,7 +399,7 @@ export default function LoanList() {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-right">
                           <Badge variant={getStatusVariant(loan.status)}>
-                            {loan.status ? formatStatus(loan.status) : "N/A"}
+                            {loan.status ? formatLoanStatus(loan.status) : "N/A"}
                           </Badge>
                         </td>
                       </tr>

@@ -45,8 +45,15 @@ const FREQUENCY_LABELS = {
   DAILY: "Daily",
 };
 
+function toTitleCase(value) {
+  if (!value) return value;
+  return String(value)
+    .toLowerCase()
+    .replace(/\b\w/g, (char) => char.toUpperCase());
+}
+
 function getFrequencyLabel(frequency) {
-  return FREQUENCY_LABELS[frequency] || frequency;
+  return toTitleCase(FREQUENCY_LABELS[frequency] || frequency);
 }
 
 const EXPORT_COLUMNS = [

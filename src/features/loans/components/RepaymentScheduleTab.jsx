@@ -37,12 +37,15 @@ export default function RepaymentScheduleTab({
             <button
               type="button"
               onClick={() => setAddingEntry(true)}
-              className="text-blue-600 hover:text-blue-700"
+              className="text-blue-600 hover:text-blue-700 cursor-pointer"
             >
               Add entry
             </button>
           )}
-          <button type="button" className="text-gray-500 hover:text-gray-700">
+          <button
+            type="button"
+            className="text-gray-500 hover:text-gray-700 cursor-pointer"
+          >
             Download
           </button>
         </div>
@@ -95,7 +98,7 @@ export default function RepaymentScheduleTab({
                         type="button"
                         onClick={() => setEditingRow(row)}
                         aria-label="Edit amount due"
-                        className="text-blue-500 hover:text-blue-600"
+                        className="text-blue-500 hover:text-blue-600 cursor-pointer"
                       >
                         <Pencil size={13} />
                       </button>

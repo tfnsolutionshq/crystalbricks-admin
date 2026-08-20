@@ -1,14 +1,10 @@
 import { useState } from "react";
 import Modal, { ModalFooter } from "./Modal";
 
-const PERIOD_OPTIONS = [
-  "1 month",
-  "2 months",
-  "3 months",
-  "5 months",
-  "6 months",
-  "12 months",
-];
+const PERIOD_OPTIONS = Array.from({ length: 12 }, (_, i) => {
+  const n = i + 1;
+  return `${n} ${n === 1 ? "month" : "months"}`;
+});
 
 export default function ApproveLoanModal({
   open,
@@ -17,6 +13,7 @@ export default function ApproveLoanModal({
   defaultAmount,
   defaultPeriod = "3 months",
   defaultInterest = 13,
+  loading = false,
 }) {
   const [amount, setAmount] = useState(defaultAmount ?? "");
   const [period, setPeriod] = useState(defaultPeriod);
@@ -25,7 +22,6 @@ export default function ApproveLoanModal({
 
   const handleConfirm = () => {
     onConfirm({ amount, period, interest, note });
-    setNote("");
   };
 
   return (
@@ -102,16 +98,18 @@ export default function ApproveLoanModal({
         <button
           type="button"
           onClick={onClose}
-          className="px-5 py-2.5 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium transition-colors"
+          disabled={loading}
+          className="px-5 py-2.5 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium transition-colors disabled:opacity-50 cursor-pointer"
         >
           Cancel
         </button>
         <button
           type="button"
           onClick={handleConfirm}
-          className="px-5 py-2.5 rounded-xl bg-pink-700 hover:bg-pink-800 text-white font-medium transition-colors"
+          disabled={loading}
+          className="px-5 py-2.5 rounded-xl bg-pink-700 hover:bg-pink-800 text-white font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
         >
-          Approve application
+          {loading ? "Disbursing..." : "Approve application"}
         </button>
       </ModalFooter>
     </Modal>
