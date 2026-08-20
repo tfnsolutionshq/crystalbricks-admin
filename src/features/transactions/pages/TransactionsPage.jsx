@@ -24,7 +24,9 @@ import {
 } from "@/features/transactions/helpers/transactionHelpers.js";
 
 const TYPE_LABELS = {
-  investment_roi_credit: "Investment RORC Credit",
+  investment_debit: "Contribution Debit",
+  investment_roi_credit: "Contribution RORC Credit",
+  investment_redemption: "Contribution Redemption",
 };
 
 const TYPE_OPTIONS = [

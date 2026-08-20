@@ -3,6 +3,7 @@ import { Wallet, Repeat, Server, Users } from "lucide-react";
 
 import Layout from "@/shared/components/Layout";
 import StatCard from "@/shared/components/StatCard";
+import FilterDropdown from "@/shared/components/FilterDropdown";
 
 import ActiveUsersChart from "@/features/dashboard/components/ActiveUsersChart";
 import ActiveEngagementChart from "@/features/dashboard/components/ActiveEngagementChart";
@@ -24,6 +25,7 @@ import {
   ACTIVE_SAVING_USERS,
   ACTIVE_LOAN_USERS,
   RECENT_INVESTMENTS,
+  TIME_FILTER_OPTIONS,
 } from "@/features/dashboard/mocks/dashboardMockData";
 
 const STATUS_LABELS = {
@@ -44,9 +46,11 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [statsFilter, setStatsFilter] = useState("all");
+  const [dateFilter, setDateFilter] = useState("all_time");
 
   useEffect(() => {
-    fetchDashboard()
+    setLoading(true);
+    fetchDashboard(dateFilter)
       .then(({ data }) => {
         setData(data);
       })
@@ -58,12 +62,12 @@ export default function Dashboard() {
       .finally(() => {
         setLoading(false);
       });
-  }, []);
+  }, [dateFilter]);
 
   function handleRetry() {
     setLoading(true);
     setError(null);
-    fetchDashboard()
+    fetchDashboard(dateFilter)
       .then(({ data }) => {
         setData(data);
       })
@@ -205,7 +209,10 @@ export default function Dashboard() {
               revenueBreakdown.total ?? summary?.total_revenue,
             )}
           />
-          <RecentTransactionsTable transactions={recentTransactions} />
+          <RecentTransactionsTable
+            transactions={recentTransactions}
+            dateFilter={dateFilter}
+          />
         </div>
       </>
     );
@@ -215,8 +222,13 @@ export default function Dashboard() {
     <Layout activeNavItem="Dashboard">
       <div className="p-6 space-y-6 max-w-[1600px]">
         <div className="p-4 sm:p-6 space-y-6">
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center justify-between mb-6 gap-4 flex-wrap">
             <h1 className="text-xl font-bold text-gray-900">Dashboard</h1>
+            <FilterDropdown
+              options={TIME_FILTER_OPTIONS}
+              selected={dateFilter}
+              onSelect={setDateFilter}
+            />
           </div>
 
           {error ? (
