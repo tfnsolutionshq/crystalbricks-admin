@@ -1,11 +1,60 @@
 import { useState } from "react";
-import { Lock, Eye, EyeOff } from "lucide-react";
+import {
+  ArrowLeft,
+  KeyRound,
+  Loader2,
+  Lock,
+  Eye,
+  EyeOff,
+} from "lucide-react";
 import skyscraperImage from "@/assets/images/skyscrapers.jpg";
 import crystalBricksLogo from "@/assets/images/crystal_bricks_logo.png";
+import { useLocation, useNavigate } from "react-router-dom";
+import { resetPasswordRequest } from "@/features/auth/api/authApi";
 
 const SetPasscodePage = () => {
+  const navigate = useNavigate();
+  const { state } = useLocation();
+  const email = state?.email ?? "";
+
+  const [verificationCode, setVerificationCode] = useState("");
+  const [passcode, setPasscode] = useState("");
+  const [confirmPasscode, setConfirmPasscode] = useState("");
   const [showPasscode, setShowPasscode] = useState(false);
   const [showConfirmPasscode, setShowConfirmPasscode] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError(null);
+    setLoading(true);
+
+    if (passcode !== confirmPasscode) {
+      setError("Passcodes do not match");
+      setLoading(false);
+      return;
+    }
+
+    try {
+      await resetPasswordRequest({
+        email,
+        token: verificationCode,
+        password: passcode,
+        password_confirmation: confirmPasscode,
+      });
+
+      navigate("/signin");
+    } catch (error) {
+      setError(
+        error.response?.data?.message ??
+          error.message ??
+          "An error occurred while resetting your passcode. Please try again",
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row">
@@ -46,13 +95,55 @@ const SetPasscodePage = () => {
           </span>
         </div>
         <div className="flex flex-1 items-center justify-center px-4 sm:px-6 pb-12 sm:pb-16">
-          <form className="w-full max-w-sm">
+          <form className="w-full max-w-sm" onSubmit={handleSubmit}>
+            <button
+              type="button"
+              onClick={() => navigate(-1)}
+              className="w-9 h-9 shrink-0 rounded-xl bg-white border border-gray-200 flex items-center justify-center hover:bg-gray-50 cursor-pointer mb-6"
+              aria-label="Go back"
+            >
+              <ArrowLeft size={16} />
+            </button>
+
             <h2 className="mb-1 text-2xl font-bold text-slate-900">
               Set Passcode
             </h2>
             <p className="mb-8 text-sm text-slate-500">
-              Choose a secure passcode to protect your account
+              Enter the verification code sent to{" "}
+              <span className="font-medium text-slate-700">{email || "your email"}</span>{" "}
+              along with your new passcode
             </p>
+
+            {error && (
+              <div className="mb-4 rounded-lg bg-red-100 px-4 py-2 text-sm text-red-700">
+                {error}
+              </div>
+            )}
+
+            {/* VERIFICATION CODE */}
+            <div className="mb-5">
+              <label
+                htmlFor="verificationCode"
+                className="mb-1.5 block text-sm font-medium text-slate-700"
+              >
+                Verification Code
+              </label>
+              <div className="relative">
+                <KeyRound
+                  size={18}
+                  className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"
+                />
+                <input
+                  type="text"
+                  name="verificationCode"
+                  id="verificationCode"
+                  value={verificationCode}
+                  onChange={(e) => setVerificationCode(e.target.value)}
+                  placeholder="Enter verification code"
+                  className="w-full rounded-xl border border-slate-200 bg-white py-3 pl-11 pr-4 text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#c21c86] focus:outline-none focus:ring-1 focus:ring-[#c21c86]"
+                />
+              </div>
+            </div>
 
             {/* PASSCODE */}
             <div className="mb-5">
@@ -60,7 +151,7 @@ const SetPasscodePage = () => {
                 htmlFor="passcode"
                 className="mb-1.5 block text-sm font-medium text-slate-700"
               >
-                Passcode
+                New Passcode
               </label>
               <div className="relative">
                 <Lock
@@ -71,7 +162,9 @@ const SetPasscodePage = () => {
                   type={showPasscode ? "text" : "password"}
                   name="passcode"
                   id="passcode"
-                  placeholder="Enter passcode"
+                  value={passcode}
+                  onChange={(e) => setPasscode(e.target.value)}
+                  placeholder="Enter new passcode"
                   className="w-full rounded-xl border border-slate-200 bg-white py-3 pl-11 pr-11 text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#c21c86] focus:outline-none focus:ring-1 focus:ring-[#c21c86]"
                 />
                 <button
@@ -91,7 +184,7 @@ const SetPasscodePage = () => {
                 htmlFor="confirmPasscode"
                 className="mb-1.5 block text-sm font-medium text-slate-700"
               >
-                Confirm Passcode
+                Confirm New Passcode
               </label>
               <div className="relative">
                 <Lock
@@ -102,7 +195,9 @@ const SetPasscodePage = () => {
                   type={showConfirmPasscode ? "text" : "password"}
                   name="confirmPasscode"
                   id="confirmPasscode"
-                  placeholder="Confirm passcode"
+                  value={confirmPasscode}
+                  onChange={(e) => setConfirmPasscode(e.target.value)}
+                  placeholder="Confirm new passcode"
                   className="w-full rounded-xl border border-slate-200 bg-white py-3 pl-11 pr-11 text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#c21c86] focus:outline-none focus:ring-1 focus:ring-[#c21c86]"
                 />
                 <button
@@ -125,9 +220,17 @@ const SetPasscodePage = () => {
             {/* SUBMIT */}
             <button
               type="submit"
-              className="w-full rounded-xl bg-[#c21c86] py-3.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#a8176f] focus:outline-none focus:ring-2 focus:ring-[#c21c86] focus:ring-offset-2"
+              className="w-full rounded-xl bg-[#c21c86] py-3.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#a8176f] focus:outline-none focus:ring-2 focus:ring-[#c21c86] focus:ring-offset-2 cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
+              disabled={loading}
             >
-              Set Passcode
+              {loading ? (
+                <span className="flex items-center justify-center gap-1">
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  <>Resetting...</>
+                </span>
+              ) : (
+                "Set Passcode"
+              )}
             </button>
           </form>
         </div>
