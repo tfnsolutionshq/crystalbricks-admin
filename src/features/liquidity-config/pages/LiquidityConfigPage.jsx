@@ -10,20 +10,18 @@ import { Plus } from "lucide-react";
 
 import Layout from "@/shared/components/Layout";
 
-import RateConfigTable from "@/features/rate-config/components/RateConfigTable";
-import AddConfigurationModal from "@/features/rate-config/components/AddConfigurationModal";
-import ConfigDetailsSidebar from "@/features/rate-config/components/ConfigDetailsSidebar";
+import RateConfigTable from "@/features/liquidity-config/components/LiquidityConfigTable";
+import AddConfigurationModal from "@/features/liquidity-config/components/AddConfigurationModal";
+import ConfigDetailsSidebar from "@/features/liquidity-config/components/ConfigDetailsSidebar";
 
 import formatDateTime from "@/shared/utils/formatDateTime";
-
-import { useAuth } from "@/shared/context/AuthContext";
 
 import {
   fetchLiquidityPenaltyConfigs,
   createLiquidityPenaltyConfig,
   updateLiquidityPenaltyConfig,
   deleteLiquidityPenaltyConfig,
-} from "@/features/rate-config/api/rateConfigApi";
+} from "@/features/liquidity-config/api/rateConfigApi";
 
 function normalizeConfig(item) {
   return {
@@ -40,15 +38,13 @@ function normalizeConfig(item) {
   };
 }
 
-export default function RateConfiguration() {
+export default function LiquidityConfiguration() {
   const [configs, setConfigs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [editingConfig, setEditingConfig] = useState(null);
   const [viewingConfig, setViewingConfig] = useState(null);
-  const { hasPermission } = useAuth();
-  const canManage = hasPermission("liquidity-penalty-configs.manage");
 
   const loadConfigs = useCallback(async () => {
     setLoading(true);
@@ -123,26 +119,24 @@ export default function RateConfiguration() {
   };
 
   return (
-    <Layout activeNavItem="Rate Config">
+    <Layout activeNavItem="Liquidity Config">
       <div className="p-6 space-y-6 max-w-[1600px]">
         <div className="p-4 sm:p-6 space-y-6">
           <div className="flex items-center justify-between mb-6">
             <h1 className="text-xl font-bold text-gray-900">
-              Rate Configuration
+              Liquidity Configuration
             </h1>
-            {canManage && (
-              <button
-                type="button"
-                onClick={() => {
-                  setEditingConfig(null);
-                  setIsAddOpen(true);
-                }}
-                className="cursor-pointer inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-pink-600 hover:bg-pink-700 text-white text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                Add Configuration
-                <Plus size={16} />
-              </button>
-            )}
+            <button
+              type="button"
+              onClick={() => {
+                setEditingConfig(null);
+                setIsAddOpen(true);
+              }}
+              className="cursor-pointer inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-pink-600 hover:bg-pink-700 text-white text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Add Configuration
+              <Plus size={16} />
+            </button>
           </div>
 
           <div className="bg-white rounded-2xl border border-gray-200 p-6 space-y-4">
@@ -177,7 +171,6 @@ export default function RateConfiguration() {
           onEdit={openEdit}
           onToggle={handleToggleStatus}
           onDelete={handleDelete}
-          canManage={canManage}
         />
       )}
     </Layout>

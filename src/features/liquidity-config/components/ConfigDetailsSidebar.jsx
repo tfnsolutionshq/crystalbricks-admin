@@ -7,7 +7,7 @@ import { X, Loader2 } from "lucide-react";
 
 import Badge from "@/shared/components/Badge";
 
-import { getPenaltyTypeLabel } from "@/features/rate-config/helpers/rateConfigHelpers";
+import { getPenaltyTypeLabel } from "@/features/liquidity-config/helpers/rateConfigHelpers";
 
 function Row({ children }) {
   return <div className="grid grid-cols-2 gap-4">{children}</div>;
@@ -28,7 +28,6 @@ export default function ConfigDetailsSidebar({
   onEdit,
   onToggle,
   onDelete,
-  canManage = true,
 }) {
   const [busyAction, setBusyAction] = useState(null);
   if (!config) return null;
@@ -116,15 +115,13 @@ export default function ConfigDetailsSidebar({
           <Field label="Effective Date" value={config.effectiveDate} />
 
           <div className="space-y-3 pt-2">
-            {canManage && (
-              <button
-                onClick={() => onEdit(config)}
-                className="w-full bg-[#C2185B] hover:opacity-90 transition-opacity text-white text-sm font-medium py-3 rounded-lg cursor-pointer"
-              >
-                Edit configuration
-              </button>
-            )}
-            {canManage && (isActive ? (
+            <button
+              onClick={() => onEdit(config)}
+              className="w-full bg-[#C2185B] hover:opacity-90 transition-opacity text-white text-sm font-medium py-3 rounded-lg cursor-pointer"
+            >
+              Edit configuration
+            </button>
+            {isActive ? (
               <button
                 onClick={handleToggle}
                 disabled={busyAction !== null}
@@ -146,19 +143,17 @@ export default function ConfigDetailsSidebar({
                 )}
                 Activate
               </button>
-            ))}
-            {canManage && (
-              <button
-                onClick={handleDelete}
-                disabled={busyAction !== null}
-                className="w-full flex items-center justify-center gap-2 border border-[#EF5350] text-[#EF5350] hover:bg-[#EF5350] hover:text-white transition-colors text-sm font-medium py-3 rounded-lg cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
-              >
-                {busyAction === "delete" && (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                )}
-                Delete
-              </button>
             )}
+            <button
+              onClick={handleDelete}
+              disabled={busyAction !== null}
+              className="w-full flex items-center justify-center gap-2 border border-[#EF5350] text-[#EF5350] hover:bg-[#EF5350] hover:text-white transition-colors text-sm font-medium py-3 rounded-lg cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+            >
+              {busyAction === "delete" && (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              )}
+              Delete
+            </button>
           </div>
         </div>
       </div>

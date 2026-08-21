@@ -1,6 +1,6 @@
 import { ChevronRight } from "lucide-react";
 
-import StatusBadge from "@/features/rate-config/components/StatusBadge";
+import StatusBadge from "@/features/liquidity-config/components/StatusBadge";
 
 const COLUMNS = ["Product Name", "Rate", "Status", "Effective Date"];
 

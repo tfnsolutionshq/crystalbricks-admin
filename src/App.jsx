@@ -12,8 +12,7 @@ import SetPasscodePage from "./features/auth/pages/SetPasscodePage";
 import ResetPasscodePage from "./features/auth/pages/ResetPasscodePage";
 import DashboardPage from "./features/dashboard/pages/AdminDashboard";
 import ProductsPage from "./features/products/pages/ProductsPage";
-import RateConfigPage from "./features/rate-config/pages/RateConfigPage";
-import RateConfigDetailsPage from "./features/rate-config/pages/RateConfigDetails";
+import RateConfigPage from "./features/liquidity-config/pages/LiquidityConfigPage";
 import CustomersPage from "./features/customers/pages/CustomersPage";
 import CustomerDetailsPage from "./features/customers/pages/CustomerDetailsPage";
 import TransactionsPage from "./features/transactions/pages/TransactionsPage";
@@ -44,11 +43,7 @@ export default function App() {
             <Route element={<PrivateRouteGuard />}>
               <Route path="/dashboard" element={<DashboardPage />} />
               <Route path="/products" element={<ProductsPage />} />
-              <Route path="/rate-config" element={<RateConfigPage />} />
-              <Route
-                path="/rate-config/:productId"
-                element={<RateConfigDetailsPage />}
-              />
+              <Route path="/liquidity-config" element={<RateConfigPage />} />
               <Route path="/customers" element={<CustomersPage />} />
               <Route
                 path="/customers/:customerId"

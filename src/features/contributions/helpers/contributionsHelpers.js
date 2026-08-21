@@ -64,6 +64,8 @@ export function getStatusVariant(status) {
       return "Completed";
     case "CANCELLED":
       return "Cancelled";
+    case "USER_CANCELLED":
+      return "User Cancelled";
     case "DEFAULTED":
       return "Defaulted";
     case "MATURED":
@@ -84,6 +86,7 @@ export function getStatusBadgeVariant(status) {
 /** Human-friendly status label. */
 export function getStatusLabel(status) {
   if (String(status).toUpperCase() === "APPROVED_PENDING_USER") return "Waiting";
+  if (String(status).toUpperCase() === "USER_CANCELLED") return "User Cancelled";
   return (
     String(status).charAt(0).toUpperCase() +
     String(status).slice(1).toLowerCase()
