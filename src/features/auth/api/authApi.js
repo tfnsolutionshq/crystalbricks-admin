@@ -5,3 +5,15 @@ export async function loginRequest(credentials) {
 
   return data;
 }
+
+export async function forgotPasswordRequest(email) {
+  const { data } = await idApi.post("/password/forgot", { email });
+
+  return data;
+}
+
+export async function resetPasswordRequest(payload) {
+  const { data } = await idApi.post("/password/reset", payload);
+
+  return data;
+}
