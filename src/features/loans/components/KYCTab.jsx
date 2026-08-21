@@ -130,6 +130,7 @@ export default function KYCTab({
   onReject,
   approving,
   rejecting,
+  canApprove = true,
 }) {
   if (!kycDetails || kycDetails.length === 0) return null;
 
@@ -137,7 +138,7 @@ export default function KYCTab({
     <Card>
       <div className="flex items-center justify-between gap-4">
         <h3 className="text-base font-bold text-gray-900">KYC</h3>
-        {kycStatus === "pending" && (
+        {kycStatus === "pending" && canApprove && (
           <div className="flex items-center gap-3">
             <button
               type="button"
