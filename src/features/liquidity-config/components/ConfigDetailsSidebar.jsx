@@ -7,7 +7,7 @@ import { X, Loader2 } from "lucide-react";
 
 import Badge from "@/shared/components/Badge";
 
-import { getPenaltyTypeLabel } from "@/features/rate-config/helpers/rateConfigHelpers";
+import { getPenaltyTypeLabel } from "@/features/liquidity-config/helpers/rateConfigHelpers";
 
 function Row({ children }) {
   return <div className="grid grid-cols-2 gap-4">{children}</div>;

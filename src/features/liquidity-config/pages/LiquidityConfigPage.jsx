@@ -10,9 +10,9 @@ import { Plus } from "lucide-react";
 
 import Layout from "@/shared/components/Layout";
 
-import RateConfigTable from "@/features/rate-config/components/RateConfigTable";
-import AddConfigurationModal from "@/features/rate-config/components/AddConfigurationModal";
-import ConfigDetailsSidebar from "@/features/rate-config/components/ConfigDetailsSidebar";
+import RateConfigTable from "@/features/liquidity-config/components/LiquidityConfigTable";
+import AddConfigurationModal from "@/features/liquidity-config/components/AddConfigurationModal";
+import ConfigDetailsSidebar from "@/features/liquidity-config/components/ConfigDetailsSidebar";
 
 import formatDateTime from "@/shared/utils/formatDateTime";
 
@@ -21,7 +21,7 @@ import {
   createLiquidityPenaltyConfig,
   updateLiquidityPenaltyConfig,
   deleteLiquidityPenaltyConfig,
-} from "@/features/rate-config/api/rateConfigApi";
+} from "@/features/liquidity-config/api/rateConfigApi";
 
 function normalizeConfig(item) {
   return {
@@ -38,7 +38,7 @@ function normalizeConfig(item) {
   };
 }
 
-export default function RateConfiguration() {
+export default function LiquidityConfiguration() {
   const [configs, setConfigs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -119,12 +119,12 @@ export default function RateConfiguration() {
   };
 
   return (
-    <Layout activeNavItem="Rate Config">
+    <Layout activeNavItem="Liquidity Config">
       <div className="p-6 space-y-6 max-w-[1600px]">
         <div className="p-4 sm:p-6 space-y-6">
           <div className="flex items-center justify-between mb-6">
             <h1 className="text-xl font-bold text-gray-900">
-              Rate Configuration
+              Liquidity Configuration
             </h1>
             <button
               type="button"

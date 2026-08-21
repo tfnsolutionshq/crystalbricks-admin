@@ -28,6 +28,7 @@ const STATUS_OPTIONS = [
   { id: "PENDING", menuLabel: "Pending", buttonLabel: "Pending" },
   { id: "ACTIVE", menuLabel: "Active", buttonLabel: "Active" },
   { id: "REJECTED", menuLabel: "Rejected", buttonLabel: "Rejected" },
+  { id: "USER_CANCELLED", menuLabel: "User Cancelled", buttonLabel: "User Cancelled" },
 ];
 
 const FREQUENCY_LABELS = {

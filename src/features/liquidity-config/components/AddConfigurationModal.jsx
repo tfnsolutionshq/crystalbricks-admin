@@ -18,7 +18,7 @@ import {
 import {
   PENALTY_TYPE_LABELS,
   PENALTY_TYPE_OPTIONS,
-} from "@/features/rate-config/helpers/rateConfigHelpers";
+} from "@/features/liquidity-config/helpers/rateConfigHelpers";
 
 export default function AddConfigurationModal({
   open,
