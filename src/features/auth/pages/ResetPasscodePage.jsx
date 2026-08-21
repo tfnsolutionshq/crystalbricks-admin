@@ -1,10 +1,36 @@
-import { ArrowLeft, Mail } from "lucide-react";
+import { useState } from "react";
+import { ArrowLeft, Loader2, Mail } from "lucide-react";
 import skyscraperImage from "@/assets/images/skyscrapers.jpg";
 import crystalBricksLogo from "@/assets/images/crystal_bricks_logo.png";
 import { useNavigate } from "react-router-dom";
+import { forgotPasswordRequest } from "@/features/auth/api/authApi";
 
 const ResetPasscodePage = () => {
   const navigate = useNavigate();
+
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError(null);
+    setLoading(true);
+
+    try {
+      await forgotPasswordRequest(email);
+      navigate("/set-passcode", { state: { email } });
+    } catch (error) {
+      setError(
+        error.response?.data?.message ??
+          error.message ??
+          "An error occurred while sending reset instructions. Please try again",
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col md:flex-row">
       {/* LEFT PANEL */}
@@ -44,7 +70,7 @@ const ResetPasscodePage = () => {
           </span>
         </div>
         <div className="flex flex-1 items-center justify-center px-4 sm:px-6 pb-12 sm:pb-16">
-          <form className="w-full max-w-sm">
+          <form className="w-full max-w-sm" onSubmit={handleSubmit}>
             <button
               type="button"
               onClick={() => navigate(-1)}
@@ -61,6 +87,12 @@ const ResetPasscodePage = () => {
               Enter your email address and we&apos;ll send you instructions to
               reset your passcode
             </p>
+
+            {error && (
+              <div className="mb-4 rounded-lg bg-red-100 px-4 py-2 text-sm text-red-700">
+                {error}
+              </div>
+            )}
 
             {/* EMAIL */}
             <div className="mb-6">
@@ -79,6 +111,8 @@ const ResetPasscodePage = () => {
                   type="email"
                   name="email"
                   id="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   placeholder="Enter your email"
                   className="w-full rounded-xl border border-slate-200 bg-white py-3 pl-11 pr-11 text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#c21c86] focus:outline-none focus:ring-1 focus:ring-[#c21c86]"
                 />
@@ -88,9 +122,17 @@ const ResetPasscodePage = () => {
             {/* SUBMIT */}
             <button
               type="submit"
-              className="w-full rounded-xl bg-[#c21c86] py-3.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#a8176f] focus:outline-none focus:ring-2 focus:ring-[#c21c86] focus:ring-offset-2"
+              className="w-full rounded-xl bg-[#c21c86] py-3.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#a8176f] focus:outline-none focus:ring-2 focus:ring-[#c21c86] focus:ring-offset-2 cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
+              disabled={loading}
             >
-              Send Reset Instructions
+              {loading ? (
+                <span className="flex items-center justify-center gap-1">
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  <>Sending...</>
+                </span>
+              ) : (
+                "Send Reset Instructions"
+              )}
             </button>
           </form>
         </div>
