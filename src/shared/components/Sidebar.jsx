@@ -18,20 +18,18 @@ import { useAuth } from "@/shared/context/AuthContext";
 import crystalBricksLogo from "@/assets/images/crystal_bricks_logo.png";
 
 /**
- * NAV_ITEMS — each item can optionally declare a `permission` key.
- * When present the item is only rendered when the current user holds that
- * permission. Items without a `permission` key are always visible.
+ * NAV_ITEMS — all items are always visible to every authenticated admin.
  */
 const NAV_ITEMS = [
-  { label: "Dashboard", icon: LayoutGrid, href: "/dashboard", permission: "dashboard.view" },
-  { label: "Products", icon: ListChecks, href: "/products", permission: "investment-plans.manage" },
-  { label: "Rate Config", icon: SlidersHorizontal, href: "/rate-config", permission: "liquidity-penalty-configs.manage" },
-  { label: "Customers", icon: Users, href: "/customers", permission: "users.view" },
-  { label: "Transactions", icon: ArrowLeftRight, href: "/transactions", permission: "wallet.view" },
-  { label: "Loans", icon: Percent, href: "/loans", permission: "loans.view" },
-  { label: "Contributions", icon: TrendingDown, href: "/contributions", permission: "investments.view" },
-  { label: "Analytics", icon: BarChart3, href: "/analytics", permission: "reports.view" },
-  { label: "Team Management", icon: UserCog, href: "/team-management", permission: "users.view" },
+  { label: "Dashboard", icon: LayoutGrid, href: "/dashboard" },
+  { label: "Products", icon: ListChecks, href: "/products" },
+  { label: "Liquidity Config", icon: SlidersHorizontal, href: "/liquidity-config" },
+  { label: "Customers", icon: Users, href: "/customers" },
+  { label: "Transactions", icon: ArrowLeftRight, href: "/transactions" },
+  { label: "Loans", icon: Percent, href: "/loans" },
+  { label: "Contributions", icon: TrendingDown, href: "/contributions" },
+  { label: "Analytics", icon: BarChart3, href: "/analytics" },
+  { label: "Team Management", icon: UserCog, href: "/team-management" },
   { label: "Settings", icon: Settings, href: "/settings" },
 ];
 
@@ -45,7 +43,7 @@ const NAV_ITEMS = [
  * - Desktop (>= lg): a static collapsible rail next to the main content.
  */
 export default function Sidebar({ activeItem = "Dashboard", isOpen, onClose }) {
-  const { user, logout, hasPermission } = useAuth();
+  const { user, logout } = useAuth();
   const isDesktop = () => window.matchMedia("(min-width: 1024px)").matches;
 
   useEffect(() => {
@@ -113,7 +111,7 @@ export default function Sidebar({ activeItem = "Dashboard", isOpen, onClose }) {
             Menu
           </p>
           <ul className="space-y-1">
-            {NAV_ITEMS.filter(({ permission }) => !permission || hasPermission(permission)).map(({ label, icon: Icon, href }) => {
+            {NAV_ITEMS.map(({ label, icon: Icon, href }) => {
               const isActive = label === activeItem;
               return (
                 <li key={label}>

@@ -8,8 +8,6 @@ import Card from "@/shared/components/Card";
 
 import formatDateTime from "@/shared/utils/formatDateTime";
 
-import { useAuth } from "@/shared/context/AuthContext";
-
 import {
   fetchLoanDetail,
   disburseLoan,
@@ -41,7 +39,6 @@ import SuccessModal from "@/features/loans/components/SuccessModal";
 export default function LoanDetail() {
   const { loanId, tab } = useParams();
   const navigate = useNavigate();
-  const { hasPermission } = useAuth();
 
   const [loan, setLoan] = useState(null);
   const [detail, setDetail] = useState(null);
@@ -296,7 +293,7 @@ export default function LoanDetail() {
 
             {!loading && headerActions.length > 0 && (
               <div className="flex items-center gap-3">
-                {headerActions.includes("approve") && hasPermission("loans.approve") && (
+                {headerActions.includes("approve") && (
                   <button
                     type="button"
                     onClick={() => setHeaderModal("approve")}
@@ -305,7 +302,7 @@ export default function LoanDetail() {
                     Disburse
                   </button>
                 )}
-                {headerActions.includes("disburse") && hasPermission("loans.disburse") && (
+                {headerActions.includes("disburse") && (
                   <button
                     type="button"
                     onClick={() => setHeaderModal("disburse")}
@@ -314,7 +311,7 @@ export default function LoanDetail() {
                     Disburse
                   </button>
                 )}
-                {headerActions.includes("reject") && hasPermission("loans.reject") && (
+                {headerActions.includes("reject") && (
                   <button
                     type="button"
                     onClick={() => setHeaderModal("reject")}
@@ -382,7 +379,6 @@ export default function LoanDetail() {
                   onReject={() => setKycModal("reject")}
                   approving={approvingKyc}
                   rejecting={rejectingKyc}
-                  canApprove={hasPermission("kyc.approve")}
                 />
               )}
               {activeTab === "schedule" && (

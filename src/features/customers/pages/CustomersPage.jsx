@@ -11,8 +11,6 @@ import FilterDropdown from "@/shared/components/FilterDropdown.jsx";
 
 import exportToExcel from "@/shared/utils/exportToExcel";
 
-import { useAuth } from "@/shared/context/AuthContext";
-
 import {
   fetchCustomers,
   fetchCustomerStats,
@@ -83,8 +81,6 @@ function getInitials(customer) {
 // ============================================================================
 export default function CustomersPage() {
   const navigate = useNavigate();
-  const { hasPermission } = useAuth();
-  const canExport = hasPermission("users.view");
 
   const [search, setSearch] = useState("");
   const [appliedSearch, setAppliedSearch] = useState("");
@@ -177,16 +173,14 @@ export default function CustomersPage() {
         <div className="p-4 sm:p-6">
           <div className="flex items-center justify-between mb-6">
             <h1 className="text-xl font-bold text-gray-900">Customers</h1>
-            {canExport && (
-              <button
-                onClick={handleExport}
-                disabled={loading}
-                className="cursor-pointer inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-pink-600 hover:bg-pink-700 text-white text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                Export
-                <Download size={16} />
-              </button>
-            )}
+            <button
+              onClick={handleExport}
+              disabled={loading}
+              className="cursor-pointer inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-pink-600 hover:bg-pink-700 text-white text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Export
+              <Download size={16} />
+            </button>
           </div>
 
         {/* ------------------------------------------------------------------

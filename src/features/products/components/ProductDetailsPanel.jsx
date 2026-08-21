@@ -230,7 +230,6 @@ export default function ProductDetailsPanel({
   onDeactivate,
   onActivate,
   onDelete,
-  canManage = true,
 }) {
   const [busyAction, setBusyAction] = useState(null);
   if (!product) return null;
@@ -284,15 +283,13 @@ export default function ProductDetailsPanel({
           )}
 
           <div className="space-y-3 pt-2">
-            {canManage && (
-              <button
-                onClick={() => onEdit(product)}
-                className="w-full bg-[#C2185B] hover:opacity-90 transition-opacity text-white text-sm font-medium py-3 rounded-lg cursor-pointer"
-              >
-                Edit product
-              </button>
-            )}
-            {canManage && (isActive ? (
+            <button
+              onClick={() => onEdit(product)}
+              className="w-full bg-[#C2185B] hover:opacity-90 transition-opacity text-white text-sm font-medium py-3 rounded-lg cursor-pointer"
+            >
+              Edit product
+            </button>
+            {isActive ? (
               <button
                 onClick={handleToggle}
                 disabled={busyAction !== null}
@@ -314,8 +311,8 @@ export default function ProductDetailsPanel({
                 )}
                 Activate
               </button>
-            ))}
-            {canManage && kind === "fd" && (
+            )}
+            {kind === "fd" && (
               <button
                 onClick={handleDelete}
                 disabled={busyAction !== null}

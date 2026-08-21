@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, useCallback } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import { loginRequest } from "@/features/auth/api/authApi";
 
 const AuthContext = createContext(null);
@@ -22,10 +22,14 @@ export const AuthProvider = ({ children }) => {
     try {
       const { data } = await loginRequest(credentials);
 
-      const isAdmin = data.user?.roles?.includes("admin");
+      // roles may be strings ["Admin"] or objects [{ name: "Admin" }] — check case-insensitively
+      const roles = data.user?.roles ?? [];
+      const isAdmin = roles.some(
+        (r) => (typeof r === "string" ? r : r?.name ?? "").toLowerCase() === "admin",
+      );
 
       if (!isAdmin) {
-        throw "Invalid credentials";
+        throw new Error("You do not have admin access.");
       }
 
       setToken(data.token);
@@ -49,25 +53,8 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("user");
   };
 
-  /**
-   * Returns true if the logged-in user has ALL of the supplied permission
-   * strings. Pass a single string or an array of strings.
-   * When no permissions are configured on the user object every check
-   * returns true so existing behaviour is preserved for super-admins.
-   */
-  const hasPermission = useCallback(
-    (...perms) => {
-      const flat = perms.flat();
-      const userPerms = user?.permissions;
-      // No permission list on the user → treat as unrestricted (super-admin).
-      if (!userPerms || !Array.isArray(userPerms)) return true;
-      return flat.every((p) => userPerms.includes(p));
-    },
-    [user],
-  );
-
   return (
-    <AuthContext.Provider value={{ user, token, login, logout, loading, hasPermission }}>
+    <AuthContext.Provider value={{ user, token, login, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );

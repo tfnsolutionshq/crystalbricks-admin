@@ -15,8 +15,6 @@ import Pagination from "@/shared/components/Pagination";
 import formatCurrency from "@/shared/utils/formatCurrency";
 import formatDateTime from "@/shared/utils/formatDateTime";
 
-import { useAuth } from "@/shared/context/AuthContext";
-
 import {
   formatLoanStatus,
   getStatusVariant,
@@ -42,8 +40,6 @@ const STATUS_OPTIONS = [
 
 export default function LoanList() {
   const navigate = useNavigate();
-  const { hasPermission } = useAuth();
-  const canExport = hasPermission("loans.reports.view");
 
   // ---- Filter state (header section) ----
   const [search, setSearch] = useState("");
@@ -209,17 +205,15 @@ export default function LoanList() {
           {/* ---- Page header ---- */}
           <div className="flex items-center justify-between mb-6">
             <h1 className="text-xl font-bold text-gray-900">Loans</h1>
-            {canExport && (
-              <button
-                type="button"
-                className="cursor-pointer inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-pink-600 hover:bg-pink-700 text-white text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                onClick={exportAllLoans}
-                disabled={loading || exporting}
-              >
-                {exporting ? "Exporting..." : "Export"}
-                <Download size={16} />
-              </button>
-            )}
+            <button
+              type="button"
+              className="cursor-pointer inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-pink-600 hover:bg-pink-700 text-white text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              onClick={exportAllLoans}
+              disabled={loading || exporting}
+            >
+              {exporting ? "Exporting..." : "Export"}
+              <Download size={16} />
+            </button>
           </div>
 
           {/* ---- Search + filter bar ---- */}
