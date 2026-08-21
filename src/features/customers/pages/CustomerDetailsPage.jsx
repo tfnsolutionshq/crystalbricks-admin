@@ -17,6 +17,8 @@ import formatCurrency from "@/shared/utils/formatCurrency";
 import formatDateTime from "@/shared/utils/formatDateTime";
 import formatStatus from "@/shared/utils/formatStatus";
 
+import { useAuth } from "@/shared/context/AuthContext";
+
 import {
   fetchCustomerDetail,
   toggleCustomerStatus,
@@ -109,6 +111,8 @@ function getAddressFields(kyc) {
 export default function CustomerDetailsPage() {
   const { customerId } = useParams();
   const navigate = useNavigate();
+  const { hasPermission } = useAuth();
+  const canUpdateUsers = hasPermission("users.update");
 
   const [customer, setCustomer] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -220,12 +224,14 @@ export default function CustomerDetailsPage() {
                     : "N/A"}
                 </Badge>
                 <Badge>{customer?.is_active ? "Active" : "Inactive"}</Badge>
-                <Toggle
-                  checked={customer?.is_active ?? false}
-                  onChange={handleToggleStatus}
-                  disabled={statusUpdating}
-                  label="Toggle customer status"
-                />
+                {canUpdateUsers && (
+                  <Toggle
+                    checked={customer?.is_active ?? false}
+                    onChange={handleToggleStatus}
+                    disabled={statusUpdating}
+                    label="Toggle customer status"
+                  />
+                )}
               </div>
               <KebabButton />
             </>

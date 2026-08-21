@@ -1,8 +1,3 @@
-// src/features/contributions/pages/ContributionsPage.jsx
-// Main/list page for Contributions. Data is fetched from the admin
-// investments API with server-side pagination, search, status/date/
-// maturity/amount filters and sorting.
-
 import { useEffect, useState } from "react";
 import { Download, Eye, RefreshCw } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -22,6 +17,8 @@ import formatDateTime from "@/shared/utils/formatDateTime";
 import exportToExcel from "@/shared/utils/exportToExcel";
 
 import ContributionDetailsModal from "@/features/contributions/components/ContributionDetailsModal";
+
+import { useAuth } from "@/shared/context/AuthContext";
 
 import {
   fetchInvestments,
@@ -67,6 +64,8 @@ const EXPORT_COLUMNS = [
 
 export default function ContributionsPage() {
   const navigate = useNavigate();
+  const { hasPermission } = useAuth();
+  const canExport = hasPermission("investments.reports.view");
 
   // ---- Server-side filter state ----
   const [searchInput, setSearchInput] = useState("");
@@ -205,15 +204,17 @@ export default function ContributionsPage() {
           {/* ------------------------------------------------------------- */}
           <div className="flex items-center justify-between mb-6">
             <h1 className="text-xl font-bold text-gray-900">Contributions</h1>
-            <button
-              type="button"
-              onClick={handleExport}
-              disabled={!investments.length}
-              className="cursor-pointer inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-pink-700 hover:bg-pink-800 text-white text-sm font-medium transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-            >
-              Export
-              <Download size={16} />
-            </button>
+            {canExport && (
+              <button
+                type="button"
+                onClick={handleExport}
+                disabled={!investments.length}
+                className="cursor-pointer inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-pink-700 hover:bg-pink-800 text-white text-sm font-medium transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                Export
+                <Download size={16} />
+              </button>
+            )}
           </div>
 
           {/* ------------------------------------------------------------- */}

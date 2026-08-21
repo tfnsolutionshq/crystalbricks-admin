@@ -18,12 +18,14 @@ import KebabButton from "@/features/team-management/components/KebabButton";
 
 import formatDateTime from "@/shared/utils/formatDateTime";
 
+import { useAuth } from "@/shared/context/AuthContext";
+
 import {
   getInitials,
   getAvatarColor,
   getRoleMeta,
   getStatusBadgeVariant,
-  getStatusLabel,
+  getStatusLabel, 
   formatDateAdded,
   capitalizeFirst,
 } from "@/features/team-management/helpers/teamManagementHelpers";
@@ -88,6 +90,12 @@ export default function TeamManagementPage() {
   const [statusFilter, setStatusFilter] = useState("");
   const [page, setPage] = useState(1);
   const [activeTab, setActiveTab] = useState("Members");
+
+  const { hasPermission } = useAuth();
+  const canCreateUsers = hasPermission("users.create");
+  const canUpdateUsers = hasPermission("users.update");
+  const canCreateRoles = hasPermission("roles.create");
+  const canUpdateRoles = hasPermission("roles.update");
 
   const [members, setMembers] = useState([]);
   const [meta, setMeta] = useState({ total: 0, last_page: 1, per_page: 0 });
@@ -379,7 +387,7 @@ export default function TeamManagementPage() {
             <h1 className="text-2xl font-bold text-slate-900">
               Team Management
             </h1>
-            {activeTab === "Members" && (
+            {activeTab === "Members" && canCreateUsers && (
               <button
                 type="button"
                 onClick={() => setAddOpen(true)}
@@ -389,7 +397,7 @@ export default function TeamManagementPage() {
                 Add Member
               </button>
             )}
-            {activeTab === "Roles" && (
+            {activeTab === "Roles" && canCreateRoles && (
               <button
                 type="button"
                 onClick={() => setAddRoleOpen(true)}
@@ -612,15 +620,15 @@ export default function TeamManagementPage() {
                           <td className="px-5 py-3.5">
                             <KebabButton
                               items={[
-                                {
+                                ...(canUpdateUsers ? [{
                                   label: "Edit Member",
                                   icon: <Pencil className="w-4 h-4" />,
                                   onClick: () => {
                                     setEditMember(member);
                                     setEditError(null);
                                   },
-                                },
-                                member.status === "active"
+                                }] : []),
+                                ...(canUpdateUsers ? [member.status === "active"
                                   ? {
                                       label: "Deactivate Member",
                                       icon: <UserX className="w-4 h-4" />,
@@ -643,7 +651,7 @@ export default function TeamManagementPage() {
                                         });
                                         setConfirmError(null);
                                       },
-                                    },
+                                    }] : []),
                               ]}
                             />
                           </td>
@@ -678,6 +686,7 @@ export default function TeamManagementPage() {
               onToggleStatus={(role, action) => {
                 setConfirmRoleState({ action, role });
               }}
+              canUpdateRoles={canUpdateRoles}
             />
           )}
 
@@ -773,7 +782,7 @@ export default function TeamManagementPage() {
 // TAB: Roles
 // List of roles on the platform. Backed by GET /admin/roles.
 // ============================================================================
-function RolesTab({ roles, loading, error, onRetry, onEdit, onToggleStatus }) {
+function RolesTab({ roles, loading, error, onRetry, onEdit, onToggleStatus, canUpdateRoles = true }) {
   return (
     <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
       <div className="overflow-x-auto">
@@ -845,12 +854,12 @@ function RolesTab({ roles, loading, error, onRetry, onEdit, onToggleStatus }) {
                   <td className="px-5 py-3.5">
                     <KebabButton
                       items={[
-                        {
+                        ...(canUpdateRoles ? [{
                           label: "Edit Role Details",
                           icon: <Pencil className="w-4 h-4" />,
                           onClick: () => onEdit(role),
-                        },
-                        role.is_active
+                        }] : []),
+                        ...(canUpdateRoles ? [role.is_active
                           ? {
                               label: "Deactivate Role",
                               icon: <UserX className="w-4 h-4" />,
@@ -861,7 +870,7 @@ function RolesTab({ roles, loading, error, onRetry, onEdit, onToggleStatus }) {
                               label: "Activate Role",
                               icon: <UserCheck className="w-4 h-4" />,
                               onClick: () => onToggleStatus(role, "activate"),
-                            },
+                            }] : []),
                       ]}
                     />
                   </td>
