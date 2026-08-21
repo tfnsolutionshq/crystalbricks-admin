@@ -16,8 +16,6 @@ import formatStatus from "@/shared/utils/formatStatus";
 
 import { fetchTransactions } from "@/features/transactions/api/transactionsApi";
 
-import { useAuth } from "@/shared/context/AuthContext";
-
 import {
   formatTransactionType,
   handleExport,
@@ -47,8 +45,6 @@ const TYPE_OPTIONS = [
 // ============================================================================
 export default function TransactionsPage() {
   const navigate = useNavigate();
-  const { hasPermission } = useAuth();
-  const canExport = hasPermission("wallet.reports.view");
   const [search, setSearch] = useState("");
   const [appliedSearch, setAppliedSearch] = useState("");
   const [status, setStatus] = useState("");
@@ -164,17 +160,15 @@ export default function TransactionsPage() {
         <div className="p-4 sm:p-6">
           <div className="flex items-center justify-between mb-6">
             <h1 className="text-xl font-bold text-gray-900">Transactions</h1>
-            {canExport && (
-              <button
-                type="button"
-                onClick={exportAllTransactions}
-                disabled={loading || exporting}
-                className="cursor-pointer inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-pink-600 hover:bg-pink-700 text-white text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {exporting ? "Exporting..." : "Export"}
-                <Download size={16} />
-              </button>
-            )}
+            <button
+              type="button"
+              onClick={exportAllTransactions}
+              disabled={loading || exporting}
+              className="cursor-pointer inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-pink-600 hover:bg-pink-700 text-white text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {exporting ? "Exporting..." : "Export"}
+              <Download size={16} />
+            </button>
           </div>
 
         {/* ------------------------------------------------------------------
