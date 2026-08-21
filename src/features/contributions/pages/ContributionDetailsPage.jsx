@@ -13,6 +13,8 @@ import Badge from "@/shared/components/Badge";
 import formatCurrency from "@/shared/utils/formatCurrency";
 import formatDateTime from "@/shared/utils/formatDateTime";
 
+import { useAuth } from "@/shared/context/AuthContext";
+
 import { fetchInvestmentDetail, approveInvestment, rejectInvestment } from "@/features/contributions/api/contributionsApi";
 
 import {
@@ -28,6 +30,7 @@ const USE_MOCK = false; // flip to false once the endpoint is wired up
 export default function ContributionDetailsPage() {
   const { investmentId } = useParams();
   const navigate = useNavigate();
+  const { hasPermission } = useAuth();
 
   const [investment, setInvestment] = useState(null);
   const [plan, setPlan] = useState(null);
@@ -249,24 +252,28 @@ export default function ContributionDetailsPage() {
               <p className="text-sm text-slate-400">{investment.reference}</p>
             </div>
 
-            {String(investment.status).toUpperCase() === "PENDING" && (
+            {String(investment.status).toUpperCase() === "PENDING" && (hasPermission("investments.approve") || hasPermission("investments.reject")) && (
               <div className="flex items-center gap-3">
-                <button
-                  type="button"
-                  onClick={() => setDecisionModal("approve")}
-                  disabled={decisionLoading}
-                  className="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  Approve
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setDecisionModal("reject")}
-                  disabled={decisionLoading}
-                  className="px-5 py-2.5 rounded-xl bg-red-500 hover:bg-red-600 text-white text-sm font-medium transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  Reject
-                </button>
+                {hasPermission("investments.approve") && (
+                  <button
+                    type="button"
+                    onClick={() => setDecisionModal("approve")}
+                    disabled={decisionLoading}
+                    className="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    Approve
+                  </button>
+                )}
+                {hasPermission("investments.reject") && (
+                  <button
+                    type="button"
+                    onClick={() => setDecisionModal("reject")}
+                    disabled={decisionLoading}
+                    className="px-5 py-2.5 rounded-xl bg-red-500 hover:bg-red-600 text-white text-sm font-medium transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    Reject
+                  </button>
+                )}
               </div>
             )}
           </div>

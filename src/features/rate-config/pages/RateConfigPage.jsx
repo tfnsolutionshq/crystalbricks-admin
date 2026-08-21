@@ -16,6 +16,8 @@ import ConfigDetailsSidebar from "@/features/rate-config/components/ConfigDetail
 
 import formatDateTime from "@/shared/utils/formatDateTime";
 
+import { useAuth } from "@/shared/context/AuthContext";
+
 import {
   fetchLiquidityPenaltyConfigs,
   createLiquidityPenaltyConfig,
@@ -45,6 +47,8 @@ export default function RateConfiguration() {
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [editingConfig, setEditingConfig] = useState(null);
   const [viewingConfig, setViewingConfig] = useState(null);
+  const { hasPermission } = useAuth();
+  const canManage = hasPermission("liquidity-penalty-configs.manage");
 
   const loadConfigs = useCallback(async () => {
     setLoading(true);
@@ -126,17 +130,19 @@ export default function RateConfiguration() {
             <h1 className="text-xl font-bold text-gray-900">
               Rate Configuration
             </h1>
-            <button
-              type="button"
-              onClick={() => {
-                setEditingConfig(null);
-                setIsAddOpen(true);
-              }}
-              className="cursor-pointer inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-pink-600 hover:bg-pink-700 text-white text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              Add Configuration
-              <Plus size={16} />
-            </button>
+            {canManage && (
+              <button
+                type="button"
+                onClick={() => {
+                  setEditingConfig(null);
+                  setIsAddOpen(true);
+                }}
+                className="cursor-pointer inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-pink-600 hover:bg-pink-700 text-white text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Add Configuration
+                <Plus size={16} />
+              </button>
+            )}
           </div>
 
           <div className="bg-white rounded-2xl border border-gray-200 p-6 space-y-4">
@@ -171,6 +177,7 @@ export default function RateConfiguration() {
           onEdit={openEdit}
           onToggle={handleToggleStatus}
           onDelete={handleDelete}
+          canManage={canManage}
         />
       )}
     </Layout>

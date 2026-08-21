@@ -12,6 +12,8 @@ import AddProductModal from "@/features/products/components/AddProductModal";
 
 import formatDateTime from "@/shared/utils/formatDateTime";
 
+import { useAuth } from "@/shared/context/AuthContext";
+
 import {
   activateInvestmentPlan,
   activateLoanPlan,
@@ -95,6 +97,12 @@ function normalizeLoanPlan(item) {
 
 export default function Products() {
   const [activeTab, setActiveTab] = useState("investments");
+  const { hasPermission } = useAuth();
+
+  // Determine which manage permission applies for the active tab
+  const canManage = activeTab === "investments"
+    ? hasPermission("investment-plans.manage")
+    : hasPermission("loan-plans.manage");
 
   const [investments, setInvestments] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -373,14 +381,16 @@ export default function Products() {
         <div className="p-4 sm:p-6 space-y-6">
           <div className="flex items-center justify-between mb-6">
             <h1 className="text-xl font-bold text-gray-900">Products</h1>
-            <button
-              type="button"
-              onClick={() => setIsAddOpen(true)}
-              className="cursor-pointer inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-pink-600 hover:bg-pink-700 text-white text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              Add product
-              <Plus size={16} />
-            </button>
+            {canManage && (
+              <button
+                type="button"
+                onClick={() => setIsAddOpen(true)}
+                className="cursor-pointer inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-pink-600 hover:bg-pink-700 text-white text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Add product
+                <Plus size={16} />
+              </button>
+            )}
           </div>
 
           <ProductTabs activeTab={activeTab} onChange={setActiveTab} />
@@ -425,6 +435,7 @@ export default function Products() {
           onDeactivate={handleDeactivate}
           onActivate={handleActivate}
           onDelete={handleDelete}
+          canManage={canManage}
         />
       )}
 
