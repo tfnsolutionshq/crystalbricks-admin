@@ -65,20 +65,34 @@ function getMemberName(member) {
   );
 }
 
+/** Roles may come back as strings or { id, name } objects — handle both. */
+function getRoleName(role) {
+  if (!role) return null;
+  return typeof role === "string" ? role : (role.name ?? null);
+}
+
+function getRoleId(role) {
+  return typeof role === "object" && role !== null ? (role.id ?? null) : null;
+}
+
 function normalizeMembers(members) {
-  return members.map((member) => ({
-    id: member.id,
-    first_name: member.first_name ?? "",
-    last_name: member.last_name ?? "",
-    name: getMemberName(member),
-    email: member.email,
-    avatar: member.avatar,
-    role: member.roles?.[0] ?? "member",
-    status: member.is_active ? "active" : "inactive",
-    dateAdded: member.created_at,
-    phone_country_code: member.phone_country_code ?? "",
-    phone_number: member.phone_number ?? "",
-  }));
+  return members.map((member) => {
+    const firstRole = member.roles?.[0] ?? null;
+    return {
+      id: member.id,
+      first_name: member.first_name ?? "",
+      last_name: member.last_name ?? "",
+      name: getMemberName(member),
+      email: member.email,
+      avatar: member.avatar,
+      role: getRoleName(firstRole),
+      roleId: getRoleId(firstRole),
+      status: member.is_active ? "active" : "inactive",
+      dateAdded: member.created_at,
+      phone_country_code: member.phone_country_code ?? "",
+      phone_number: member.phone_number ?? "",
+    };
+  });
 }
 
 export default function TeamManagementPage() {
@@ -255,6 +269,8 @@ export default function TeamManagementPage() {
         phone_number: form.phone_number || null,
         roles: [form.role],
       });
+      const roleName =
+        roles.find((r) => r.id === form.role)?.name ?? member.role;
       setMembers((prev) =>
         prev.map((m) =>
           m.id === member.id
@@ -266,7 +282,8 @@ export default function TeamManagementPage() {
                 email: form.email,
                 phone_country_code: form.phone_country_code,
                 phone_number: form.phone_number,
-                role: form.role,
+                role: roleName,
+                roleId: form.role,
               }
             : m,
         ),

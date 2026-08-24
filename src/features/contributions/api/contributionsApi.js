@@ -60,3 +60,61 @@ export async function rejectInvestment(id, adminNote) {
 
   return data;
 }
+
+export async function fetchLiquidityRequests({
+  page = 1,
+  search = "",
+  status = "",
+  from = "",
+  to = "",
+  minAmount = "",
+  maxAmount = "",
+  sortBy = "",
+  sortOrder = "",
+} = {}) {
+  const params = { page };
+
+  if (search) params.search = search;
+  if (status) params.status = status;
+  if (from) params.from = from;
+  if (to) params.to = to;
+  if (minAmount) params.min_amount = minAmount;
+  if (maxAmount) params.max_amount = maxAmount;
+  if (sortBy) params.sort_by = sortBy;
+  if (sortOrder) params.sort_order = sortOrder;
+
+  const { data } = await walletApi.get("/admin/investment-liquidity-requests", {
+    params,
+  });
+
+  return data;
+}
+
+export async function fetchLiquidityRequestDetail(id) {
+  const { data } = await walletApi.get(
+    `/admin/investment-liquidity-requests/${id}`,
+  );
+
+  return data;
+}
+
+export async function approveLiquidityRequest(id, adminNote) {
+  const { data } = await walletApi.post(
+    `/admin/investment-liquidity-requests/${id}/approve`,
+    { admin_note: adminNote },
+  );
+
+  return data;
+}
+
+export async function rejectLiquidityRequest(id, adminNote) {
+  const { data } = await walletApi.post(
+    `/admin/investment-liquidity-requests/${id}/reject`,
+    { admin_note: adminNote },
+  );
+
+  return data;
+}
+
+
+

@@ -83,14 +83,16 @@ export function getStatusBadgeVariant(status) {
   return getStatusVariant(status);
 }
 
-/** Human-friendly status label. */
 export function getStatusLabel(status) {
-  if (String(status).toUpperCase() === "APPROVED_PENDING_USER") return "Waiting";
-  if (String(status).toUpperCase() === "USER_CANCELLED") return "User Cancelled";
-  return (
-    String(status).charAt(0).toUpperCase() +
-    String(status).slice(1).toLowerCase()
-  );
+  if (!status) return "—";
+  const s = String(status).toUpperCase();
+  if (s === "APPROVED_PENDING_USER") return "Waiting";
+  if (s === "USER_CANCELLED") return "User Cancelled";
+  if (s === "UNDER_REVIEW") return "Under Review";
+  return String(status)
+    .toLowerCase()
+    .replace(/_/g, " ")
+    .replace(/\b\w/g, (char) => char.toUpperCase());
 }
 
 /** Maps a KYC status to its Badge variant. */
