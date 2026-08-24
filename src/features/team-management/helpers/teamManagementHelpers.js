@@ -31,9 +31,13 @@ export function getAvatarColor(name = "") {
 
 /** Looks up display label + badge variant for a role value. */
 export function getRoleMeta(roleValue) {
+  const label =
+    typeof roleValue === "object" && roleValue !== null
+      ? (roleValue.name ?? "Unknown")
+      : roleValue;
   return (
     TEAM_ROLES.find((role) => role.value === roleValue) || {
-      label: roleValue,
+      label: capitalizeFirst(label) || "N/A",
       badgeVariant: "neutral",
     }
   );
