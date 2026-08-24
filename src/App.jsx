@@ -24,6 +24,7 @@ import TeamManagementPage from "./features/team-management/pages/TeamManagementP
 import PersonalInfoPage from "./features/settings/pages/PersonalInfoPage";
 import ContributionsPage from "./features/contributions/pages/ContributionsPage";
 import ContributionDetailsPage from "./features/contributions/pages/ContributionDetailsPage";
+import LiquidityRequestDetailsPage from "./features/contributions/pages/LiquidityRequestDetailsPage";
 import LoanDetailsPage from "./features/loans/pages/LoanDetailsPage";
 import LoanListPage from "./features/loans/pages/LoanListPage";
 
@@ -63,6 +64,10 @@ export default function App() {
 
               <Route path="/settings" element={<PersonalInfoPage />} />
               <Route path="/contributions" element={<ContributionsPage />} />
+              <Route
+                path="/contributions/liquidity-requests/:requestId"
+                element={<LiquidityRequestDetailsPage />}
+              />
               <Route
                 path="/contributions/:investmentId"
                 element={<ContributionDetailsPage />}

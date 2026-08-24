@@ -21,7 +21,7 @@ export default function EditMemberModal({
     email: member?.email ?? "",
     phone_country_code: member?.phone_country_code ?? "",
     phone_number: member?.phone_number ?? "",
-    role: member?.role ?? "",
+    role: member?.roleId ?? "",
   });
 
   if (!member) return null;
