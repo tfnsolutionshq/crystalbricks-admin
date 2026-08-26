@@ -22,13 +22,16 @@ export const AuthProvider = ({ children }) => {
     try {
       const { data } = await loginRequest(credentials);
 
-      // roles may be strings ["Admin"] or objects [{ name: "Admin" }] — check case-insensitively
+      // roles may be strings ["Admin", "Super Admin"] or objects [{ name: "Admin" }] — check case-insensitively
       const roles = data.user?.roles ?? [];
-      const isAdmin = roles.some(
-        (r) => (typeof r === "string" ? r : r?.name ?? "").toLowerCase() === "admin",
-      );
+      const isAuthorized = roles.some((r) => {
+        const roleName = (typeof r === "string" ? r : r?.name ?? "")
+          .toLowerCase()
+          .replace(/[_\s-]+/g, "");
+        return roleName === "admin" || roleName === "superadmin";
+      });
 
-      if (!isAdmin) {
+      if (!isAuthorized) {
         throw new Error("You do not have admin access.");
       }
 

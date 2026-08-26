@@ -8,13 +8,16 @@ const PrivateRouteGuard = () => {
     return <div className="bg-white h-screen"></div>;
   }
 
-  // roles may be strings ["Admin"] or objects [{ name: "Admin" }] — check case-insensitively
+  // roles may be strings ["Admin", "Super Admin"] or objects [{ name: "Admin" }] — check case-insensitively
   const roles = user?.roles ?? [];
-  const isAdmin = roles.some(
-    (r) => (typeof r === "string" ? r : r?.name ?? "").toLowerCase() === "admin",
-  );
+  const isAuthorized = roles.some((r) => {
+    const roleName = (typeof r === "string" ? r : r?.name ?? "")
+      .toLowerCase()
+      .replace(/[_\s-]+/g, "");
+    return roleName === "admin" || roleName === "superadmin";
+  });
 
-  if (!user || !isAdmin) {
+  if (!user || !isAuthorized) {
     return <Navigate to="/signin" replace />;
   }
 

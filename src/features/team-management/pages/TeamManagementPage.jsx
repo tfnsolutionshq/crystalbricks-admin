@@ -237,13 +237,18 @@ export default function TeamManagementPage() {
     setAddSubmitting(true);
     setAddError(null);
     try {
+      const roleName =
+        typeof form.role === "string" && isNaN(Number(form.role))
+          ? form.role
+          : roles.find((r) => r.id === form.role)?.name || String(form.role);
+
       await createTeamMember({
         first_name: form.first_name,
         last_name: form.last_name,
         email: form.email,
         phone_country_code: form.phone_country_code || null,
         phone_number: form.phone_number || null,
-        roles: [form.role],
+        roles: [roleName],
       });
       setAddOpen(false);
       loadMembers(page, appliedSearch, statusFilter);
@@ -261,16 +266,19 @@ export default function TeamManagementPage() {
     setEditSubmitting(true);
     setEditError(null);
     try {
+      const roleName =
+        typeof form.role === "string" && isNaN(Number(form.role))
+          ? form.role
+          : roles.find((r) => r.id === form.role)?.name || String(form.role);
+
       await updateTeamMember(member.id, {
         first_name: form.first_name,
         last_name: form.last_name,
         email: form.email,
         phone_country_code: form.phone_country_code || null,
         phone_number: form.phone_number || null,
-        roles: [form.role],
+        roles: [roleName],
       });
-      const roleName =
-        roles.find((r) => r.id === form.role)?.name ?? member.role;
       setMembers((prev) =>
         prev.map((m) =>
           m.id === member.id
@@ -283,7 +291,7 @@ export default function TeamManagementPage() {
                 phone_country_code: form.phone_country_code,
                 phone_number: form.phone_number,
                 role: roleName,
-                roleId: form.role,
+                roleId: roles.find((r) => r.name === roleName)?.id ?? m.roleId,
               }
             : m,
         ),

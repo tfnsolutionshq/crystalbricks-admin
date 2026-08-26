@@ -3,7 +3,7 @@
 // card, form) are built inline here per project convention.
 
 import { useState, useEffect } from "react";
-import { KeyRound, Loader2 } from "lucide-react";
+import { KeyRound, Loader2, CheckCircle2 } from "lucide-react";
 
 import Layout from "@/shared/components/Layout";
 
@@ -16,22 +16,34 @@ import {
   fetchTeamMember,
   updateTeamMember,
 } from "@/features/team-management/api/teamManagementApi";
+import { forgotPasswordRequest } from "@/features/auth/api/authApi";
 
 export default function PersonalInfoPage() {
   const { user } = useAuth();
   const [form, setForm] = useState({
-    name: "",
+    first_name: "",
+    last_name: "",
+    email: "",
+    phone_country_code: "",
     phone: "",
   });
   const [original, setOriginal] = useState({
-    name: "",
+    first_name: "",
+    last_name: "",
+    email: "",
+    phone_country_code: "",
     phone: "",
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
   const [saved, setSaved] = useState(false);
+
+  // Change password states
   const [passwordModalOpen, setPasswordModalOpen] = useState(false);
+  const [requestingReset, setRequestingReset] = useState(false);
+  const [resetError, setResetError] = useState(null);
+  const [passwordSuccess, setPasswordSuccess] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -41,16 +53,34 @@ export default function PersonalInfoPage() {
       try {
         const { data } = await fetchTeamMember(user.id);
         if (cancelled) return;
+        // Split name into first and last name
+        const fullName = data?.name ?? "";
+        const nameParts = fullName.trim().split(/\s+/);
+        const firstName = nameParts[0] ?? "";
+        const lastName = nameParts.slice(1).join(" ");
+
         const next = {
-          name: data?.name ?? "",
+          first_name: firstName,
+          last_name: lastName,
+          email: data?.email ?? "",
+          phone_country_code: data?.phone_country_code ?? "",
           phone: data?.phone_number ?? data?.phone ?? "",
         };
         setForm(next);
         setOriginal(next);
       } catch {
         if (cancelled) return;
+        // Split name into first and last name
+        const fullName = user?.name ?? "";
+        const nameParts = fullName.trim().split(/\s+/);
+        const firstName = nameParts[0] ?? "";
+        const lastName = nameParts.slice(1).join(" ");
+
         const next = {
-          name: user?.name ?? "",
+          first_name: firstName,
+          last_name: lastName,
+          email: user?.email ?? "",
+          phone_country_code: user?.phone_country_code ?? "",
           phone: user?.phone_number ?? user?.phone ?? "",
         };
         setForm(next);
@@ -75,8 +105,16 @@ export default function PersonalInfoPage() {
     event.preventDefault();
     if (!user?.id) return;
     const payload = {};
-    if (form.name !== original.name) payload.name = form.name;
-    if (form.phone !== original.phone) payload.phone_number = form.phone || null;
+    if (form.first_name !== original.first_name)
+      payload.first_name = form.first_name;
+    if (form.last_name !== original.last_name)
+      payload.last_name = form.last_name;
+    if (form.phone_country_code !== original.phone_country_code) {
+      payload.phone_country_code = form.phone_country_code || null;
+    }
+    if (form.phone !== original.phone) {
+      payload.phone_number = form.phone || null;
+    }
     if (Object.keys(payload).length === 0) {
       setSaved(true);
       return;
@@ -97,9 +135,24 @@ export default function PersonalInfoPage() {
     }
   }
 
-  function handleSavePassword(form) {
-    // Wire up to your API here.
-    setPasswordModalOpen(false);
+  async function handleInitiateChangePassword() {
+    if (!user?.email || requestingReset) return;
+    setRequestingReset(true);
+    setResetError(null);
+    setPasswordSuccess(false);
+
+    try {
+      await forgotPasswordRequest(user.email);
+      setPasswordModalOpen(true);
+    } catch (err) {
+      setResetError(
+        err.response?.data?.message ??
+        err.message ??
+        "Failed to send password reset code. Please try again.",
+      );
+    } finally {
+      setRequestingReset(false);
+    }
   }
 
   return (
@@ -129,30 +182,58 @@ export default function PersonalInfoPage() {
               </div>
 
               <div className="space-y-5">
-                <Field label="Name" required>
-                  <TextInput
-                    type="text"
-                    value={form.name}
-                    onChange={(e) => handleChange("name", e.target.value)}
-                  />
-                </Field>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <Field label="First Name" required>
+                    <TextInput
+                      type="text"
+                      value={form.first_name}
+                      onChange={(e) =>
+                        handleChange("first_name", e.target.value)
+                      }
+                    />
+                  </Field>
+
+                  <Field label="Last Name">
+                    <TextInput
+                      type="text"
+                      value={form.last_name}
+                      onChange={(e) =>
+                        handleChange("last_name", e.target.value)
+                      }
+                    />
+                  </Field>
+                </div>
 
                 <Field label="Email Address">
                   <TextInput
                     type="email"
-                    value={user?.email ?? ""}
-                    disabled
-                    className="bg-slate-50 text-slate-400"
+                    value={form.email}
+                    onChange={(e) => handleChange("email", e.target.value)}
+                    readOnly={true}
                   />
                 </Field>
 
-                <Field label="Phone Number">
-                  <TextInput
-                    type="tel"
-                    value={form.phone}
-                    onChange={(e) => handleChange("phone", e.target.value)}
-                  />
-                </Field>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <Field label="Country Code">
+                    <TextInput
+                      type="text"
+                      placeholder="e.g. +234"
+                      value={form.phone_country_code}
+                      onChange={(e) =>
+                        handleChange("phone_country_code", e.target.value)
+                      }
+                    />
+                  </Field>
+
+                  <Field label="Phone Number">
+                    <TextInput
+                      type="tel"
+                      placeholder="e.g. 9012345677"
+                      value={form.phone}
+                      onChange={(e) => handleChange("phone", e.target.value)}
+                    />
+                  </Field>
+                </div>
               </div>
 
               <div className="flex items-center justify-end gap-3 mt-2 pt-4 border-t border-slate-100">
@@ -195,19 +276,40 @@ export default function PersonalInfoPage() {
                 </div>
                 <button
                   type="button"
-                  onClick={() => setPasswordModalOpen(true)}
-                  className="px-4 py-2 rounded-xl border border-slate-200 text-sm font-medium text-slate-600 hover:bg-slate-50 transition-colors whitespace-nowrap cursor-pointer"
+                  onClick={handleInitiateChangePassword}
+                  disabled={requestingReset}
+                  className="flex items-center gap-2 px-4 py-2 rounded-xl border border-slate-200 text-sm font-medium text-slate-600 hover:bg-slate-50 transition-colors whitespace-nowrap cursor-pointer disabled:opacity-50"
                 >
-                  Change Password
+                  {requestingReset && (
+                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                  )}
+                  {requestingReset ? "Sending Code..." : "Change Password"}
                 </button>
               </div>
+
+              {resetError && (
+                <div className="mt-3 p-3 rounded-xl bg-red-50 border border-red-200 text-xs text-red-600">
+                  {resetError}
+                </div>
+              )}
+
+              {passwordSuccess && (
+                <div className="mt-3 p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-700 flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-600" />
+                  Password updated successfully.
+                </div>
+              )}
             </div>
           </form>
 
           <ChangePasswordModal
             open={passwordModalOpen}
             onClose={() => setPasswordModalOpen(false)}
-            onSubmit={handleSavePassword}
+            email={user?.email ?? ""}
+            onSuccess={() => {
+              setPasswordSuccess(true);
+              setTimeout(() => setPasswordSuccess(false), 5000);
+            }}
           />
         </div>
       </div>

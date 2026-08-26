@@ -23,6 +23,7 @@ export const ROLE_PERMISSIONS = [
     label: "Permissions",
     read: ["permissions.view"],
     write: [],
+    readOnly: true,
   },
   {
     key: "kyc",
@@ -69,7 +70,7 @@ export const ROLE_PERMISSIONS = [
   },
   {
     key: "investments",
-    label: "Investments",
+    label: "Contributions",
     read: ["investments.view", "investments.reports.view"],
     write: [
       "investments.create",
@@ -83,7 +84,7 @@ export const ROLE_PERMISSIONS = [
   },
   {
     key: "investment-plans",
-    label: "Investment Plans",
+    label: "Contribution Plans",
     read: [],
     write: ["investment-plans.manage"],
   },
@@ -114,7 +115,12 @@ export const ROLE_PERMISSIONS = [
     key: "wallet",
     label: "Wallet",
     read: ["wallet.view", "wallet.reports.view"],
-    write: ["wallet.debit", "wallet.credit", "wallet.freeze", "wallet.unfreeze"],
+    write: [
+      "wallet.debit",
+      "wallet.credit",
+      "wallet.freeze",
+      "wallet.unfreeze",
+    ],
   },
   {
     key: "account-tiers",
@@ -127,18 +133,35 @@ export const ROLE_PERMISSIONS = [
     label: "Dashboard",
     read: ["dashboard.view"],
     write: [],
+    readOnly: true,
   },
   {
     key: "audit",
     label: "Audit",
     read: ["audit.view"],
     write: [],
+    readOnly: true,
   },
   {
     key: "reports",
     label: "Reports",
     read: ["reports.view"],
     write: [],
+    readOnly: true,
+  },
+  {
+    key: "analytics",
+    label: "Analytics",
+    read: ["analytics.view"],
+    write: [],
+    readOnly: true,
+  },
+  {
+    key: "transactions",
+    label: "Transactions",
+    read: ["transactions.view"],
+    write: [],
+    readOnly: true,
   },
 ];
 
