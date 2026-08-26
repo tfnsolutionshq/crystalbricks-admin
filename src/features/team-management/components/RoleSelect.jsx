@@ -41,7 +41,7 @@ export default function RoleSelect({ value, onChange }) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const selected = roles.find((r) => r.id === value);
+  const selected = roles.find((r) => r.name === value || r.id === value);
 
   return (
     <div className="relative" ref={ref}>
@@ -88,7 +88,7 @@ export default function RoleSelect({ value, onChange }) {
               key={role.id}
               type="button"
               onClick={() => {
-                onChange(role.id);
+                onChange(role.name);
                 setOpen(false);
               }}
               className="w-full flex items-center justify-between px-4 py-2.5 text-sm text-left text-slate-600 hover:bg-slate-50 transition-colors cursor-pointer"
@@ -96,7 +96,7 @@ export default function RoleSelect({ value, onChange }) {
               <span className="block font-medium text-slate-700">
                 {capitalizeFirst(role.name)}
               </span>
-              {role.id === value && (
+              {(role.name === value || role.id === value) && (
                 <Check className="w-4 h-4 text-pink-600 shrink-0" />
               )}
             </button>
