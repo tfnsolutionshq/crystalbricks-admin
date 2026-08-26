@@ -81,7 +81,22 @@ export default function EditRoleModal({
           hint="Select the access level for each module."
         >
           <div className="border border-slate-200 rounded-lg divide-y divide-slate-100 max-h-72 overflow-y-auto">
-            {ROLE_PERMISSIONS.map((module) => (
+            {ROLE_PERMISSIONS.filter((m) => m.readOnly).map((module) => (
+              <div
+                key={module.key}
+                className="flex items-center justify-between px-3 py-2.5"
+              >
+                <span className="text-sm font-medium text-slate-700">
+                  {module.label}
+                </span>
+                <Toggle
+                  checked={permissions[module.key]?.read ?? false}
+                  onChange={() => togglePermission(module.key, "read")}
+                  label={`Toggle ${module.label} access`}
+                />
+              </div>
+            ))}
+            {ROLE_PERMISSIONS.filter((m) => !m.readOnly).map((module) => (
               <div
                 key={module.key}
                 className="flex items-center justify-between px-3 py-2.5"
