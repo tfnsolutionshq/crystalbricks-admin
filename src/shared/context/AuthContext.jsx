@@ -25,7 +25,7 @@ export const AuthProvider = ({ children }) => {
       // roles may be strings ["Admin", "Super Admin"] or objects [{ name: "Admin" }] — check case-insensitively
       const roles = data.user?.roles ?? [];
       const isAuthorized = roles.some((r) => {
-        const roleName = (typeof r === "string" ? r : r?.name ?? "")
+        const roleName = (typeof r === "string" ? r : (r?.name ?? ""))
           .toLowerCase()
           .replace(/[_\s-]+/g, "");
         return roleName === "admin" || roleName === "superadmin";

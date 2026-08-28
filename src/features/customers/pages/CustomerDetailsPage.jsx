@@ -29,7 +29,7 @@ import {
   TRANSACTION_TYPES,
 } from "@/features/transactions/helpers/transactionHelpers";
 
-const TABS = ["Details", "KYC Documents", "Transactions"];
+const TABS = ["Details", "KYC Details", "Transactions"];
 
 const TYPE_LABELS = {
   investment_debit: "Contribution Debit",
@@ -281,7 +281,7 @@ export default function CustomerDetailsPage() {
         ) : (
           <>
             {activeTab === "Details" && <DetailsTab customer={customer} />}
-            {activeTab === "KYC Documents" && (
+            {activeTab === "KYC Details" && (
               <KycDocumentsTab customer={customer} />
             )}
             {activeTab === "Transactions" && (
@@ -376,14 +376,14 @@ function KycDocumentsTab({ customer }) {
     return (
       <Card>
         <p className="text-sm text-gray-400 text-center py-10">
-          No KYC documents on file for this customer yet.
+          No KYC details on file for this customer yet.
         </p>
       </Card>
     );
   }
 
   return (
-    <Card title="KYC Documents">
+    <Card title="KYC Details">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-5">
         <Field label="Status">
           <Badge>{capitalize(kyc.status)}</Badge>

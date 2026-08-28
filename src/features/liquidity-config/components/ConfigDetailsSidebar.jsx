@@ -3,7 +3,7 @@
 // Mirrors the ProductDetailsPanel pattern used on the Products page.
 
 import { useState } from "react";
-import { X, Loader2 } from "lucide-react";
+import { X, Loader2, Pencil, Power, Trash2 } from "lucide-react";
 
 import Badge from "@/shared/components/Badge";
 
@@ -117,18 +117,21 @@ export default function ConfigDetailsSidebar({
           <div className="space-y-3 pt-2">
             <button
               onClick={() => onEdit(config)}
-              className="w-full bg-[#C2185B] hover:opacity-90 transition-opacity text-white text-sm font-medium py-3 rounded-lg cursor-pointer"
+              className="w-full flex items-center justify-center gap-2 bg-[#C2185B] hover:opacity-90 transition-opacity text-white text-sm font-medium py-3 rounded-lg cursor-pointer"
             >
+              <Pencil className="h-4 w-4" />
               Edit configuration
             </button>
             {isActive ? (
               <button
                 onClick={handleToggle}
                 disabled={busyAction !== null}
-                className="w-full flex items-center justify-center gap-2 bg-[#EF5350] hover:bg-[#e53e3e] transition-colors text-white text-sm font-medium py-3 rounded-lg cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+                className="w-full flex items-center justify-center gap-2 bg-[#C2185B] hover:opacity-90 transition-opacity text-white text-sm font-medium py-3 rounded-lg cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
               >
-                {busyAction === "deactivate" && (
+                {busyAction === "deactivate" ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <Power className="h-4 w-4" />
                 )}
                 Deactivate
               </button>
@@ -136,10 +139,12 @@ export default function ConfigDetailsSidebar({
               <button
                 onClick={handleToggle}
                 disabled={busyAction !== null}
-                className="w-full flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 transition-colors text-white text-sm font-medium py-3 rounded-lg cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+                className="w-full flex items-center justify-center gap-2 bg-[#C2185B] hover:opacity-90 transition-opacity text-white text-sm font-medium py-3 rounded-lg cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
               >
-                {busyAction === "activate" && (
+                {busyAction === "activate" ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <Power className="h-4 w-4" />
                 )}
                 Activate
               </button>
@@ -147,10 +152,12 @@ export default function ConfigDetailsSidebar({
             <button
               onClick={handleDelete}
               disabled={busyAction !== null}
-              className="w-full flex items-center justify-center gap-2 border border-[#EF5350] text-[#EF5350] hover:bg-[#EF5350] hover:text-white transition-colors text-sm font-medium py-3 rounded-lg cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+              className="w-full flex items-center justify-center gap-2 bg-[#C2185B] hover:opacity-90 transition-opacity text-white text-sm font-medium py-3 rounded-lg cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
             >
-              {busyAction === "delete" && (
+              {busyAction === "delete" ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Trash2 className="h-4 w-4" />
               )}
               Delete
             </button>
