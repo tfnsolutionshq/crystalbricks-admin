@@ -31,9 +31,108 @@ export const DURATION_OPTIONS = [
 export const KYC_CHECK_REQUIREMENT_OPTIONS = [
   "Business Profile",
   "Bank Verification Number (BVN)",
+  "National Identification Number (NIN)",
   "Tax Compliance Document",
   "Guarantors Details (2 required)",
 ];
+
+export const KYC_REQUIREMENT_TEMPLATES = {
+  "Business Profile": {
+    id: "business_profile",
+    label: "Business Profile",
+    type: "array",
+    is_required: true,
+    min_items: 3,
+    max_items: 3,
+    fields: [
+      {
+        id: "business_name",
+        label: "Business Name",
+        type: "text",
+        is_required: true,
+        max_length: 255,
+      },
+      {
+        id: "cac_registration_number",
+        label: "CAC Registration Number",
+        type: "text",
+        is_required: true,
+        max_length: 255,
+      },
+    ],
+  },
+  "Bank Verification Number (BVN)": {
+    id: "bvn",
+    label: "Bank Verification Number (BVN)",
+    type: "text",
+    is_required: true,
+    exact_length: 11,
+  },
+  "National Identification Number (NIN)": {
+    id: "nin",
+    label: "National Identification Number (NIN)",
+    type: "text",
+    is_required: true,
+    exact_length: 11,
+  },
+  "Tax Compliance Document": {
+    id: "tax_document",
+    label: "Tax Compliance Document",
+    type: "file",
+    is_required: true,
+    allowed_extensions: ["pdf", "jpg", "png"],
+    max_size_kb: 5120,
+  },
+  "Guarantors Details (2 required)": {
+    id: "guarantors",
+    label: "Guarantors Details",
+    type: "array",
+    is_required: true,
+    min_items: 2,
+    max_items: 2,
+    fields: [
+      {
+        id: "full_name",
+        label: "Full Name",
+        type: "text",
+        is_required: true,
+        max_length: 255,
+      },
+      {
+        id: "email",
+        label: "Email Address",
+        type: "email",
+        is_required: true,
+        max_length: 255,
+      },
+      {
+        id: "phone_number",
+        label: "Phone Number",
+        type: "text",
+        is_required: true,
+        max_length: 20,
+      },
+    ],
+  },
+};
+
+export function buildKycRequirements(selectedOptions) {
+  return (selectedOptions ?? [])
+    .filter((opt) => KYC_REQUIREMENT_TEMPLATES[opt])
+    .map((opt) => KYC_REQUIREMENT_TEMPLATES[opt]);
+}
+
+export function kycRequirementsToLabels(kycRequirements) {
+  const labelById = {};
+  Object.values(KYC_REQUIREMENT_TEMPLATES).forEach((t) => {
+    labelById[t.id] = Object.keys(KYC_REQUIREMENT_TEMPLATES).find(
+      (label) => KYC_REQUIREMENT_TEMPLATES[label] === t,
+    );
+  });
+  return (kycRequirements ?? [])
+    .map((req) => labelById[req.id])
+    .filter(Boolean);
+}
 
 export const DEFAULT_REPAYMENT_STRUCTURE = [
   "• Repay via direct wallet debit or bank transfer",

@@ -9,6 +9,7 @@ import ProductsTable from "@/features/products/components/ProductsTable";
 import ProductDetailsPanel from "@/features/products/components/ProductDetailsPanel";
 import EditProductModal from "@/features/products/components/EditProductModal";
 import AddProductModal from "@/features/products/components/AddProductModal";
+import { buildKycRequirements } from "@/features/products/mocks/productsMockData";
 
 import formatDateTime from "@/shared/utils/formatDateTime";
 
@@ -81,6 +82,9 @@ function normalizeLoanPlan(item) {
     min_interest_rate: item.min_interest_rate,
     max_interest_rate: item.max_interest_rate,
     processing_fee_percentage: item.processing_fee_percentage,
+    kyc_requirements: item.kyc_requirements ?? [],
+    repayment_structure: item.repayment_structure ?? "",
+    eligibility_criteria: item.eligibility_criteria ?? "",
     minimum_amount: minAmount,
     maximum_amount: maxAmount,
     minAmount,
@@ -293,6 +297,13 @@ export default function Products() {
         ? Number(updated.processing_fee_percentage)
         : null,
       is_active: updated.is_active,
+      repayment_structure: updated.repayment_structure ?? "",
+      eligibility_criteria: updated.eligibility_criteria ?? "",
+      kyc_requirements:
+        updated.kyc_check_requirements &&
+        updated.kyc_check_requirements.length > 0
+          ? buildKycRequirements(updated.kyc_check_requirements)
+          : [],
     };
     try {
       await updateLoanPlan(updated.id, payload);
@@ -352,8 +363,13 @@ export default function Products() {
       processing_fee_percentage: newProduct.processing_fee_percentage
         ? Number(newProduct.processing_fee_percentage)
         : null,
-      // kyc_check_requirements: newProduct.kyc_check_requirements ?? [],
-      // repayment_structure: newProduct.repayment_structure ?? "",
+      repayment_structure: newProduct.repayment_structure ?? "",
+      eligibility_criteria: newProduct.eligibility_criteria ?? "",
+      kyc_requirements:
+        newProduct.kyc_check_requirements &&
+        newProduct.kyc_check_requirements.length > 0
+          ? buildKycRequirements(newProduct.kyc_check_requirements)
+          : [],
       is_active: newProduct.is_active,
     };
     try {

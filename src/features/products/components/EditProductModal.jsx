@@ -7,6 +7,7 @@ import {
   KYC_CHECK_REQUIREMENT_OPTIONS,
   DEFAULT_REPAYMENT_STRUCTURE,
   DEFAULT_ELIGIBILITY_CRITERIA,
+  kycRequirementsToLabels,
   capitalizeLabel,
 } from "../mocks/productsMockData";
 
@@ -22,7 +23,9 @@ function getInitialForm(product, kind) {
       min_amount: product.min_amount ?? product.minimum_amount ?? "",
       max_amount: product.max_amount ?? product.maxAmount ?? "",
       processing_fee_percentage: product.processing_fee_percentage ?? "",
-      kyc_check_requirements: product.kyc_check_requirements ?? [],
+      kyc_check_requirements:
+        product.kyc_check_requirements ??
+        kycRequirementsToLabels(product.kyc_requirements),
       repayment_structure:
         product.repayment_structure ?? DEFAULT_REPAYMENT_STRUCTURE,
       eligibility_criteria:

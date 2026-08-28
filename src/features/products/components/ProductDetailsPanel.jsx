@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { X, Loader2 } from "lucide-react";
+import { X, Loader2, Pencil, Power, Trash2 } from "lucide-react";
 import Badge from "@/shared/components/Badge";
 import formatCurrency from "@/shared/utils/formatCurrency";
 
@@ -12,6 +12,22 @@ function Field({ label, value }) {
     <div>
       <p className="text-sm text-gray-500">{label}</p>
       <p className="text-sm font-semibold text-gray-900 mt-1">{value || "-"}</p>
+    </div>
+  );
+}
+
+function formatKycRequirements(kycRequirements) {
+  if (!kycRequirements || kycRequirements.length === 0) return null;
+  return kycRequirements.map((req) => req.label).join(", ");
+}
+
+function RichTextBlock({ label, value }) {
+  return (
+    <div>
+      <p className="text-sm text-gray-500">{label}</p>
+      <p className="text-sm font-semibold text-gray-900 mt-1 whitespace-pre-line">
+        {value || "-"}
+      </p>
     </div>
   );
 }
@@ -70,6 +86,18 @@ function LoanFullDetails({ product }) {
           </div>
         </div>
       </Row>
+      <Field
+        label="KYC Requirements"
+        value={formatKycRequirements(product.kyc_requirements)}
+      />
+      <RichTextBlock
+        label="Repayment Structure"
+        value={product.repayment_structure}
+      />
+      <RichTextBlock
+        label="Eligibility Criteria"
+        value={product.eligibility_criteria}
+      />
       <Field label="Date Created" value={product.dateCreated} />
       <Field label="Last Updated" value={product.updatedAt} />
     </>
@@ -130,6 +158,18 @@ function LoanSimpleDetails({ product }) {
           </div>
         </div>
       </Row>
+      <Field
+        label="KYC Requirements"
+        value={formatKycRequirements(product.kyc_requirements)}
+      />
+      <RichTextBlock
+        label="Repayment Structure"
+        value={product.repayment_structure}
+      />
+      <RichTextBlock
+        label="Eligibility Criteria"
+        value={product.eligibility_criteria}
+      />
       <Field label="Date Created" value={product.dateCreated} />
       <Field label="Last Updated" value={product.updatedAt} />
     </>
@@ -285,18 +325,21 @@ export default function ProductDetailsPanel({
           <div className="space-y-3 pt-2">
             <button
               onClick={() => onEdit(product)}
-              className="w-full bg-[#C2185B] hover:opacity-90 transition-opacity text-white text-sm font-medium py-3 rounded-lg cursor-pointer"
+              className="w-full flex items-center justify-center gap-2 bg-[#C2185B] hover:opacity-90 transition-opacity text-white text-sm font-medium py-3 rounded-lg cursor-pointer"
             >
+              <Pencil className="h-4 w-4" />
               Edit product
             </button>
             {isActive ? (
               <button
                 onClick={handleToggle}
                 disabled={busyAction !== null}
-                className="w-full flex items-center justify-center gap-2 bg-[#EF5350] hover:bg-[#e53e3e] transition-colors text-white text-sm font-medium py-3 rounded-lg cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+                className="w-full flex items-center justify-center gap-2 bg-[#C2185B] hover:opacity-90 transition-opacity text-white text-sm font-medium py-3 rounded-lg cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
               >
-                {busyAction === "deactivate" && (
+                {busyAction === "deactivate" ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <Power className="h-4 w-4" />
                 )}
                 Deactivate
               </button>
@@ -304,10 +347,12 @@ export default function ProductDetailsPanel({
               <button
                 onClick={handleToggle}
                 disabled={busyAction !== null}
-                className="w-full flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 transition-colors text-white text-sm font-medium py-3 rounded-lg cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+                className="w-full flex items-center justify-center gap-2 bg-[#C2185B] hover:opacity-90 transition-opacity text-white text-sm font-medium py-3 rounded-lg cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
               >
-                {busyAction === "activate" && (
+                {busyAction === "activate" ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <Power className="h-4 w-4" />
                 )}
                 Activate
               </button>
@@ -316,10 +361,12 @@ export default function ProductDetailsPanel({
               <button
                 onClick={handleDelete}
                 disabled={busyAction !== null}
-                className="w-full flex items-center justify-center gap-2 border border-[#EF5350] text-[#EF5350] hover:bg-[#EF5350] hover:text-white transition-colors text-sm font-medium py-3 rounded-lg cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+                className="w-full flex items-center justify-center gap-2 bg-[#C2185B] hover:opacity-90 transition-opacity text-white text-sm font-medium py-3 rounded-lg cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
               >
-                {busyAction === "delete" && (
+                {busyAction === "delete" ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <Trash2 className="h-4 w-4" />
                 )}
                 Delete
               </button>
