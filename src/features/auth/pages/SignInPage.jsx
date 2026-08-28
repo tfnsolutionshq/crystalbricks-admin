@@ -23,7 +23,7 @@ const SignInPage = () => {
 
     try {
       await login({
-        email,
+        identifier: email,
         password: passcode,
       });
 
