@@ -1,12 +1,5 @@
 import { useState } from "react";
-import {
-  ArrowLeft,
-  KeyRound,
-  Loader2,
-  Lock,
-  Eye,
-  EyeOff,
-} from "lucide-react";
+import { ArrowLeft, KeyRound, Loader2, Lock, Eye, EyeOff } from "lucide-react";
 import skyscraperImage from "@/assets/images/skyscrapers.jpg";
 import crystalBricksLogo from "@/assets/images/crystal_bricks_logo.png";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -31,7 +24,7 @@ const SetPasscodePage = () => {
     setLoading(true);
 
     if (passcode !== confirmPasscode) {
-      setError("Passcodes do not match");
+      setError("Passwords do not match");
       setLoading(false);
       return;
     }
@@ -49,7 +42,7 @@ const SetPasscodePage = () => {
       setError(
         error.response?.data?.message ??
           error.message ??
-          "An error occurred while resetting your passcode. Please try again",
+          "An error occurred while resetting your password. Please try again",
       );
     } finally {
       setLoading(false);
@@ -106,12 +99,14 @@ const SetPasscodePage = () => {
             </button>
 
             <h2 className="mb-1 text-2xl font-bold text-slate-900">
-              Set Passcode
+              Set Password
             </h2>
             <p className="mb-8 text-sm text-slate-500">
               Enter the verification code sent to{" "}
-              <span className="font-medium text-slate-700">{email || "your email"}</span>{" "}
-              along with your new passcode
+              <span className="font-medium text-slate-700">
+                {email || "your email"}
+              </span>{" "}
+              along with your new password
             </p>
 
             {error && (
@@ -145,13 +140,13 @@ const SetPasscodePage = () => {
               </div>
             </div>
 
-            {/* PASSCODE */}
+            {/* PASSWORD */}
             <div className="mb-5">
               <label
                 htmlFor="passcode"
                 className="mb-1.5 block text-sm font-medium text-slate-700"
               >
-                New Passcode
+                New Password
               </label>
               <div className="relative">
                 <Lock
@@ -164,13 +159,13 @@ const SetPasscodePage = () => {
                   id="passcode"
                   value={passcode}
                   onChange={(e) => setPasscode(e.target.value)}
-                  placeholder="Enter new passcode"
+                  placeholder="Enter new password"
                   className="w-full rounded-xl border border-slate-200 bg-white py-3 pl-11 pr-11 text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#c21c86] focus:outline-none focus:ring-1 focus:ring-[#c21c86]"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPasscode((prev) => !prev)}
-                  aria-label={showPasscode ? "Hide passcode" : "Show passcode"}
+                  aria-label={showPasscode ? "Hide password" : "Show password"}
                   className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
                 >
                   {showPasscode ? <EyeOff size={18} /> : <Eye size={18} />}
@@ -178,13 +173,13 @@ const SetPasscodePage = () => {
               </div>
             </div>
 
-            {/* CONFIRM PASSCODE */}
+            {/* CONFIRM PASSWORD */}
             <div className="mb-6">
               <label
                 htmlFor="confirmPasscode"
                 className="mb-1.5 block text-sm font-medium text-slate-700"
               >
-                Confirm New Passcode
+                Confirm New Password
               </label>
               <div className="relative">
                 <Lock
@@ -197,14 +192,14 @@ const SetPasscodePage = () => {
                   id="confirmPasscode"
                   value={confirmPasscode}
                   onChange={(e) => setConfirmPasscode(e.target.value)}
-                  placeholder="Confirm new passcode"
+                  placeholder="Confirm new password"
                   className="w-full rounded-xl border border-slate-200 bg-white py-3 pl-11 pr-11 text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#c21c86] focus:outline-none focus:ring-1 focus:ring-[#c21c86]"
                 />
                 <button
                   type="button"
                   onClick={() => setShowConfirmPasscode((prev) => !prev)}
                   aria-label={
-                    showConfirmPasscode ? "Hide passcode" : "Show passcode"
+                    showConfirmPasscode ? "Hide password" : "Show password"
                   }
                   className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
                 >
@@ -229,7 +224,7 @@ const SetPasscodePage = () => {
                   <>Resetting...</>
                 </span>
               ) : (
-                "Set Passcode"
+                "Set Password"
               )}
             </button>
           </form>
