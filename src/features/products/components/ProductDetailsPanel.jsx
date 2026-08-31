@@ -180,7 +180,6 @@ function FdFullDetails({ product }) {
   return (
     <>
       <Field label="Name" value={product.name} />
-      <Field label="Slug" value={product.slug} />
       <div>
         <p className="text-sm text-gray-500">Description</p>
         <p className="text-sm font-semibold text-gray-900 mt-1">
@@ -223,7 +222,6 @@ function FdSimpleDetails({ product }) {
   return (
     <>
       <Field label="Name" value={product.name} />
-      <Field label="Slug" value={product.slug} />
       <div>
         <p className="text-sm text-gray-500">Description</p>
         <p className="text-sm font-semibold text-gray-900 mt-1">
@@ -297,7 +295,10 @@ export default function ProductDetailsPanel({
 
   return (
     <div className="fixed inset-0 z-50 flex justify-end">
-      <div className="absolute inset-0 bg-black/30 animate-fade-in" onClick={onClose} />
+      <div
+        className="absolute inset-0 bg-black/30 animate-fade-in"
+        onClick={onClose}
+      />
       <div className="relative w-full max-w-100 bg-white h-full shadow-xl overflow-y-auto animate-slide-in-right">
         <div className="p-6 space-y-6">
           <div className="flex items-center justify-between">
