@@ -81,11 +81,11 @@ const ResetPasscodePage = () => {
             </button>
 
             <h2 className="mb-1 text-2xl font-bold text-slate-900">
-              Reset Passcode
+              Reset Password
             </h2>
             <p className="mb-8 text-sm text-slate-500">
               Enter your email address and we&apos;ll send you instructions to
-              reset your passcode
+              reset your password
             </p>
 
             {error && (
