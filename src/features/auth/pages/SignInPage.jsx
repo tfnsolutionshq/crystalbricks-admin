@@ -131,7 +131,7 @@ const SignInPage = () => {
                 htmlFor="passcode"
                 className="mb-1.5 block text-sm font-medium text-slate-700"
               >
-                Passcode
+                Password
               </label>
               <div className="relative">
                 <Lock
@@ -144,13 +144,13 @@ const SignInPage = () => {
                   id="passcode"
                   value={passcode}
                   onChange={(e) => setPasscode(e.target.value)}
-                  placeholder="Enter passcode"
+                  placeholder="Enter password"
                   className="w-full rounded-xl border border-slate-200 bg-white py-3 pl-11 pr-11 text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#c21c86] focus:outline-none focus:ring-1 focus:ring-[#c21c86]"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPasscode((prev) => !prev)}
-                  aria-label={showPasscode ? "Hide passcode" : "Show passcode"}
+                  aria-label={showPasscode ? "Hide password" : "Show password"}
                   className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
                 >
                   {showPasscode ? <EyeOff size={18} /> : <Eye size={18} />}
@@ -158,7 +158,7 @@ const SignInPage = () => {
               </div>
             </div>
 
-            {/* REMEMBER ME / FORGOT PASSCODE */}
+            {/* REMEMBER ME / FORGOT PASSWORD */}
             <div className="mb-6 flex items-center justify-between gap-2 flex-wrap">
               <label className="flex items-center gap-2 text-sm text-slate-600">
                 <input
@@ -174,7 +174,7 @@ const SignInPage = () => {
                 to="/reset-passcode"
                 className="text-sm font-medium text-emerald-600 hover:text-emerald-700"
               >
-                Forgot passcode?
+                Forgot password?
               </Link>
             </div>
 
